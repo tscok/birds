@@ -1,0 +1,62 @@
+// My projects (created by me)
+user: {
+    'abc123': {
+        name: '',
+        provider: '',
+        project: {
+            owner: {
+                private: {
+                    'aaa111': true
+                },
+                public: {
+                    'bbb222': true,
+                    'ccc333': true
+                }
+            },
+            member: {
+                'ddd444': true,
+                'eee555': true
+            }
+        }
+    }
+}
+
+
+    1.  Searching projects
+    2.  Click 'join' button on project result (possible if now() < project['dateEnd'])
+        a.  add user_id and now() to 'pending/project_id' (readable to all, writeable to all)
+    
+    3.  Project owner's public project list includes count on number of 'join requests' (since last login?)
+    4.  Project owner accepts/denies users
+        a.  denied users remain listed
+        b.  accepted users are listed in 'member/project_id' (readable to all, writeable to project owner)
+
+member: {
+    'aaa111': {
+        'abc123': true,
+        'abc456': true,
+        'abc789': true
+    }
+}
+
+    5.  Profile 'listProjects'
+
+==========================
+OWNERSHIPS
+==========================
+
+1.  User checks user/uid/projects/ (public/private) for a list of owned projects
+
+2.  User iterates over owned.public and owned.private for project info.
+
+==========================
+MEMBERSHIPS
+==========================
+
+1.  User A creates a public project
+
+2.  User B applies for membership (adds uid to pending/projectID)
+    
+3.  User A accepts user B as member (removes uid from pending/projectID, adds projectID to member/uid, adds uid to project/projectID/member)
+
+4.  User B checks member/uid for memberships

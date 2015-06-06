@@ -1,0 +1,44 @@
+clearfix(){
+	&:before, &:after {
+		content: "";
+		display: table;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+navbar {
+	clearfix()
+	nav {
+		&.left { float: left; }
+		&.right { float: right; }
+	}
+}
+
+form {
+	margin-bottom: 20px;
+}
+
+color-info = #5bc0de
+color-success = #5cb85c
+color-warning = #f0ad4e
+color-danger = #d9534f
+
+.alert {
+	padding: 15px;
+	&__text {
+		margin: 0;
+	}
+	&__close {
+
+	}
+	&--danger {
+
+	}
+}
+
+#mapCanvas {
+	width: 400px;
+	height: 200px;
+}

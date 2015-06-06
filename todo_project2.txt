@@ -1,0 +1,48 @@
+project
+    'abc123'
+        owner: 'user:1'
+        public: false
+    'abc456'
+        owner: 'user:2'
+        public: true
+        member
+            'user:1'
+    'abc789'
+        owner: 'user:3'
+        public: true
+
+user
+    'user:1'
+        project
+            'abc123': true
+    'user:2'
+        project
+            'abc456': true
+    'user:3'
+        project
+            'abc789': true
+
+member
+    'user:1'
+        'abc456': true
+
+pending
+    'abc789'
+        'user:1': true
+        'user:2': true
+
+
+// get ownerships
+user/<uid>/own
+
+// get memberships
+member/<uid>
+
+// get project
+project/<pid>
+
+// get project memebers
+project/<pid>/member
+
+// get public projects
+project/ orderByChild('public').startAt(true).endAt(true)
