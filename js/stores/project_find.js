@@ -23,8 +23,6 @@ module.exports = function() {
 
             // Use regExp to compare category value and needle.
             if (project[params.category] && regx.test(project[params.category])) {
-                console.log('match',project[params.category]);
-
                 isOwner = project.ownerId === uid;
                 itemNo = list.length;
 

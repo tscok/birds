@@ -38,7 +38,6 @@
 		}
 
 		riotcontrol.on('project_search_result', function(list) {
-			console.log(list);
 			self.update({items: list})
 		})
 
