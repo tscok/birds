@@ -21,8 +21,10 @@ module.exports = function() {
             var project = snap.val();
             var projectId = snap.key();
 
-            // Use regExp to compare attr value and needle.
-            if (project[params.attr] && regx.test(project[params.attr])) {
+            // Use regExp to compare category value and needle.
+            if (project[params.category] && regx.test(project[params.category])) {
+                console.log('match',project[params.category]);
+
                 isOwner = project.ownerId === uid;
                 itemNo = list.length;
 
@@ -39,9 +41,9 @@ module.exports = function() {
                     isPending(projectId, itemNo);
                     isMember(projectId, itemNo);
                 }
-
-                self.trigger('project_search_result', list);
             }
+
+            self.trigger('project_search_result', list);
         });
     }
 

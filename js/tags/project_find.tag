@@ -5,9 +5,9 @@
 			<input type="text" name="needle" placeholder="Search" autocomplete="off">
 			<button type="button" onclick={ find }>OK</button>
 			<fieldset>
-				<label><input type="radio" name="attr" onclick={ find } value="title" checked> Project title</label>
-				<label><input type="radio" name="attr" onclick={ find } value="site"> Site name</label>
-				<label><input type="radio" name="attr" onclick={ find } value="ownerName"> Owner name</label>
+				<label><input type="radio" name="category" onclick={ find } value="title" checked> Project title</label>
+				<label><input type="radio" name="category" onclick={ find } value="site"> Site name</label>
+				<label><input type="radio" name="category" onclick={ find } value="ownerName"> Owner name</label>
 			</fieldset>
 			<p>Tip: Searches are case <em>sensitive</em>.</p>
 		</form>
@@ -30,7 +30,7 @@
 		find(e) {
 			if (self.needle.value.length > 1) {
 				var params = {
-					attr: utils.radioBtnVal('attr'),
+					category: utils.radioBtnVal('category'),
 					needle: self.needle.value
 				}
 				riotcontrol.trigger('project_search', params)
