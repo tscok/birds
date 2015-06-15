@@ -23,7 +23,7 @@
   "devDependencies": {
     "minifyify": "^6.3.2",
     "parallelshell": "^1.1.1",
-    "riot": "^2.0.14",
+    "riot": "^2.1.0",
     "riotify": "0.0.9",
     "serve": "^1.4.0",
     "watch": "^0.15.0",

@@ -30,7 +30,7 @@ module.exports = function() {
                     'pid': projectId,
                     'title': project.title,
                     'site': project.site,
-                    'ownerName': project.ownerId === uid ? 'You' : project.ownerName,
+                    'ownerName': project.ownerName,
                     'dateStart': project.dateStart,
                     'dateEnd': project.dateEnd
                 });

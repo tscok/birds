@@ -13,14 +13,15 @@ module.exports = function() {
     function listProjects() {
         uid = fbRef.getAuth().uid;
         listOwnerships();
-        listMemberships();
-        pendingMemberships();
+        // listMemberships();
+        // pendingMemberships();
     };
     
     function listOwnerships() {
         ownerships = [];
         // Get own projects.
         fbRef.child('user/' + uid + '/project/own').once('value', function(snap) {
+            console.log(snap.val());
             snap.forEach(function(childSnap) {
                 var projectId = childSnap.key();
 
@@ -74,7 +75,7 @@ module.exports = function() {
     }
 
     function getPendingCount(pid, itemNo) {
-        console.log('addPendingCount', pid, itemNo);
+        // console.log('addPendingCount', pid, itemNo);
         fbRef.child('pending/' + pid).on('value', function(pending) {
             ownerships[itemNo]['pending'] = pending.numChildren();
             self.trigger('project_ownerships', ownerships);

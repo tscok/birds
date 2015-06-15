@@ -1,1 +1,1 @@
-navbar:before,navbar:after{content:"";display:table}navbar:after{clear:both}navbar nav.left{float:left}navbar nav.right{float:right}form{margin-bottom:20px}.alert{padding:15px;}.alert__text{margin:0}#mapCanvas{width:400px;height:200px}
+navigation:before,navigation:after{content:"";display:table}navigation:after{clear:both}navigation nav.left{float:left}navigation nav.right{float:right}form{margin-bottom:20px}.alert{padding:15px;}.alert__text{margin:0}#mapCanvas{width:400px;height:200px}

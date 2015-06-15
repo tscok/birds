@@ -6,43 +6,61 @@ var firebase = require('firebase');
 var ref = new firebase('https://bluebird.firebaseio.com/');
 
 // Stores.
-var map = require('./stores/map');
 var auth = require('./stores/auth');
-var navbar = require('./stores/navbar');
-var profile = require('./stores/profile');
-var project_list = require('./stores/project_list');
-var project_find = require('./stores/project_find');
-var project_join = require('./stores/project_join');
-var project_create = require('./stores/project_create');
-var project_dashboard = require('./stores/project_dashboard');
-var list_members = require('./stores/list_members');
+var navigation = require('./stores/navigation');
+
+var ownerships = require('./stores/profile/ownerships');
+
+
+// var profile = require('./stores/profile');
+// var project_list = require('./stores/project_list');
+// var project_find = require('./stores/project_find');
+// var project_join = require('./stores/project_join');
+// var project_create = require('./stores/project_create');
+// var project_dashboard = require('./stores/project_dashboard');
+// var list_members = require('./stores/list_members');
 
 // Register stores.
 riotcontrol.addStore(new auth());
-riotcontrol.addStore(new navbar());
-riotcontrol.addStore(new map());
-riotcontrol.addStore(new profile());
-riotcontrol.addStore(new project_list());
-riotcontrol.addStore(new project_find());
-riotcontrol.addStore(new project_join());
-riotcontrol.addStore(new project_create());
-riotcontrol.addStore(new project_dashboard());
-riotcontrol.addStore(new list_members());
+riotcontrol.addStore(new navigation());
+riotcontrol.addStore(new ownerships());
+// riotcontrol.addStore(new map());
+// riotcontrol.addStore(new profile());
+// riotcontrol.addStore(new project_list());
+// riotcontrol.addStore(new project_find());
+// riotcontrol.addStore(new project_join());
+// riotcontrol.addStore(new project_create());
+// riotcontrol.addStore(new project_dashboard());
+// riotcontrol.addStore(new list_members());
 
 // Tags.
-require('./tags/map.tag');
+require('./tags/navigation.tag');
+require('./tags/list.tag');
 require('./tags/alert.tag');
-require('./tags/login.tag');
-require('./tags/navbar.tag');
-require('./tags/verify.tag');
-require('./tags/profile.tag');
-require('./tags/register.tag');
-require('./tags/project_list.tag');
-require('./tags/project_find.tag');
-require('./tags/project_join.tag');
-require('./tags/project_create.tag');
-require('./tags/project_dashboard.tag');
-require('./tags/list_members.tag');
+
+require('./tags/auth/_auth.tag');
+require('./tags/auth/login.tag');
+require('./tags/auth/register.tag');
+
+require('./tags/create/_create.tag');
+require('./tags/create/map.tag');
+
+require('./tags/profile/_profile.tag');
+require('./tags/profile/memberships.tag');
+require('./tags/profile/ownerships.tag');
+require('./tags/profile/user.tag');
+require('./tags/profile/verify.tag');
+
+require('./tags/project/_project.tag');
+require('./tags/project/new_ring.tag');
+require('./tags/project/old_ring.tag');
+require('./tags/project/rings.tag');
+require('./tags/project/members/active.tag');
+require('./tags/project/members/passive.tag');
+require('./tags/project/members/pending.tag');
+
+require('./tags/search/_search.tag');
+require('./tags/search/join.tag');
 
 // Mount tags.
 riot.mount('*');

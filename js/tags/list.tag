@@ -1,9 +1,6 @@
 <list>
+    <h3>{ opts.title }</h3>
     <ul>
-        <li each={ item in opts.data }>{ item }</li>
+        <yield/>
     </ul>
-
-    <script>
-        var self = this
-    </script>
 </list>
