@@ -1,15 +1,22 @@
 <memberships>
-    <li each={ list }>Project { name }</li>
-    <li if={ !list.length }>No memberships found.</li>
+    <li each={ list }><a href="#project/{ pid }">{ title }, { site }</a></li>
+    <li if={ !list.length }>{ loadText }</li>
 
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
 
         self.list = []
+        self.loadText = 'Loading…'
+
+        // riotcontrol.on('route_changed', function(route) {
+        //     if (route == 'profile') {
+        //         self.update({list: []})
+        //     }
+        // })
 
         riotcontrol.on('memberships', function(list) {
-            self.update({list: list})
+            self.update({list: list, loadText: !list.length ? 'No memberships found.' : ''})
         })
     </script>
 </memberships>
