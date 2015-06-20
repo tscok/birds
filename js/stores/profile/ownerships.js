@@ -15,7 +15,7 @@ module.exports = function() {
 
         fbRef.child('user/'+uid+'/project/own').once('value', function(snap) {
             if (!snap.val()) {
-                self.trigger('ownerships', list);
+                self.trigger('projects', list, 'ownerships');
                 return;
             }
 
@@ -34,7 +34,7 @@ module.exports = function() {
                         dateEnd: data.dateEnd
                     });
 
-                    self.trigger('ownerships', list);
+                    self.trigger('projects', list, 'ownerships');
                 });
             });
         });

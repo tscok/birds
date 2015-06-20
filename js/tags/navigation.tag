@@ -5,7 +5,7 @@
 	</nav>
 	<nav if={ uid && !pid } class="left">
 		<a href="#create">Create Project</a>
-		<a href="#find">Find Project</a>
+		<a href="#search">Find Project</a>
 	</nav>
 	<nav if={ uid && pid } class="left">
 		<a href="#project/{ pid }">Overview</a>

@@ -1,24 +1,21 @@
 var riot = require('riot');
 var riotcontrol = require('riotcontrol');
 
-// Firebase
 var firebase = require('firebase');
 var ref = new firebase('https://bluebird.firebaseio.com/');
 
-// Stores.
+// == STORES ==
+
 var auth = require('./stores/auth');
 var navigation = require('./stores/navigation');
 
 var ownerships = require('./stores/profile/ownerships');
 var memberships = require('./stores/profile/memberships');
 
-var map = require('./stores/map');
-// var project_list = require('./stores/project_list');
-// var project_find = require('./stores/project_find');
-// var project_join = require('./stores/project_join');
-// var project_create = require('./stores/project_create');
-// var project_dashboard = require('./stores/project_dashboard');
-// var list_members = require('./stores/list_members');
+var map = require('./stores/create/map');
+
+var search = require('./stores/search/_search');
+var join = require('./stores/search/join');
 
 // Register stores.
 riotcontrol.addStore(new auth());
@@ -26,15 +23,12 @@ riotcontrol.addStore(new navigation());
 riotcontrol.addStore(new ownerships());
 riotcontrol.addStore(new memberships());
 riotcontrol.addStore(new map());
-// riotcontrol.addStore(new profile());
-// riotcontrol.addStore(new project_list());
-// riotcontrol.addStore(new project_find());
-// riotcontrol.addStore(new project_join());
-// riotcontrol.addStore(new project_create());
-// riotcontrol.addStore(new project_dashboard());
-// riotcontrol.addStore(new list_members());
+riotcontrol.addStore(new search());
+riotcontrol.addStore(new join());
 
-// Tags.
+
+// == RIOT TAGS ==
+
 require('./tags/navigation.tag');
 require('./tags/list.tag');
 require('./tags/alert.tag');
@@ -47,10 +41,9 @@ require('./tags/create/_create.tag');
 require('./tags/create/map.tag');
 
 require('./tags/profile/_profile.tag');
-require('./tags/profile/memberships.tag');
-require('./tags/profile/ownerships.tag');
 require('./tags/profile/user.tag');
 require('./tags/profile/verify.tag');
+require('./tags/profile/projects.tag');
 
 require('./tags/project/_project.tag');
 require('./tags/project/new_ring.tag');
@@ -63,10 +56,11 @@ require('./tags/project/members/pending.tag');
 require('./tags/search/_search.tag');
 require('./tags/search/join.tag');
 
-// Mount tags.
 riot.mount('*');
 
-// Router
+
+// == ROUTER ==
+
 function validateRoute(route, id, action) {
 
     // All valid routes with authentication requirement.
@@ -74,7 +68,7 @@ function validateRoute(route, id, action) {
         'login':    {authRequired: false},
         'register': {authRequired: false},
         'profile':  {authRequired: true},
-        'find':     {authRequired: true},
+        'search':     {authRequired: true},
         'create':   {authRequired: true},
         'project':  {authRequired: true}
     };

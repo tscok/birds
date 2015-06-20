@@ -15,7 +15,7 @@ module.exports = function() {
 
         fbRef.child('user/'+uid+'/project/member').once('value', function(snap) {
             if (!snap.val()) {
-                self.trigger('memberships', list);
+                self.trigger('projects', list, 'memberships');
                 return;
             }
 
@@ -34,7 +34,7 @@ module.exports = function() {
                         dateEnd: data.dateEnd
                     });
 
-                    self.trigger('memberships', list);
+                    self.trigger('projects', list, 'memberships');
                 });
             });
         });

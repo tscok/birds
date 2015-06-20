@@ -1,22 +1,29 @@
-<find>
+<search>
 	<div if={ show }>
 		<form name="frmSearch" onsubmit={ find }>
 			<h2>Find project</h2>
 			<input type="text" name="needle" placeholder="Search" autocomplete="off">
 			<button type="button" onclick={ find }>OK</button>
 			<fieldset>
+				<legend>Filter by</legend>
 				<label><input type="radio" name="category" onclick={ find } value="title" checked> Project title</label>
 				<label><input type="radio" name="category" onclick={ find } value="site"> Site name</label>
 				<label><input type="radio" name="category" onclick={ find } value="ownerName"> Owner name</label>
 			</fieldset>
 			<p>Tip: Searches are case <em>sensitive</em>.</p>
 		</form>
-		<ul>
+		<!-- <ul>
 			<li each={ items }>{ title }, { site }<br>Owned by: { ownerName }<br>
 				<datetime if={ dateStart || dateEnd }>{ dateStart } &ndash; { dateEnd } </datetime>
 				<join project={ this } />
 			</li>
-		</ul>
+		</ul> -->
+
+		<list heading="Search Results" items={ items }>
+			<span>{ title }, { site }<br>Owned by: { ownerName }</span><br>
+			<datetime if={ dateStart || dateEnd }>{ dateStart } &ndash; { dateEnd } </datetime>
+			<join project={ this } />
+		</list>
 	</div>
 
 	<script>
@@ -33,16 +40,16 @@
 					category: utils.radioBtnVal('category'),
 					needle: self.needle.value
 				}
-				riotcontrol.trigger('project_search', params)
+				riotcontrol.trigger('search', params)
 			}
 		}
 
-		riotcontrol.on('project_search_result', function(list) {
+		riotcontrol.on('search_result', function(list) {
 			self.update({items: list})
 		})
 
 		riotcontrol.on('route_changed', function(route) {
-			self.update({show: (route == 'find')})
+			self.update({show: (route == 'search')})
 		})
 	</script>
-</find>
+</search>
