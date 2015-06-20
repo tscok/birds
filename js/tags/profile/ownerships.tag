@@ -1,22 +1,17 @@
 <ownerships>
-    <li each={ list }><a href="#project/{ pid }">{ title }, { site }</a></li>
-    <li if={ !list.length }>{ loadText }</li>
+    <list heading="Project ownerships" items={ list } status={ message }>
+        <a href="#project/{ pid }">{ title }, { site }</a>
+    </list>
 
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
 
         self.list = []
-        self.loadText = 'Loading…'
+        self.message = 'Loading…'
 
-        // riotcontrol.on('route_changed', function(route) {
-        //     if (route == 'profile') {
-        //         self.update({list: []})
-        //     }
-        // })
-
-        riotcontrol.on('ownerships', function(list) {
-            self.update({list: list, loadText: !list.length ? 'No ownerships found.' : ''})
+        riotcontrol.on('ownerships', function(ownerships) {
+            self.update({list: ownerships, message: !ownerships.length ? 'No ownerships found.' : ''})
         })
     </script>
 </ownerships>

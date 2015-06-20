@@ -1,12 +1,7 @@
 <profile>
     <user if={ show }></user>
-    <list if={ show } title="Project Ownerships">
-        <ownerships></ownerships>
-    </list>
-    <list if={ show } title="Project Memberships">
-        <memberships></memberships>
-    </list>
-    
+    <ownerships if={ show }></ownerships>
+    <memberships if={ show }></memberships>
 
     <script>
         var riotcontrol = require('riotcontrol')
