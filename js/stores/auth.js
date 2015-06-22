@@ -30,10 +30,10 @@ module.exports = function() {
 	};
 
 	function setLocalUserData(auth) {
-		console.log('Auth provider:', auth.provider);
+		// console.log('Auth provider:', auth.provider);
 		
 		var localUser = utils.getLocalUser();
-		var authEmail = auth.provider == 'password' ? auth.password.email : '';
+		var authEmail = (auth.provider == 'password') ? auth.password.email : '';
 
 		if (localUser.email && localUser.email !== authEmail) {
 			utils.setLocalUser({email: authEmail, name: ''});
@@ -51,7 +51,8 @@ module.exports = function() {
 	});
 
 	self.on('logout', function(route) {
-		console.log('user:', fbRef.getAuth(), 'last logged in:', new Date());
+		// console.log('user:', fbRef.getAuth(), 'last logged in:', new Date());
+		
 		fbRef.unauth();
 		self.trigger('alert', null);
 		self.trigger('auth_update', null);

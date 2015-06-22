@@ -11,6 +11,7 @@
             self.update({show: route == 'profile'})
 
             if (route == 'profile') {
+                riotcontrol.trigger('user_update')
                 riotcontrol.trigger('list_ownerships')
                 riotcontrol.trigger('list_memberships')
             }

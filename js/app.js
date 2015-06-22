@@ -11,7 +11,9 @@ var navigation = require('./stores/navigation');
 
 var ownerships = require('./stores/profile/ownerships');
 var memberships = require('./stores/profile/memberships');
+var user = require('./stores/profile/user');
 
+var create = require('./stores/create/_create');
 var map = require('./stores/create/map');
 
 var search = require('./stores/search/_search');
@@ -22,6 +24,8 @@ riotcontrol.addStore(new auth());
 riotcontrol.addStore(new navigation());
 riotcontrol.addStore(new ownerships());
 riotcontrol.addStore(new memberships());
+riotcontrol.addStore(new user());
+riotcontrol.addStore(new create());
 riotcontrol.addStore(new map());
 riotcontrol.addStore(new search());
 riotcontrol.addStore(new join());

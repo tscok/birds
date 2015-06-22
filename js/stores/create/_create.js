@@ -1,5 +1,5 @@
 var riot = require('riot');
-var utils = require('../utils');
+var utils = require('../../utils');
 var firebase = require('firebase');
 
 module.exports = function() {

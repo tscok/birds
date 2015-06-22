@@ -1,24 +1,32 @@
 <join>
-    <!-- <span if={ 'isMember' in opts.project && 'isPending' in opts.project }>
-        <span if={ isMember }>[M]</span>
-        <span if={ isPending }>[P]</span>
-        <button type="button" if={ !isOwner && !isEnded && !isPending && !isMember } onclick={ join }>Join</button>
-    </span> -->
+    <span if={ typeof isPending === 'boolean' && typeof isMember === 'boolean' }>
+        <i if={ isPending }>[P]</i>
+        <i if={ isMember }>[M]</i>
+        <button type="button" if={ !isPending && !isMember && opts.project.isActive } onclick={ join }>Join</button>
+    </span>
+    <span if={ typeof isPending !== 'boolean' && typeof isMember !== 'boolean' }>…</span>
 
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
 
-        console.log(this.opts.project.isOwner);
-
-        // self.isOwner = opts.project.isOwner
-        // self.isEnded = opts.project.isEnded
-        // self.isMember = opts.project.isMember
-        // self.isPending = opts.project.isPending
-
         join(e) {
             riotcontrol.trigger('project_join', opts.project.pid)
             self.isPending = true;
         }
+
+        riotcontrol.on('join_pending', function(status, project_id) {
+            if (project_id === opts.project.pid) {
+                self.update({isPending: status})
+            }
+        })
+
+        riotcontrol.on('join_member', function(status, project_id) {
+            if (project_id === opts.project.pid) {
+                self.update({isMember: status})
+            }
+        })
+
+        riotcontrol.trigger('join_status', opts.project.pid)
     </script>
 </join>

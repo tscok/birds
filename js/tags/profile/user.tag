@@ -51,11 +51,5 @@
 			self.newpassword.value = ''
 			self.update()
 		})
-		
-		riotcontrol.on('route_changed', function(route) {
-			if(route == 'profile') {
-				riotcontrol.trigger('user_update')
-			}
-		})
 	</script>
 </user>

@@ -2,7 +2,7 @@
 	<div if={ show }>
 		<form name="frmSearch" onsubmit={ find }>
 			<h2>Find project</h2>
-			<input type="text" name="needle" placeholder="Search" autocomplete="off">
+			<input type="text" name="needle" placeholder="Search" autocomplete="off" onkeyup={ find }>
 			<button type="button" onclick={ find }>OK</button>
 			<fieldset>
 				<legend>Filter by</legend>
@@ -10,19 +10,12 @@
 				<label><input type="radio" name="category" onclick={ find } value="site"> Site name</label>
 				<label><input type="radio" name="category" onclick={ find } value="ownerName"> Owner name</label>
 			</fieldset>
-			<p>Tip: Searches are case <em>sensitive</em>.</p>
 		</form>
-		<!-- <ul>
-			<li each={ items }>{ title }, { site }<br>Owned by: { ownerName }<br>
-				<datetime if={ dateStart || dateEnd }>{ dateStart } &ndash; { dateEnd } </datetime>
-				<join project={ this } />
-			</li>
-		</ul> -->
 
-		<list heading="Search Results" items={ items }>
+		<list heading="Search Results" items={ items } if={ items.length }>
 			<span>{ title }, { site }<br>Owned by: { ownerName }</span><br>
 			<datetime if={ dateStart || dateEnd }>{ dateStart } &ndash; { dateEnd } </datetime>
-			<join project={ this } />
+			<join if={ !this.isOwner } project={ this } />
 		</list>
 	</div>
 
@@ -32,7 +25,6 @@
 		var self = this
 
 		self.show = false
-		self.items = []
 
 		find(e) {
 			if (self.needle.value.length > 1) {
@@ -50,6 +42,10 @@
 
 		riotcontrol.on('route_changed', function(route) {
 			self.update({show: (route == 'search')})
+			if (route == 'search') {
+				self.update({items: []})
+				self.frmSearch.reset()
+			}
 		})
 	</script>
 </search>

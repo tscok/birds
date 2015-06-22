@@ -19,6 +19,7 @@
 
 	<script>
 		var riotcontrol = require('riotcontrol');
+		var utils = require('../utils');
 		var self = this
 
 		self.uid = null

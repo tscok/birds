@@ -1,20 +1,19 @@
 var riot = require('riot');
-var utils = require('../utils');
+var utils = require('../../utils');
 var firebase = require('firebase');
 
 module.exports = function() {
 	riot.observable(this);
 
-	var self = this, user, uid;
+	var self = this, uid;
 
 	var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
 	// Get the user object (triggered on route).
 	function userUpdate() {
-		var auth = fbRef.getAuth();
-		var localUser = utils.getLocalUser();
+		uid = fbRef.getAuth().uid;
 
-		uid = auth.uid;
+		var localUser = utils.getLocalUser();
 
 		// Run once and again if user name changes.
 		fbRef.child('user/' + uid + '/name').on('value', function(snap) {
