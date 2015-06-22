@@ -11,7 +11,7 @@
         var self = this
 
         join(e) {
-            riotcontrol.trigger('project_join', opts.project.pid)
+            riotcontrol.trigger('join_project', opts.project.pid)
             self.isPending = true;
         }
 
