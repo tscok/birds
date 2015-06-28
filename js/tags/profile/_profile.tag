@@ -9,12 +9,12 @@
 
         riotcontrol.on('route_changed', function(route) {
             self.update({show: route == 'profile'})
+        })
 
-            if (route == 'profile') {
-                riotcontrol.trigger('user_update')
-                riotcontrol.trigger('list_ownerships')
-                riotcontrol.trigger('list_memberships')
-            }
+        riotcontrol.on('route_profile', function() {
+            riotcontrol.trigger('user_update')
+            riotcontrol.trigger('list_ownerships')
+            riotcontrol.trigger('list_memberships')
         })
     </script>
 </profile>

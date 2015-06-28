@@ -1,0 +1,2 @@
+<newring>
+</newring>

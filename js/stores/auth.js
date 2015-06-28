@@ -51,12 +51,12 @@ module.exports = function() {
 	});
 
 	self.on('logout', function(route) {
-		// console.log('user:', fbRef.getAuth(), 'last logged in:', new Date());
+		console.log('user:', fbRef.getAuth(), 'last logged in:', new Date());
 		
 		fbRef.unauth();
 		self.trigger('alert', null);
 		self.trigger('auth_update', null);
-		riot.route(route ? route : 'login');
+		riot.route('login');
 	});
 
 	self.on('register', function(userObj, userName) {

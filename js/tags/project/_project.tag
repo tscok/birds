@@ -1,40 +1,20 @@
-<dashboard>
-    <div if={ show }>
-        <div if={ !data }>Loading…</div>
-
-        <div if={ data }>
-            <h1>{ data.title }</h1>
-            <p>{ data.site }, { data.dateStart } &ndash; { data.dateEnd }</p>
-        </div>
-        <div if={ data.isOwner }>
-            <members pid={ data.pid } />
-        </div>
-        
-        <!--
-        <button type="button">Edit Rings</button>
-        <button type="button" onclick={ remove }>Remove project</button>
-        -->
-    </div>
+<project>
+    <!-- <members if={ show } type="pending"></members>
+    <members if={ show } type="active"></members> -->
 
     <script>
-        var riotcontrol = require('riotcontrol')
-        var self = this
+        // var riotcontrol = require('riotcontrol')
+        // var self = this
 
-        self.show = false
+        // self.show = false
 
-        // remove(e) {
-        //     riotcontrol.trigger('project_delete', self.pid);
-        // }
+        // riotcontrol.on('route_changed', function(route, id) {
+        //     self.update({show: route == 'project' && id})
 
-        riotcontrol.on('dashboard_data', function(project) {
-            self.update({data: project})
-        })
-
-        riotcontrol.on('route_changed', function(route, id) {
-            if(route == 'project' && id) {
-                riotcontrol.trigger('dashboard_init', id)
-            }
-            self.update({show: (route == 'project' && id)})
-        })
+        //     if(route == 'project' && id) {
+        //         riotcontrol.trigger('list_members_pending', id)
+        //         riotcontrol.trigger('list_members_active', id)
+        //     }
+        // })
     </script>
-</dashboard>
+</project>
