@@ -9,7 +9,7 @@ module.exports = function() {
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
     function countPending(pid) {
-        fbRef.child('pending/' + pid).once('value', function(snap) {
+        fbRef.child('member/' + pid + '/pending/').once('value', function(snap) {
             var count = snap.numChildren();
             self.trigger('pending_count_' + pid, count);
         });

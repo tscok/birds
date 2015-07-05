@@ -22,20 +22,20 @@ module.exports = function() {
         });
     };*/
 
-    function initDashboard(pid) {
-        uid = fbRef.getAuth().uid;
+    // function initDashboard(pid) {
+    //     uid = fbRef.getAuth().uid;
 
-        var data = {};
+    //     var data = {};
         
-        fbRef.child('project/' + pid).once('value', function(snap) {
-            data = snap.val();
-            data.pid = pid;
-            data.isOwner = data.ownerId == uid;
-            self.trigger('dashboard_data', data);
-        });
-    }
+    //     fbRef.child('project/' + pid).once('value', function(snap) {
+    //         data = snap.val();
+    //         data.pid = pid;
+    //         data.isOwner = data.ownerId == uid;
+    //         self.trigger('dashboard_data', data);
+    //     });
+    // }
 
-    self.on('dashboard_init', initDashboard);
+    // self.on('dashboard_init', initDashboard);
 
     // self.on('project_delete', deleteProject);
 };

@@ -1,19 +1,17 @@
 <members>
-    <list heading="Members { opts.type }" items={ list } status={ message }>
-        <span>{ uid }, { name }</span>
+    <list each={ type, list in types } heading="Members { type }" items={ list }>
+        <span>{ name } [accept] [ignore]</span>
     </list>
 
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
 
-        self.list = []
-        self.message = 'Loading…'
+        self.types = {}
 
-        riotcontrol.on('members', function(list, type) {
-            if (opts.type == type) {
-                self.update({list: list, message: !list.length ? 'No result' : ''})
-            }
+        riotcontrol.on('members', function(type, list) {
+            self.types[type] = list
+            self.update()
         })
     </script>
 </members>

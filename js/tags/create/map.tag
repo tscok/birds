@@ -1,13 +1,13 @@
 <map>
-	<div id="mapCanvas"></div>
+    <div id="mapCanvas"></div>
 
-	<script>
+    <script>
         var riotcontrol = require('riotcontrol');
         
-		riotcontrol.on('route_changed', function(route) {
-			if(route == 'create') {
-				riotcontrol.trigger('map_init');
-			}
-		})
-	</script>
+        riotcontrol.on('route_changed', function(route) {
+            if(route == 'create') {
+                riotcontrol.trigger('map_init');
+            }
+        })
+    </script>
 </map>

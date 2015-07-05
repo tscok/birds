@@ -36,5 +36,4 @@ utils.updateLocalUser = function(key, val) {
     utils.setLocalUser(data);
 }
 
-
 module.exports = utils;

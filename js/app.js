@@ -54,23 +54,20 @@ require('./tags/alert.tag');
 require('./tags/auth/login.tag');
 require('./tags/auth/register.tag');
 
-require('./tags/create/_create.tag');
-require('./tags/create/map.tag');
-
 require('./tags/profile/_profile.tag');
 require('./tags/profile/user.tag');
 require('./tags/profile/verify.tag');
 require('./tags/profile/projects.tag');
 require('./tags/profile/pendingcount.tag');
 
-require('./tags/project/_project.tag');
-require('./tags/project/ringnew.tag');
-require('./tags/project/ringold.tag');
-require('./tags/project/rings.tag');
-require('./tags/project/members.tag');
+require('./tags/create/_create.tag');
+require('./tags/create/map.tag');
 
 require('./tags/search/_search.tag');
 require('./tags/search/join.tag');
+
+require('./tags/project/_project.tag');
+require('./tags/project/members.tag');
 
 riot.mount('*');
 

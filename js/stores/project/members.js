@@ -8,40 +8,34 @@ module.exports = function() {
 
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
-    function getPending(pid) {
-        var list = [];
-
-        self.trigger('members', list, 'pending');
-
-        fbRef.child('pending/' + pid).on('child_added', function(snap) {
-            fbRef.child('user/' + snap.key()).once('value', function(childSnap) {
-                list.push({
-                    uid: snap.key(),
-                    name: childSnap.val().name
-                });
-
-                self.trigger('members', list, 'pending');
+    function getMembers(pid) {
+        fbRef.child('member/' + pid).once('value', function(snap) {
+            snap.forEach(function(childSnap) {
+                // childSnap is either of type;
+                // pending, granted, dormant or ignored.
+                getMembersByType(childSnap);
             });
         });
     }
 
-    function getActive(pid) {
+    function getMembersByType(snap) {
         var list = [];
+        var type = snap.key();
+        var userCount = snap.numChildren();
 
-        self.trigger('members', list, 'active');
-
-        fbRef.child('member/' + pid).on('child_added', function(snap) {
-            fbRef.child('user/' + snap.key()).once('value', function(childSnap) {
+        snap.forEach(function(member) {
+            fbRef.child('user/' + member.key()).once('value', function(user) {
                 list.push({
-                    uid: snap.key(),
-                    name: childSnap.val().name
+                    uid: user.key(),
+                    name: user.val().name
                 });
 
-                self.trigger('members', list, 'active');
+                if (userCount === list.length) {
+                    self.trigger('members', type, list);
+                }
             });
         });
     }
 
-    self.on('list_members_pending', getPending);
-    self.on('list_members_pending', getActive);
+    self.on('list_members', getMembers);
 };

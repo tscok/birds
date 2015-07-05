@@ -1,20 +1,18 @@
 <project>
-    <!-- <members if={ show } type="pending"></members>
-    <members if={ show } type="active"></members> -->
+    <div if={ show } class="dashboard">
+        <members></members>
+    </div>
 
     <script>
-        // var riotcontrol = require('riotcontrol')
-        // var self = this
+        var riotcontrol = require('riotcontrol')
+        var self = this
 
-        // self.show = false
+        riotcontrol.on('route_changed', function(route) {
+            self.update({show: route == 'project'})
+        })
 
-        // riotcontrol.on('route_changed', function(route, id) {
-        //     self.update({show: route == 'project' && id})
-
-        //     if(route == 'project' && id) {
-        //         riotcontrol.trigger('list_members_pending', id)
-        //         riotcontrol.trigger('list_members_active', id)
-        //     }
-        // })
+        riotcontrol.on('route_project', function(pid) {
+            riotcontrol.trigger('list_members', pid)
+        })
     </script>
 </project>
