@@ -1,5 +1,6 @@
 <members>
-    <list each={ type, list in types } heading="Members { type }" items={ list }>
+    <h2>Members</h2>
+    <list each={ type, list in types } heading="{ type }" items={ list }>
         <span>{ name } [accept] [ignore]</span>
     </list>
 

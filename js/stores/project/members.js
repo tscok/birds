@@ -21,7 +21,7 @@ module.exports = function() {
     function getMembersByType(snap) {
         var list = [];
         var type = snap.key();
-        var userCount = snap.numChildren();
+        var count = snap.numChildren();
 
         snap.forEach(function(member) {
             fbRef.child('user/' + member.key()).once('value', function(user) {
@@ -30,7 +30,7 @@ module.exports = function() {
                     name: user.val().name
                 });
 
-                if (userCount === list.length) {
+                if (count === list.length) {
                     self.trigger('members', type, list);
                 }
             });

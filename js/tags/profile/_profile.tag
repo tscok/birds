@@ -1,7 +1,8 @@
 <profile>
-    <user if={ show }></user>
-    <projects if={ show } type="ownerships"></projects>
-    <projects if={ show } type="memberships"></projects>
+    <div if={ show } class="profile">
+        <user></user>
+        <projects></projects>
+    </div>
 
     <script>
         var riotcontrol = require('riotcontrol')
@@ -13,8 +14,7 @@
 
         riotcontrol.on('route_profile', function() {
             riotcontrol.trigger('user_update')
-            riotcontrol.trigger('list_ownerships')
-            riotcontrol.trigger('list_memberships')
+            riotcontrol.trigger('list_projects')
         })
     </script>
 </profile>

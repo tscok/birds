@@ -1,63 +1,62 @@
 var riot = require('riot');
+var promise = require('promise');
 var firebase = require('firebase');
 
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, uid;
+    var self = this, uid, projects;
 
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
-    function getOwnerships() {
+    function getProjects() {
         uid = fbRef.getAuth().uid;
-        var list = [];
 
-        fbRef.child('user/' + uid + '/project/own').once('value', function(snap) {
-            if (!snap.val()) {
-                self.trigger('projects', 'ownerships', list);
-                return;
-            }
-            listProjects(snap, 'ownerships', list);
-        });
-    }
+        projects = {};
 
-    function getMemberships() {
-        uid = fbRef.getAuth().uid;
-        var list = [];
+        fbRef.child('user/' + uid + '/project').on('value', function(snap) {
 
-        fbRef.child('user/' + uid + '/project/member').once('value', function(snap) {
-            if (!snap.val()) {
-                self.trigger('projects', 'memberships', list);
-                return;
-            }
-            listProjects(snap, 'memberships', list);
-        });
-    }
-
-    function listProjects(snap, type, list) {
-        var numberOfProjects = snap.numChildren();
-        snap.forEach(function(childSnap) {
-            var pid = childSnap.key();
-
-            fbRef.child('project/' + pid).once('value', function(project) {
-                var data = project.val();
-
-                list.push({
-                    pid: pid,
-                    title: data.title,
-                    site: data.site,
-                    ownerName: data.ownerId === uid ? 'You' : data.ownerName,
-                    dateStart: data.dateStart,
-                    dateEnd: data.dateEnd
+            // new promise(function(resolve, reject) {
+                snap.forEach(function(childSnap) {
+                    getProjectsByType(childSnap);
                 });
-
-                if (numberOfProjects === list.length) {
-                    self.trigger('projects', type, list);
-                }
-            });
+            // }).then(function(data) {
+            //     console.log('data',data);
+            //     console.log('projects',projects);
+            //     // console.log('data',data);
+            // })
+            
         });
     }
 
-    self.on('list_ownerships', getOwnerships);
-    self.on('list_memberships', getMemberships);
+    function getProjectsByType(snap) {
+    //     var list = [];
+        var type = snap.key();
+        console.log('type',type);
+    //     var count = snap.numChildren();
+
+    //     console.log('type',type);
+
+    //     snap.forEach(function(childSnap) {
+    //         var pid = childSnap.key();
+
+    //         // projects[type][pid] = true;
+
+    //         fbRef.child('project/' + pid).once('value', function(project) {
+
+    //             console.log('pid',pid);
+
+    //             projects[type][pid] = {
+    //                 title: project.val().title,
+    //                 site: project.val().site,
+    //                 dateStart: project.val().dateStart,
+    //                 dateEnd: project.val().dateEnd,
+    //                 own: project.val().ownerId === uid
+    //             };
+
+    //         });
+    //     });
+    }
+
+    self.on('list_projects', getProjects);
 };
