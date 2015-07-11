@@ -1,61 +1,40 @@
 var riot = require('riot');
-var promise = require('promise');
 var firebase = require('firebase');
 
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, uid, projects;
+    var self = this, uid;
 
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
     function getProjects() {
         uid = fbRef.getAuth().uid;
 
-        projects = {};
-
-        fbRef.child('user/' + uid + '/project').on('value', function(snap) {
-
-            // new promise(function(resolve, reject) {
-                snap.forEach(function(childSnap) {
-                    getProjectsByType(childSnap);
-                });
-            // }).then(function(data) {
-            //     console.log('data',data);
-            //     console.log('projects',projects);
-            //     // console.log('data',data);
-            // })
-            
+        fbRef.child('user/' + uid + '/project').once('value', function(snap) {
+            snap.forEach(function(childSnap) {
+                getProjectsByType(childSnap);
+            });
         });
     }
 
     function getProjectsByType(snap) {
-    //     var list = [];
+        var list = [];
         var type = snap.key();
-        console.log('type',type);
-    //     var count = snap.numChildren();
 
-    //     console.log('type',type);
+        snap.forEach(function(childSnap) {
+            var pid = childSnap.key();
 
-    //     snap.forEach(function(childSnap) {
-    //         var pid = childSnap.key();
+            fbRef.child('project/' + pid).once('value', function(project) {
+                list.push({
+                    pid: pid,
+                    title: project.val().title,
+                    site: project.val().site
+                });
 
-    //         // projects[type][pid] = true;
-
-    //         fbRef.child('project/' + pid).once('value', function(project) {
-
-    //             console.log('pid',pid);
-
-    //             projects[type][pid] = {
-    //                 title: project.val().title,
-    //                 site: project.val().site,
-    //                 dateStart: project.val().dateStart,
-    //                 dateEnd: project.val().dateEnd,
-    //                 own: project.val().ownerId === uid
-    //             };
-
-    //         });
-    //     });
+                self.trigger('projects', type, list);
+            });
+        });
     }
 
     self.on('list_projects', getProjects);

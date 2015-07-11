@@ -13,9 +13,9 @@
         </form>
 
         <list heading="Search Results" items={ items } if={ items.length }>
-            <span>{ title }, { site }<br>Owned by: { ownerName }</span><br>
-            <datetime if={ dateStart || dateEnd }>{ dateStart } &ndash; { dateEnd } </datetime>
-            <join if={ !this.isOwner } project={ this } />
+            <span>{ item.title }, { item.site }<br>Owned by: { item.ownerName }</span><br>
+            <datetime if={ item.dateStart || item.dateEnd }>{ item.dateStart } &ndash; { item.dateEnd } </datetime>
+            <join if={ !item.isOwner } project={ item } />
         </list>
     </div>
 

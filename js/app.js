@@ -14,7 +14,7 @@ var navigation = require('./stores/navigation');
 var user = require('./stores/profile/user');
 var projects = require('./stores/profile/projects');
 var pendingcount = require('./stores/profile/pendingcount');
-
+var leave = require('./stores/profile/leave');
 
 // Create
 var create = require('./stores/create/_create');
@@ -35,6 +35,7 @@ riotcontrol.addStore(new navigation());
 riotcontrol.addStore(new user());
 riotcontrol.addStore(new projects());
 riotcontrol.addStore(new pendingcount());
+riotcontrol.addStore(new leave());
 
 riotcontrol.addStore(new create());
 riotcontrol.addStore(new map());
@@ -59,6 +60,7 @@ require('./tags/profile/user.tag');
 require('./tags/profile/verify.tag');
 require('./tags/profile/projects.tag');
 require('./tags/profile/pendingcount.tag');
+require('./tags/profile/leave.tag');
 
 require('./tags/create/_create.tag');
 require('./tags/create/map.tag');
