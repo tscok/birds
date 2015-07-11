@@ -1,11 +1,12 @@
 <projects>
     <h2>Projects</h2>
     <list each={ type, list in types } heading={ type } items={ list }>
-        <a href="#project/{ item.pid }" if={ parent.type !== 'pending' }>{ item.title }, { item.site }</a>
-        <span if={ parent.type === 'pending' }>{ item.title }, { item.site } 
-            <leave data={ this }></leave>
-        </span>
-        <pendingcount if={ own } pid={ pid }></pendingcount>
+        <a if={ parent.type != 'pending' } href="#project/{ item.pid }">{ item.title }, { item.site }</a>
+        <pendingcount if={ parent.type == 'own' } pid={ item.pid }></pendingcount>
+
+        <a if={ parent.type == 'pending' }>{ item.title }, { item.site }</a>
+
+        <leave if={ parent.type != 'own' } data={ this }></leave>
     </list>
 
     <script>

@@ -35,6 +35,7 @@ module.exports = function() {
                     'isOwner': uid === project.ownerId,
                     'isActive': new Date(project.dateEnd).getTime() > new Date().getTime()
                 });
+                
             }
 
             self.trigger('search_result', list);

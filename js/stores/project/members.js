@@ -13,12 +13,12 @@ module.exports = function() {
             snap.forEach(function(childSnap) {
                 // childSnap is either of type;
                 // pending, granted, dormant or ignored.
-                getMembersByType(childSnap);
+                getMembersByType(childSnap, pid);
             });
         });
     }
 
-    function getMembersByType(snap) {
+    function getMembersByType(snap, pid) {
         var list = [];
         var type = snap.key();
         var count = snap.numChildren();
@@ -27,7 +27,8 @@ module.exports = function() {
             fbRef.child('user/' + member.key()).once('value', function(user) {
                 list.push({
                     uid: user.key(),
-                    name: user.val().name
+                    name: user.val().name,
+                    pid: pid
                 });
 
                 if (count === list.length) {
