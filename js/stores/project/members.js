@@ -9,10 +9,8 @@ module.exports = function() {
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
     function getMembers(pid) {
-        fbRef.child('member/' + pid).once('value', function(snap) {
+        fbRef.child('member/' + pid).on('value', function(snap) {
             snap.forEach(function(childSnap) {
-                // childSnap is either of type;
-                // pending, granted, dormant or ignored.
                 getMembersByType(childSnap, pid);
             });
         });
