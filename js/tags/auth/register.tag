@@ -27,13 +27,15 @@
         }
 
         riotcontrol.on('route_changed', function(route) {
-            self.update({route: route, show: route == 'register'})
+            self.update({show: route === 'register'})
         })
 
-        riotcontrol.on('alert', function() {
-            if (self.route == 'register') {
-                self.update({isLoading: false})
-            }
+        riotcontrol.on('route_register', function() {
+            self.update({isLoading: false})
+        })
+
+        riotcontrol.on('register_status', function(status) {
+            self.update({isLoading: status === 'success'})
         })
     </script>
 </register>

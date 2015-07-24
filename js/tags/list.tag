@@ -5,7 +5,7 @@
             <yield/>
         </li>
     </ul>
-    <p if={ !opts.items.length }>{ opts.status }</p>
+    <p if={ opts.status && !opts.items.length }>{ opts.status }</p>
 
     <script>
         var self = this

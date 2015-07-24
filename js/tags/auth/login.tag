@@ -25,13 +25,15 @@
         }
 
         riotcontrol.on('route_changed', function(route) {
-            self.update({route: route, show: route == 'login'})
+            self.update({show: route === 'login'})
         })
 
-        riotcontrol.on('alert', function() {
-            if (self.route == 'login') {
-                self.update({isLoading: false})
-            }
+        riotcontrol.on('route_login', function() {
+            self.update({isLoading: false})
+        })
+
+        riotcontrol.on('login_status', function(status) {
+            self.update({isLoading: status === 'success'})
         })
     </script>
 </login>

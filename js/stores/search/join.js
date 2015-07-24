@@ -11,30 +11,32 @@ module.exports = function() {
     // Request status in project.
     function getStatus(pid) {
         uid = uid || fbRef.getAuth().uid;
+        
         // Look for pending status.
-        fbRef.child('member/' + pid + '/pending/' + uid).once('value', function(pendingSnap) {
+        fbRef.child('user_project/' + uid + '/pending/' + pid).once('value', function(pendingSnap) {
             self.trigger('join_pending', !!pendingSnap.val(), pid);
         });
+
         // Look for member status.
-        fbRef.child('member/' + pid + '/granted/' + uid).once('value', function(memberSnap) {
+        fbRef.child('user_project/' + uid + '/member/' + pid).once('value', function(memberSnap) {
             self.trigger('join_member', !!memberSnap.val(), pid);
         });
     }
 
     // Request to join project
     function joinProject(pid) {
-        // Add uid to pending/pid to notify project owner.
-        fbRef.child('member/' + pid + '/pending/' + uid).set(true);
-        // Add pid to user/uid/pending for reference.
-        fbRef.child('user/' + uid + '/project/pending/' + pid).set(true);
+        // Add uid to pending (project) to notify project owner.
+        fbRef.child('member_status/' + pid + '/pending/' + uid).set(true);
+        // Add pid to pending (user) for reference.
+        fbRef.child('user_project/' + uid + '/pending/' + pid).set(true);
     }
 
     // Undo membership request
     function joinUndo(pid) {
-        // Remove uid from pending.
-        fbRef.child('member/' + pid + '/pending/' + uid).set(null);
-        // Remove pid from user/uid/pending.
-        fbRef.child('user/' + uid + '/project/pending/' + pid).set(null);
+        // Remove uid from pending (project).
+        fbRef.child('member_status/' + pid + '/pending/' + uid).remove();
+        // Remove pid from pending (user).
+        fbRef.child('user_project/' + uid + '/pending/' + pid).remove();
     }
 
     self.on('join_status', getStatus)

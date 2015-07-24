@@ -64,7 +64,7 @@
         })
 
         riotcontrol.on('route_changed', function(route) {
-            self.update({show: route == 'create'})
+            self.update({show: route === 'create'})
         })
     </script>
 </create>

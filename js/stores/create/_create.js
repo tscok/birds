@@ -15,7 +15,7 @@ module.exports = function() {
 		// Firebase locations.
 		var projectRef = fbRef.child('project');
 		var countryRef = fbRef.child('country/' + data['countryIso']);
-		var userRef = fbRef.child('user/' + uid);
+		var userRef = fbRef.child('user_project/' + uid + '/own/');
 
 		// Save project.
 		var newProjectRef = projectRef.push({
@@ -34,7 +34,7 @@ module.exports = function() {
 		var projectID = newProjectRef.key();
 
 		// Add projectID to user profile.
-		userRef.child('project/own/' + projectID).set(true);
+		userRef.child(projectID).set(true);
 		
 		// Store Country data (if countryIso does not already exist).
 		countryRef.once('value', function(snap) {

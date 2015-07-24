@@ -7,11 +7,15 @@
 
         leave() {
             var item = self.item
-            var index = self.parent.list.indexOf(item)
-            self.parent.list.splice(index, 1)
-            self.parent.update()
+            var list = self.parent.opts.items
+            var index = list.indexOf(item)
+            
+            if (index != -1) {
+                list.splice(index, 1)
+                self.parent.update()
 
-            riotcontrol.trigger('leave_project', self.item.pid)
+                riotcontrol.trigger('leave_project', self.item.pid)
+            }
         }
 
     </script>

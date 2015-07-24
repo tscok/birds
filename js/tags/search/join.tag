@@ -3,7 +3,7 @@
         <i if={ !isActive }>[I]</i>
         <i if={ isPending }>[P]</i>
         <i if={ isMember }>[M]</i>
-        <button type="button" if={ !isPending && !isMember && isActive } onclick={ join }>Join</button>
+        <button type="button" if={ !isPending && !isMember && isActive } onclick={ request }>Join</button>
         <button type="button" if={ isPending === true } onclick={ undo }>Undo</button>
     </span>
     <span if={ typeof isPending !== 'boolean' && typeof isMember !== 'boolean' }>…</span>
@@ -14,7 +14,7 @@
 
         self.isActive = opts.project.isActive
 
-        join(e) {
+        request(e) {
             riotcontrol.trigger('join_project', opts.project.pid)
             self.isPending = true
         }

@@ -9,7 +9,7 @@
         var self = this
 
         riotcontrol.on('route_changed', function(route) {
-            self.update({show: route == 'profile'})
+            self.update({show: route === 'profile'})
         })
 
         riotcontrol.on('route_profile', function() {

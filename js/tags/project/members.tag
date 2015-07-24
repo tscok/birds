@@ -1,20 +1,26 @@
 <members>
     <h2>Members</h2>
-    <list each={ type, list in types } heading={ type } items={ list }>
+    <list each={ type, list in members } heading={ type } items={ list }>
         <span>{ item.name }</span>
-        <memberstatus data={ this }></memberstatus>
+        <membership data={ this }></membership>
     </list>
+    <p if={ !Object.keys(members).length }>No members found.</p>
 
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
 
+        self.members = {}
+        self.message = 'No members found.'
+
+        // On route, clear members.
         riotcontrol.on('route_project', function(pid) {
-            self.update({types: {}})
+            self.update({members: {}})
         });
 
-        riotcontrol.on('members', function(type, list) {
-            self.types[type] = list
+        // Per event type, populate members.
+        riotcontrol.on('members_listed', function(type, list) {
+            self.members[type] = list
             self.update()
         })
     </script>

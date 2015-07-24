@@ -41,11 +41,12 @@
         })
 
         riotcontrol.on('route_changed', function(route) {
-            self.update({show: (route == 'search')})
-            if (route == 'search') {
-                self.update({items: []})
-                self.frmSearch.reset()
-            }
+            self.update({show: route === 'search'})
+        })
+
+        riotcontrol.on('route_search', function() {
+            self.update({items: []})
+            self.frmSearch.reset()
         })
     </script>
 </search>

@@ -1,24 +1,35 @@
 <projects>
     <h2>Projects</h2>
-    <list each={ type, list in types } heading={ type } items={ list }>
-        <a if={ parent.type != 'pending' } href="#project/{ item.pid }">{ item.title }, { item.site }</a>
-        <pendingcount if={ parent.type == 'own' } pid={ item.pid }></pendingcount>
 
-        <a if={ parent.type == 'pending' }>{ item.title }, { item.site }</a>
+    <list heading="Own" items={ projects['own'] }>
+        <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
+        <pendingcount pid={ item.pid }></pendingcount>
+    </list>
 
-        <leave if={ parent.type != 'own' } data={ this }></leave>
+    <list heading="Member" items={ projects['member'] }>
+        <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
+        <leave item={ item.pid }></leave>
+    </list>
+
+    <list heading="Pending" items={ projects['pending'] }>
+        <a>{ item.title }, { item.site }</a>
+        <leave item={ item.pid }></leave>
     </list>
 
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
-        
-        riotcontrol.on('route_profile', function() {
-            self.update({types:{}})
-        });
 
-        riotcontrol.on('projects', function(type, list) {
-            self.types[type] = list
+        self.projects = {}
+
+        // On route, clear projects.
+        riotcontrol.on('route_profile', function() {
+            self.update({projects: {}})
+        })
+
+        // Per event type, populate projects.
+        riotcontrol.on('projects_listed', function(type, list) {
+            self.projects[type] = list
             self.update()
         })
     </script>

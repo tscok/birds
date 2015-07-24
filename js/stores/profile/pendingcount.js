@@ -9,9 +9,10 @@ module.exports = function() {
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
     function countPending(pid) {
-        fbRef.child('member/' + pid + '/pending/').once('value', function(snap) {
-            var count = snap.numChildren();
-            self.trigger('pending_count_' + pid, count);
+        fbRef.child('member_status/' + pid + '/pending/').once('value', function(snap) {
+            if (snap.val() !== null) {
+                self.trigger('pending_count_' + pid, snap.numChildren());
+            }
         });
     }
 

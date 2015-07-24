@@ -23,9 +23,11 @@ module.exports = function() {
 		promise.then(function(auth) {
 			setLocalUserData(auth);
 			self.trigger('alert', null);
+			self.trigger('login_status', 'success');
 			riot.route(route);
 		}, function(error) {
 			self.trigger('alert', {text:error.message, type:'danger'});
+			self.trigger('login_status', 'failure');
 		});
 	};
 
