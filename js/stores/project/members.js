@@ -1,4 +1,5 @@
 var riot = require('riot');
+var utils = require('../../utils');
 var firebase = require('firebase');
 
 module.exports = function() {
@@ -10,12 +11,14 @@ module.exports = function() {
 
     function getMembers(pid) {
         // Remove members who flagged themselves for removal.
-        revokeMembership(pid);
+        removeMembers(pid);
 
         // Get member types.
         fbRef.child('member_status/' + pid).on('value', function(snap) {
             if (!snap.val()) {
                 // No pending, no members. Trigger cancel event for loader…?
+                self.trigger('members_empty');
+                return;
             }
 
             // Get members by type.
@@ -31,12 +34,20 @@ module.exports = function() {
         var count = snap.numChildren();
 
         snap.forEach(function(member) {
+
             fbRef.child('user/' + member.key()).once('value', function(user) {
-                list.push({
+                var userObj = {
                     uid: user.key(),
                     name: user.val().name,
                     pid: pid
-                });
+                };
+
+                if (type === 'member') {
+                    // Merge member object with user details.
+                    list.push(utils.extend(member.val(), userObj));
+                } else {
+                    list.push(userObj);
+                }
 
                 if (count === list.length) {
                     self.trigger('members_listed', type, list);
@@ -45,7 +56,7 @@ module.exports = function() {
         });
     }
 
-    function revokeMembership(pid) {
+    function removeMembers(pid) {
         fbRef.child('member_status/' + pid + '/revoke/').once('value', function(snap) {
             snap.forEach(function(childSnap) {
                 fbRef.child('member_status/' + pid + '/member/' + childSnap.key()).remove();

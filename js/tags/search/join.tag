@@ -1,12 +1,12 @@
 <join>
-    <span if={ typeof isPending === 'boolean' && typeof isMember === 'boolean' }>
+    <span if={ typeof isPending == 'boolean' && typeof isMember == 'boolean' }>
         <i if={ !isActive }>[I]</i>
         <i if={ isPending }>[P]</i>
         <i if={ isMember }>[M]</i>
         <button type="button" if={ !isPending && !isMember && isActive } onclick={ request }>Join</button>
-        <button type="button" if={ isPending === true } onclick={ undo }>Undo</button>
+        <button type="button" if={ isPending == true } onclick={ undo }>Undo</button>
     </span>
-    <span if={ typeof isPending !== 'boolean' && typeof isMember !== 'boolean' }>…</span>
+    <span if={ typeof isPending != 'boolean' && typeof isMember != 'boolean' }>…</span>
 
     <script>
         var riotcontrol = require('riotcontrol')

@@ -28,6 +28,7 @@ var join = require('./stores/search/join');
 var project = require('./stores/project/_project');
 var members = require('./stores/project/members');
 var membership = require('./stores/project/membership');
+var role = require('./stores/project/role');
 
 
 // Register stores.
@@ -48,6 +49,7 @@ riotcontrol.addStore(new join());
 riotcontrol.addStore(new project());
 riotcontrol.addStore(new members());
 riotcontrol.addStore(new membership());
+riotcontrol.addStore(new role());
 
 
 // == RIOT TAGS ==
@@ -75,6 +77,7 @@ require('./tags/search/join.tag');
 require('./tags/project/_project.tag');
 require('./tags/project/members.tag');
 require('./tags/project/membership.tag');
+require('./tags/project/role.tag');
 
 riot.mount('*');
 

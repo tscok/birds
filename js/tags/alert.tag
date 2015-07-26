@@ -16,6 +16,12 @@
 
         riotcontrol.on('alert', function(obj) {
             self.update({alert: obj})
+
+            // if (obj.type == 'success') {
+            //     setTimeout(function() {
+            //         self.update({alert: null})
+            //     }, 4000)
+            // }
         })
     </script>
 </alert>

@@ -1,12 +1,11 @@
 <membership>
-    <button if={ type == 'pending' } onclick={ allow }>Allow</button>
-    <button if={ type == 'pending' } onclick={ deny }>Deny</button>
+    <button onclick={ allow }>Allow</button>
+    <button onclick={ deny }>Deny</button>
     
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
 
-        self.type = self.parent.type
         self.item = opts.data.item
         
         removeItem(item) {
@@ -20,12 +19,12 @@
 
         allow() {
             riotcontrol.trigger('membership_allow', self.item)
-            this.removeItem(self.item)
+            // this.removeItem(self.item)
         }
 
         deny() {
             riotcontrol.trigger('membership_deny', self.item)
-            this.removeItem(self.item)
+            // this.removeItem(self.item)
         }
 
     </script>

@@ -1,17 +1,17 @@
 <projects>
     <h2>Projects</h2>
 
-    <list heading="Own" items={ projects['own'] }>
+    <list if={ projects['own'] } heading="Own" items={ projects['own'] }>
         <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
         <pendingcount pid={ item.pid }></pendingcount>
     </list>
 
-    <list heading="Member" items={ projects['member'] }>
+    <list if={ projects['member'] } heading="Member" items={ projects['member'] }>
         <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
         <leave item={ item.pid }></leave>
     </list>
 
-    <list heading="Pending" items={ projects['pending'] }>
+    <list if={ projects['pending'] } heading="Pending" items={ projects['pending'] }>
         <a>{ item.title }, { item.site }</a>
         <leave item={ item.pid }></leave>
     </list>
