@@ -43,7 +43,6 @@ module.exports = function() {
                 };
 
                 if (type === 'member') {
-                    // Merge member object with user details.
                     list.push(utils.extend(member.val(), userObj));
                 } else {
                     list.push(userObj);

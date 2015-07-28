@@ -1,6 +1,7 @@
 <members>
     <h2>Members</h2>
-    <p if={ !Object.keys(members).length }>No members found.</p>
+    <p if={ loading && !Object.keys(members).length }>Loading…</p>
+    <p if={ !loading && !Object.keys(members).length }>No members found.</p>
 
     <list if={ members['pending'] } heading="Pending" items={ members['pending'] }>
         <span>{ item.name }</span>
@@ -13,16 +14,11 @@
         <role data={ this }></role>
     </list>
 
-    <!-- <list each={ type, list in members } heading={ type } items={ list }>
-        <span>{ item.name } { item.role ? '('+item.role+', '+item.sign+')' : '' }</span>
-        <membership data={ this }></membership>
-        <role if={ parent.type == 'member' } data={ this }></role>
-    </list>
-    <p if={ !Object.keys(members).length }>No members found.</p> -->
-
     <script>
         var riotcontrol = require('riotcontrol')
         var self = this
+
+        self.loading = true;
 
         // On route, clear members.
         riotcontrol.on('route_project', function(pid) {
@@ -35,9 +31,9 @@
             self.update()
         })
 
-        // On empty result, clear members.
+        // On empty result, clear members and cancel loader.
         riotcontrol.on('members_empty', function() {
-            self.update({members: {}})
+            self.update({members: {}, loading: false})
         })
     </script>
 </members>
