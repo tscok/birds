@@ -1,5 +1,5 @@
 <create>
-    <form name="frmCreate" if={ show }>
+    <form name="frmCreate">
         <h2>Create Project</h2>
         <label>Project title</label><br>
         <input type="text" name="title" placeholder="Project name"><br>
@@ -61,10 +61,6 @@
             self.countryName.value = data.countryName
             self.country.value = data.countryName +', '+ data.countryIso
             self.latlng.value = data.latLng
-        })
-
-        riotcontrol.on('route_changed', function(route) {
-            self.update({show: route === 'create'})
         })
     </script>
 </create>

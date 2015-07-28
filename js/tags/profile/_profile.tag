@@ -1,16 +1,9 @@
 <profile>
-    <div if={ show } class="profile">
-        <user></user>
-        <projects></projects>
-    </div>
+    <user></user>
+    <projects></projects>
 
     <script>
         var riotcontrol = require('riotcontrol')
-        var self = this
-
-        riotcontrol.on('route_changed', function(route) {
-            self.update({show: route === 'profile'})
-        })
 
         riotcontrol.on('route_profile', function() {
             riotcontrol.trigger('user_update')

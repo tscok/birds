@@ -1,23 +1,21 @@
 <search>
-    <div if={ show }>
-        <form name="frmSearch" onsubmit={ find }>
-            <h2>Find project</h2>
-            <input type="text" name="needle" placeholder="Search" autocomplete="off" onkeyup={ find }>
-            <button type="button" onclick={ find }>OK</button>
-            <fieldset>
-                <legend>Filter by</legend>
-                <label><input type="radio" name="category" onclick={ find } value="title" checked> Project title</label>
-                <label><input type="radio" name="category" onclick={ find } value="site"> Site name</label>
-                <label><input type="radio" name="category" onclick={ find } value="ownerName"> Owner name</label>
-            </fieldset>
-        </form>
+    <form name="frmSearch" onsubmit={ find }>
+        <h2>Find project</h2>
+        <input type="text" name="needle" placeholder="Search" autocomplete="off" onkeyup={ find }>
+        <button type="button" onclick={ find }>OK</button>
+        <fieldset>
+            <legend>Filter by</legend>
+            <label><input type="radio" name="category" onclick={ find } value="title" checked> Project title</label>
+            <label><input type="radio" name="category" onclick={ find } value="site"> Site name</label>
+            <label><input type="radio" name="category" onclick={ find } value="ownerName"> Owner name</label>
+        </fieldset>
+    </form>
 
-        <list heading="Search Results" items={ items } if={ items.length }>
-            <span>{ item.title }, { item.site }<br>Owned by: { item.ownerName }</span><br>
-            <datetime if={ item.dateStart || item.dateEnd }>{ item.dateStart } &ndash; { item.dateEnd } </datetime>
-            <join if={ !item.isOwner } project={ item } />
-        </list>
-    </div>
+    <list heading="Search Results" items={ items } if={ items.length }>
+        <span>{ item.title }, { item.site }<br>Owned by: { item.ownerName }</span><br>
+        <datetime if={ item.dateStart || item.dateEnd }>{ item.dateStart } &ndash; { item.dateEnd } </datetime>
+        <join if={ !item.isOwner } project={ item } />
+    </list>
 
     <script>
         var riotcontrol = require('riotcontrol')
@@ -38,10 +36,6 @@
 
         riotcontrol.on('search_result', function(list) {
             self.update({items: list})
-        })
-
-        riotcontrol.on('route_changed', function(route) {
-            self.update({show: route === 'search'})
         })
 
         riotcontrol.on('route_search', function() {

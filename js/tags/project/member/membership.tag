@@ -19,12 +19,10 @@
 
         allow() {
             riotcontrol.trigger('membership_allow', self.item)
-            // this.removeItem(self.item)
         }
 
         deny() {
             riotcontrol.trigger('membership_deny', self.item)
-            // this.removeItem(self.item)
         }
 
     </script>

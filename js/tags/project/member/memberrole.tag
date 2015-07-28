@@ -1,4 +1,4 @@
-<role>
+<memberrole>
     <button onclick={ edit }>…</button>
     <form if={ showForm } name="frmRoles" onsubmit={ updateMember }>
         <label><input type="checkbox" name="ringer" onclick={ toggleTextfield } checked={ isChecked }> Ringer</label><br>
@@ -9,7 +9,7 @@
 
     <script>
         var riotcontrol = require('riotcontrol')
-        var utils = require('../../utils')
+        var utils = require('../../../utils')
         var self = this
 
         self.isChecked = opts.data.item.role == 'ringer'
@@ -49,4 +49,4 @@
             riotcontrol.trigger('membership_revoke', opts.data.item);
         }
     </script>
-</role>
+</memberrole>

@@ -22,7 +22,7 @@ module.exports = function() {
 	function handleAuthResponse(promise, route) {
 		promise.then(function(auth) {
 			setLocalUserData(auth);
-			self.trigger('alert', null);
+			self.trigger('alert_clear');
 			self.trigger('login_status', 'success');
 			riot.route(route);
 		}, function(error) {
@@ -56,7 +56,7 @@ module.exports = function() {
 		console.log('user:', fbRef.getAuth(), 'last logged in:', new Date());
 		
 		fbRef.unauth();
-		self.trigger('alert', null);
+		self.trigger('alert_clear');
 		self.trigger('auth_update', null);
 		riot.route('login');
 	});

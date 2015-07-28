@@ -30,3 +30,17 @@
             <bird-new></bird-new>
 
             <bird-old></bird-old>
+
+
+
+
+            // Create app component to control what shows when?
+
+            <app>
+                <login if={ route == 'login' }></login>
+                <register if={ route == 'register' }></register>
+
+                riotcontrol.on('route_changed', function(route) {
+                    self.update({route: route})
+                })
+            </app>

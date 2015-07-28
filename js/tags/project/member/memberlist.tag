@@ -1,4 +1,4 @@
-<members>
+<memberlist>
     <h2>Members</h2>
     <p if={ loading && !Object.keys(members).length }>Loading…</p>
     <p if={ !loading && !Object.keys(members).length }>No members found.</p>
@@ -11,7 +11,7 @@
     <list if={ members['member'] } heading="Member" items={ members['member'] }>
         <span>{ item.name }</span>
         <span>({ item.role }<span if={ item.sign }>, { item.sign }</span>)</span>
-        <role data={ this }></role>
+        <memberrole data={ this }></memberrole>
     </list>
 
     <script>
@@ -36,4 +36,4 @@
             self.update({members: {}, loading: false})
         })
     </script>
-</members>
+</memberlist>
