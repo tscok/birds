@@ -18,7 +18,7 @@
         var riotcontrol = require('riotcontrol')
         var self = this
 
-        self.loading = true;
+        self.loading = true
 
         // On route, clear members.
         riotcontrol.on('route_project', function(pid) {

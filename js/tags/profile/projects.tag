@@ -1,5 +1,7 @@
 <projects>
     <h2>Projects</h2>
+    <p if={ loading && !Object.keys(projects).length }>Loading…</p>
+    <p if={ !loading && !Object.keys(projects).length }>No projects found.</p>
 
     <list if={ projects['own'] } heading="Own" items={ projects['own'] }>
         <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
@@ -21,6 +23,7 @@
         var self = this
 
         self.projects = {}
+        self.loading = true
 
         // On route, clear projects.
         riotcontrol.on('route_profile', function() {
@@ -31,6 +34,11 @@
         riotcontrol.on('projects_listed', function(type, list) {
             self.projects[type] = list
             self.update()
+        })
+
+        // On empty result, clear projects and cancel loader.
+        riotcontrol.on('projects_empty', function() {
+            self.update({projects: {}, loading: false})
         })
     </script>
 </projects>

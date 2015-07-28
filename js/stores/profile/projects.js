@@ -13,6 +13,12 @@ module.exports = function() {
 
         // Whatever happens to my project folder, let me know!
         fbRef.child('user_project/' + uid).once('value', function(snap) {
+            if (!snap.val()) {
+                // User has no projects, owned or memberships.
+                self.trigger('projects_empty');
+                return;
+            }
+
             // Loop over the project folder and take actions accordingly.
             snap.forEach(function(childSnap) {
                 switch (childSnap.key()) {
