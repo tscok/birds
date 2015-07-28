@@ -9,59 +9,57 @@ module.exports = function() {
 
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
-    function updateMember(data) {
-
+    function updateMemberRole(data) {
         var memberSnap = fbRef.child('member_status/' + data.pid + '/member/' + data.uid);
         var ringerSnap = fbRef.child('ringer/' + data.pid + '/' + data.uid);
 
-        var signatures = [];
-
+        // Wrap list of ringer signatures in a promise.
         var ringers = new promise(function(resolve, reject) {
             fbRef.child('ringer/' + data.pid).once('value', function(snap) {
-                if (snap) resolve(snap);
+                var signatures = [];
+                snap.forEach(function(childSnap) {
+                    signatures.push(childSnap.val());
+                });
+                resolve({list: signatures, source: snap.val()});
             });
         });
 
-        function isSignTaken(sign) {
-            if (!signatures.length) {
-                ringers.then(function(result) {
-                    result.forEach(function(childSnap) {
-                        signatures.push(childSnap.val());
-                    });
-                });
+        // Define action to take depending on 'data'.
+        if (data.newRole == 'ringer') {
+            ringers.then(function(res) {
+                
+                var index = res.list.indexOf(data.newSign);
+
+                // Check if newSign is used by another member.
+                if (index != -1 && res.source[data.uid] != data.newSign) {
+                    var message = 'The signature "' + data.newSign + '" is assigned to another member.';
+                    self.trigger('alert', {text: message, type:'error'});
+                    return;
+                }
+
+                if (data.newRole != data.role) {
+                    // Promote to ringer.
+                    promote();
+                } else {
+                    if (data.newSign != data.sign) {
+                        // Update ringer.
+                        update();
+                    }
+                }
+            });
+        } else {
+            if (data.newRole != data.role) {
+                // Demote to assistant.
+                demote();
             }
-            return signatures.indexOf(sign) != -1;
-        }
-
-        /* PROMOTE TO RINGER */
-        if (data.newRole == 'ringer' && data.newRole != data.role) {
-            promote();
-        }
-
-        /* UPDATE RINGER (SIGN.) */
-        if (data.newRole == 'ringer' && data.newRole == data.role && data.newSign != data.sign) {
-            update();
-        }
-
-        /* DEMOTE TO ASSISTANT */
-        if (data.newRole == 'assistant' && data.newRole != data.role) {
-            demote();
         }
 
         function promote() {
-            if (isSignTaken(data.newSign)) {
-                self.trigger('alert', {text:'The signature "'+ data.newSign +'" already exists in this project.', type:'error'});
-                return;
-            }
             memberSnap.update({role: data.newRole, sign: data.newSign});
             ringerSnap.set(data.newSign);
         }
 
         function update() {
-            if (isSignTaken(data.newSign)) {
-                self.trigger('alert', {text:'The signature "'+ data.newSign +'" already exists in this project.', type:'error'});
-                return;
-            }
             memberSnap.update({sign: data.newSign});
             ringerSnap.set(data.newSign);
         }
@@ -69,12 +67,11 @@ module.exports = function() {
         function demote() {
             memberSnap.update({role: data.newRole, sign: null});
             /**
-             * Never completely remove ringer info as this could lead
-             * to 'who did what' problems down the line.
+             * Never completely remove ringer signatures (only in member).
              * ringerSnap.remove();
              */
         }
     }
 
-    self.on('role_update', updateMember);
+    self.on('role_update', updateMemberRole);
 };
