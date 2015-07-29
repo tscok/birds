@@ -31,6 +31,7 @@
     var memberlist = require('./stores/project/member/memberlist');
     var membership = require('./stores/project/member/membership');
     var memberrole = require('./stores/project/member/memberrole');
+    var ringsizes = require('./stores/project/ringsizes');
 
 
     // Register stores.
@@ -52,6 +53,7 @@
     riotcontrol.addStore(new memberlist());
     riotcontrol.addStore(new membership());
     riotcontrol.addStore(new memberrole());
+    riotcontrol.addStore(new ringsizes());
 
 
     // == RIOT TAGS ==
@@ -82,6 +84,7 @@
     require('./tags/project/member/memberlist.tag');
     require('./tags/project/member/membership.tag');
     require('./tags/project/member/memberrole.tag');
+    require('./tags/project/ringsizes.tag');
 
     riot.mount('*');
 
