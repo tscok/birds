@@ -17,12 +17,16 @@ module.exports = function() {
 
         // Member status: Pending.
         userSnap.child('/pending/' + pid).once('value', function(snap) {
-            if (snap.val()) removePending();
+            if (snap.exists()) {
+                removePending();
+            }
         });
 
         // Member status: Member.
         userSnap.child('/member/' + pid).once('value', function(snap) {
-            if (snap.val()) removeMember();
+            if (snap.exists()) {
+                removeMember();
+            }
         });
 
         function removePending() {
@@ -31,7 +35,7 @@ module.exports = function() {
         }
 
         function removeMember() {
-            memberSnap.child('/revoke/' + uid).set(true);
+            memberSnap.child('/member/' + uid).remove();
             userSnap.child('/member/' + pid).remove();
         }
     }

@@ -10,9 +10,6 @@ module.exports = function() {
     var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
     function getMembers(pid) {
-        // Remove members who flagged themselves for removal.
-        removeMembers(pid);
-
         // Get member types.
         fbRef.child('member_status/' + pid).on('value', function(snap) {
             if (!snap.val()) {
@@ -51,15 +48,6 @@ module.exports = function() {
                 if (count === list.length) {
                     self.trigger('members_listed', type, list);
                 }
-            });
-        });
-    }
-
-    function removeMembers(pid) {
-        fbRef.child('member_status/' + pid + '/revoke/').once('value', function(snap) {
-            snap.forEach(function(childSnap) {
-                fbRef.child('member_status/' + pid + '/member/' + childSnap.key()).remove();
-                fbRef.child('member_status/' + pid + '/revoke/' + childSnap.key()).remove();
             });
         });
     }

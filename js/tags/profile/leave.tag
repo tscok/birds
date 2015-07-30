@@ -14,7 +14,7 @@
                 list.splice(index, 1)
                 self.parent.update()
 
-                riotcontrol.trigger('leave_project', self.item.pid)
+                riotcontrol.trigger('leave_project', opts.data)
             }
         }
 

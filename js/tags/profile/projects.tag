@@ -10,12 +10,12 @@
 
     <list if={ projects['member'] } heading="Member" items={ projects['member'] }>
         <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
-        <leave item={ item.pid }></leave>
+        <leave data={ item.pid }></leave>
     </list>
 
     <list if={ projects['pending'] } heading="Pending" items={ projects['pending'] }>
         <a>{ item.title }, { item.site }</a>
-        <leave item={ item.pid }></leave>
+        <leave data={ item.pid }></leave>
     </list>
 
     <script>
