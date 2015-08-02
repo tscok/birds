@@ -5,16 +5,18 @@
         <button type="button" onclick={ find }>OK</button>
         <fieldset>
             <legend>Filter by</legend>
-            <label><input type="radio" name="category" onclick={ find } value="title" checked> Project title</label>
+            <label><input type="radio" name="category" onclick={ find } value="all" checked> All</label>
+            <label><input type="radio" name="category" onclick={ find } value="title"> Project title</label>
             <label><input type="radio" name="category" onclick={ find } value="site"> Site name</label>
             <label><input type="radio" name="category" onclick={ find } value="ownerName"> Owner name</label>
         </fieldset>
     </form>
 
     <list heading="Search Results" items={ items } if={ items.length }>
-        <span>{ item.title }, { item.site }<br>Owned by: { item.ownerName }</span><br>
+        <span>{ item.title }</span><span>, { item.site }</span><br>
+        <span>Owned by: { item.ownerName }</span><br>
         <datetime if={ item.dateStart || item.dateEnd }>{ item.dateStart } &ndash; { item.dateEnd } </datetime>
-        <join if={ !item.isOwner } project={ item } />
+        <join if={ !item.isOwner } data={ item } />
     </list>
 
     <script>

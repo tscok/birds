@@ -1,15 +1,13 @@
 var riot = require('riot');
 var promise = require('promise');
-var firebase = require('firebase');
+var fbRef = require('../../../firebase');
 
 module.exports = function() {
     riot.observable(this);
 
     var self = this;
 
-    var fbRef = new firebase('https://bluebird.firebaseio.com/');
-
-    function updateMemberRole(data) {
+    function editRole(data) {
         var memberSnap = fbRef.child('member_status/' + data.pid + '/member/' + data.uid);
         var ringerSnap = fbRef.child('ringer/' + data.pid + '/' + data.uid);
 
@@ -33,7 +31,7 @@ module.exports = function() {
                 // Check if newSign is used by another member.
                 if (index != -1 && res.source[data.uid] != data.newSign) {
                     var message = 'The signature "' + data.newSign + '" is assigned to another member.';
-                    self.trigger('alert', {text: message, type:'error'});
+                    self.trigger('alert', message, 'error');
                     return;
                 }
 
@@ -73,5 +71,5 @@ module.exports = function() {
         }
     }
 
-    self.on('role_update', updateMemberRole);
+    self.on('memberrole_edit', editRole);
 };

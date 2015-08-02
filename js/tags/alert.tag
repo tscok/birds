@@ -13,8 +13,8 @@
             self.alert = {}
         }
 
-        riotcontrol.on('alert', function(obj) {
-            self.update({alert: obj})
+        riotcontrol.on('alert', function(text, type) {
+            self.update({alert: {text: text, type: type}})
 
             // if (obj.type == 'success') {
             //     setTimeout(function() {

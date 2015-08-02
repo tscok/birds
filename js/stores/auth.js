@@ -1,18 +1,16 @@
 var riot = require('riot');
 var utils = require('../utils');
+var fbRef = require('../firebase');
 var promise = require('promise');
-var firebase = require('firebase');
 
 module.exports = function() {
 	riot.observable(this);
 
 	var self = this;
-	var fbRef = new firebase('https://bluebird.firebaseio.com/');
-	var userRef = fbRef.child('user');
 
-	function authWithPassword(userObj) {
+	function authWithPassword(userData) {
 		return new promise(function(resolve, reject) {
-			fbRef.authWithPassword(userObj, function onAuth(err, user) {
+			fbRef.authWithPassword(userData, function onAuth(err, user) {
 				if(err) reject(err);
 				if(user) resolve(user);
 			});
@@ -20,48 +18,44 @@ module.exports = function() {
 	};
 
 	function handleAuthResponse(promise, route) {
-		promise.then(function(auth) {
-			setLocalUserData(auth);
+		promise.then(function(authData) {
+			lastLogin = new Date();
+			setLocalUserData(authData);
 			self.trigger('alert_clear');
-			self.trigger('login_status', 'success');
+			self.trigger('login_success')
 			riot.route(route);
 		}, function(error) {
-			self.trigger('alert', {text:error.message, type:'danger'});
-			self.trigger('login_status', 'failure');
+			self.trigger('alert', error.message, 'error');
+			self.trigger('login_fail');
 		});
 	};
 
-	function setLocalUserData(auth) {
-		// console.log('Auth provider:', auth.provider);
-		
+	function setLocalUserData(authData) {
 		var localUser = utils.getLocalUser();
-		var authEmail = (auth.provider == 'password') ? auth.password.email : '';
-
+		var authEmail = (authData.provider == 'password') ? authData.password.email : '';
 		if (localUser.email && localUser.email !== authEmail) {
 			utils.setLocalUser({email: authEmail, name: ''});
 		}
 	}
-	
-	self.on('auth', function() {
-		var uid = fbRef.getAuth() ? fbRef.getAuth().uid : null;
-		self.trigger('auth_update', uid);
-	});
 
-	self.on('login', function(userObj) {
-		var promise = authWithPassword(userObj);
+	function login(userData) {
+		var promise = authWithPassword(userData);
 		handleAuthResponse(promise, 'profile');
-	});
+	}
 
-	self.on('logout', function(route) {
-		console.log('user:', fbRef.getAuth(), 'last logged in:', new Date());
-		
+	function logout() {
 		fbRef.unauth();
 		self.trigger('alert_clear');
-		self.trigger('auth_update', null);
+		self.trigger('auth', null);
 		riot.route('login');
-	});
+	}
 
-	self.on('register', function(userObj, userName) {
-		console.log(userObj, userName);
-	});
+	function authCheck(args) {
+		var uid = fbRef.getAuth() ? fbRef.getAuth().uid : null;
+		self.trigger('auth', uid);
+	}
+	
+	self.on('auth_check', authCheck);
+	self.on('login', login);
+	self.on('logout', logout);
 }

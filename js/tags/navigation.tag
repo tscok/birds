@@ -19,23 +19,19 @@
 
     <script>
         var riotcontrol = require('riotcontrol');
-        var utils = require('../utils');
         var self = this
-
-        self.uid = null
-        self.pid = null
 
         logout(e) {
             riotcontrol.trigger('logout');
         }
 
-        riotcontrol.on('auth_update', function(uid) {
+        riotcontrol.on('auth', function(uid) {
             self.update({uid: uid})
         })
         
-        riotcontrol.on('route_changed', function(route, pid, action) {
-            riotcontrol.trigger('auth')
-            self.update({pid: pid ? pid : false})
+        riotcontrol.on('route_change', function(route, pid, action) {
+            riotcontrol.trigger('auth_check')
+            self.update({pid: pid ? pid : null})
         })
     </script>
 </navigation>

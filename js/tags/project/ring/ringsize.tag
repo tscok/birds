@@ -1,6 +1,5 @@
-<ringsizes>
+<ringsize>
     <a href onclick={ toggleForm }>{ showForm ? 'Hide' : 'Show' } Ring Sizes</a>
-
     <form if={ showForm } name="frmRingsizes" onsubmit={ add }>
         <list items={ ringsizes }>
             <span>{ item.ringSize }</span><span>{ item.serialNumber }</span>
@@ -31,16 +30,15 @@
         }
 
         remove(e) {
-            var data = e.item.item
-            riotcontrol.trigger('ringsizes_remove', data)
+            riotcontrol.trigger('ringsizes_remove', e.item.item)
         }
 
-        riotcontrol.on('ringsizes_listed', function(list) {
+        riotcontrol.on('ringsizes_data', function(list) {
             self.update({ringsizes: list})
         })
 
-        riotcontrol.on('route_changed', function() {
+        riotcontrol.on('route_change', function() {
             self.update({showForm: false})
         })
     </script>
-</ringsizes>
+</ringsize>

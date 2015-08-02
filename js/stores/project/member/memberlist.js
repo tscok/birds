@@ -1,31 +1,31 @@
 var riot = require('riot');
 var utils = require('../../../utils');
-var firebase = require('firebase');
+var fbRef = require('../../../firebase');
 
 module.exports = function() {
     riot.observable(this);
 
-    var self = this;
+    var self = this, pid;
 
-    var fbRef = new firebase('https://bluebird.firebaseio.com/');
+    function init(projectId) {
+        pid = projectId;
 
-    function getMembers(pid) {
         // Get member types.
         fbRef.child('member_status/' + pid).on('value', function(snap) {
-            if (!snap.val()) {
+            if (!snap.exists()) {
                 // No pending, no members. Trigger cancel event for loader…?
-                self.trigger('members_empty');
+                self.trigger('memberlist_empty');
                 return;
             }
 
             // Get members by type.
             snap.forEach(function(childSnap) {
-                getMemberByType(childSnap, pid);
+                getMemberByType(childSnap);
             });
         });
     }
 
-    function getMemberByType(snap, pid) {
+    function getMemberByType(snap) {
         var list = [];
         var type = snap.key();
         var count = snap.numChildren();
@@ -46,11 +46,11 @@ module.exports = function() {
                 }
 
                 if (count === list.length) {
-                    self.trigger('members_listed', type, list);
+                    self.trigger('memberlist_data', type, list);
                 }
             });
         });
     }
 
-    self.on('list_members', getMembers);
+    self.on('memberlist_init', init);
 };

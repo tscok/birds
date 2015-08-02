@@ -6,8 +6,8 @@ module.exports = function() {
 	var self = this;
 
     // proxy for routing
-	self.on('route', function(route, id, action) {
-		self.trigger('route_changed', route, id, action);
+	self.on('proxy_route', function(route, id, action) {
+		self.trigger('route', route, id, action);
         self.trigger('route_' + route, id, action);
 	});
 };

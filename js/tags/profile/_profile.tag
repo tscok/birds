@@ -1,13 +1,14 @@
 <profile>
     <user></user>
-    <projects></projects>
+    <projectlist></projectlist>
 
     <script>
-        var riotcontrol = require('riotcontrol')
+        // 
 
-        riotcontrol.on('route_profile', function() {
-            riotcontrol.trigger('user_update')
-            riotcontrol.trigger('list_projects')
-        })
+        // riotcontrol.on('route_profile', function() {
+        //     riotcontrol.trigger('user_update')
+        //     riotcontrol.trigger('projectlist_init')
+        //     console.log('hopp', new Date().getTime());
+        // })
     </script>
 </profile>

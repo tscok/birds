@@ -22,12 +22,12 @@
             self.isLoading = true
         }
 
-        riotcontrol.on('route_login', function() {
+        riotcontrol.on('route_login login_fail', function() {
             self.update({isLoading: false})
         })
 
-        riotcontrol.on('login_status', function(status) {
-            self.update({isLoading: status === 'success'})
+        riotcontrol.on('login_success', function() {
+            self.update({isLoading: true})
         })
     </script>
 </login>

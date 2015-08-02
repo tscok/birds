@@ -12,30 +12,30 @@
         var riotcontrol = require('riotcontrol')
         var self = this
 
-        self.isActive = opts.project.isActive
+        self.isActive = opts.data.isActive
 
         request(e) {
-            riotcontrol.trigger('join_project', opts.project.pid)
+            riotcontrol.trigger('membership_request', {pid: opts.data.pid})
             self.isPending = true
         }
 
         undo(e) {
-            riotcontrol.trigger('join_undo', opts.project.pid)
+            riotcontrol.trigger('membership_deny', {pid: opts.data.pid})
             self.isPending = false
         }
 
-        riotcontrol.on('join_pending', function(status, project_id) {
-            if (project_id === opts.project.pid) {
+        riotcontrol.on('join_pending', function(status, projectId) {
+            if (projectId === opts.data.pid) {
                 self.update({isPending: status})
             }
         })
 
-        riotcontrol.on('join_member', function(status, project_id) {
-            if (project_id === opts.project.pid) {
+        riotcontrol.on('join_member', function(status, projectId) {
+            if (projectId === opts.data.pid) {
                 self.update({isMember: status})
             }
         })
 
-        riotcontrol.trigger('join_status', opts.project.pid)
+        riotcontrol.trigger('join_status', opts.data.pid)
     </script>
 </join>

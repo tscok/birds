@@ -1,13 +1,11 @@
 var riot = require('riot');
 var utils = require('../../utils');
-var firebase = require('firebase');
+var fbRef = require('../../firebase');
 
 module.exports = function() {
 	riot.observable(this);
 
 	var self = this, uid;
-
-	var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
 	// Get the user object (triggered on route).
 	function userUpdate() {
@@ -30,9 +28,9 @@ module.exports = function() {
 	// Alerts on success or failure.
 	function updateComplete(error) {
 		if(error) {
-			self.trigger('alert', {text: error.message, type:'danger'});
+			self.trigger('alert', error.message, 'error');
 		}else{
-			self.trigger('alert', {text: 'Profile successfully updated!', type:'success'});
+			self.trigger('alert', 'Profile successfully updated!', 'info');
 		}
 	}
 

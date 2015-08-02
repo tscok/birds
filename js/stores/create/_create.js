@@ -1,13 +1,11 @@
 var riot = require('riot');
 var utils = require('../../utils');
-var firebase = require('firebase');
+var fbRef = require('../../firebase');
 
 module.exports = function() {
 	riot.observable(this);
 
 	var self = this;
-
-	var fbRef = new firebase('https://bluebird.firebaseio.com/');
 
 	var createProject = function(data) {
 		var uid = fbRef.getAuth().uid;
