@@ -5,7 +5,7 @@ module.exports = function() {
 
 	var self = this, marker, geocoder;
 
-	function map_init() {
+	function init() {
 		var delta = new google.maps.LatLng(63.27114510000001, 12.449269500000014);
 		var mapOptions = {
 			zoom: 8,
@@ -50,7 +50,5 @@ module.exports = function() {
 		});
 	};
 
-	self.on('map_init', function() {
-		map_init();
-	})
+	self.on('map_init', init);
 };

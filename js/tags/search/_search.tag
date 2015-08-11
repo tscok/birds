@@ -1,7 +1,11 @@
+var riotcontrol = require('riotcontrol')
+var utils = require('../../utils')
+require('./join.tag')
+
 <search>
     <form name="frmSearch" onsubmit={ find }>
         <h2>Find project</h2>
-        <input type="text" name="needle" placeholder="Search" autocomplete="off" onkeyup={ find }>
+        <input type="text" name="needle" placeholder="Search" autocomplete="off">
         <button type="button" onclick={ find }>OK</button>
         <fieldset>
             <legend>Filter by</legend>
@@ -12,16 +16,14 @@
         </fieldset>
     </form>
 
-    <list heading="Search Results" items={ items } if={ items.length }>
+    <list heading="Search Results" items={ result } if={ result.length }>
         <span>{ item.title }</span><span>, { item.site }</span><br>
         <span>Owned by: { item.ownerName }</span><br>
         <datetime if={ item.dateStart || item.dateEnd }>{ item.dateStart } &ndash; { item.dateEnd } </datetime>
-        <join if={ !item.isOwner } data={ item } />
+        <join if={ !item.isOwner && item.isActive } data={ item }></join>
     </list>
 
     <script>
-        var riotcontrol = require('riotcontrol')
-        var utils = require('../../utils')
         var self = this
 
         self.show = false
@@ -36,13 +38,8 @@
             }
         }
 
-        riotcontrol.on('search_result', function(list) {
-            self.update({items: list})
-        })
-
-        riotcontrol.on('route_search', function() {
-            self.update({items: []})
-            self.frmSearch.reset()
+        riotcontrol.on('search_data', function(data) {
+            self.update({result: data})
         })
     </script>
 </search>

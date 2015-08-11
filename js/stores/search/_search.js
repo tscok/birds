@@ -5,51 +5,57 @@ var fbRef = require('../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this;
+    var self = this, uid, pattern, category, result;
+    var types = ['title','site','ownerName'];
+    var publicRef = fbRef.child('project').orderByChild('public').equalTo(true);
 
-    function searchProjects(params) {
-        var uid = fbRef.getAuth().uid;
-        var list = [];
+    function search(data) {
+        uid = fbRef.getAuth().uid;
+        pattern = new RegExp(data.needle, 'i');
+        category = data.category;
+        result = [];
 
-        // Use regExp to find the needle in category values.
-        var regExp = new RegExp(params.needle,'i');
-
-        // Search all public projects.
-        var projects = fbRef.child('project').orderByChild('public').equalTo(true);
-        projects.on('child_added', onChildAdded);
-
-        function onChildAdded(snap) {
-            var pid = snap.key();
-            var project = snap.val();
-
-            if (params.category === 'all') {
-                var category = ['title','site','ownerName'];
-                for (var i = 0; i < category.length; i++) {
-                    if (project[category[i]] && regExp.test(project[category[i]])) {
-                        listProject(project, pid);
-                        // Break loop to prevent duplicates.
-                        break;
-                    }
+        publicRef.once('value', function(publicSnap) {
+            publicSnap.forEach(function(projectSnap) {
+                if (category == 'all') {
+                    tryCategories(projectSnap);
+                } else {
+                    tryCategory(projectSnap);
                 }
-            } else {
-                if (project[params.category] && regExp.test(project[params.category])) {
-                    listProject(project, pid);
-                }
+            });
+
+            self.trigger('search_data', result);
+        });
+    }
+
+    function tryCategories(snap) {
+        var project = snap.val(), sample;
+        for (var i = 0; i < types.length; i++) {
+            sample = project[types[i]];
+            if (sample && pattern.test(sample)) {
+                addResult(project, snap.key());
+                break;
             }
-        }
-
-        function listProject(data, pid) {
-            var extraInfo = {
-                pid: pid,
-                isOwner: uid === data.ownerId,
-                ownerName: uid === data.ownerId ? 'You' : data.ownerName,
-                isActive: new Date(data.dateEnd).getTime() > new Date().getTime()
-            };
-
-            list.push(utils.extend(data, extraInfo));
-            self.trigger('search_result', list);
         }
     }
 
-    self.on('search', searchProjects);
+    function tryCategory(snap) {
+        var project = snap.val();
+        var sample = project[category];
+        if (sample && pattern.test(sample)) {
+            addResult(project, snap.key());
+        }
+    }
+
+    function addResult(project, id) {
+        var extras = {
+            pid: id,
+            isOwner: uid === project.ownerId,
+            ownerName: uid === project.ownerId ? 'You' : project.ownerName,
+            isActive: new Date(project.dateEnd).getTime() > new Date().getTime()
+        };
+        result.push(utils.extend(project, extras));
+    }
+
+    self.on('search', search);
 };

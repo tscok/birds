@@ -1,19 +1,21 @@
+var riotcontrol = require('riotcontrol')
+
 <membership>
     <button onclick={ allow }>Allow</button>
     <button onclick={ deny }>Deny</button>
     
     <script>
-        var riotcontrol = require('riotcontrol')
-        var self = this
-
-        self.item = opts.data.item
+        var data = {
+            pid: this.parent.id,
+            uid: opts.uid
+        }
 
         allow() {
-            riotcontrol.trigger('membership_allow', self.item)
+            riotcontrol.trigger('membership_allow', data)
         }
 
         deny() {
-            riotcontrol.trigger('membership_deny', self.item)
+            riotcontrol.trigger('membership_deny', data)
         }
     </script>
 </membership>

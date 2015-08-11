@@ -1,10 +1,14 @@
+var riotcontrol = require('riotcontrol')
+require('./projectlist.tag')
+require('./pendingcount.tag')
+
 <projectlist>
     <h2>Projects</h2>
     <p if={ loading }>Loading…</p>
 
     <list heading="Own" items={ own }>
         <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
-        <pendingcount data={ item.pid }></pendingcount>
+        <pendingcount pid={ item.pid }></pendingcount>
     </list>
 
     <list heading="Member" items={ member }>
@@ -18,7 +22,6 @@
     </list>
 
     <script>
-        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.loading = true
@@ -42,5 +45,30 @@
             self[type] = []
             self.update()
         })
+
+        // self.loading = true
+
+        // leaveProject(e) {
+        //     var data = e.item.item
+        //     riotcontrol.trigger('membership_revoke', data)
+        // }
+
+        // undoPending(e) {
+        //     var data = e.item.item
+        //     riotcontrol.trigger('membership_deny', data)
+        // }
+
+        // riotcontrol.on('projectlist_data', function(type, data) {
+        //     self[type] = data
+        //     self.loading = false
+        //     self.update()
+        //     console.log(type, 'updated', data);
+        // })
+
+        // riotcontrol.on('projectlist_clear', function(type) {
+        //     self[type] = []
+        //     self.update()
+        //     console.log(type, 'cleared');
+        // })
     </script>
 </projectlist>

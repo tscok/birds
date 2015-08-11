@@ -1,3 +1,5 @@
+require('./map.tag');
+
 <create>
     <form name="frmCreate">
         <h2>Create Project</h2>
@@ -6,15 +8,15 @@
         <label>Site name</label><br>
         <input type="text" name="site" placeholder="Site name"><br>
 
-        <label>Use the map to mark the site's location. Adds lat/lng to ringing data.</label><br>
+        <label>Site location</label><br>
         <map></map>
 
         <label>Latitude / Longitude</label><br>
-        <input type="text" name="latlng" placeholder="Click map to set..." disabled><br>
+        <input type="text" name="latlng" placeholder="Click map to set…" disabled><br>
         <label>Country</label><br>
         <input type="hidden" name="countryIso">
         <input type="hidden" name="countryName">
-        <input type="text" name="country" placeholder="Click map to set..." disabled><br>
+        <input type="text" name="country" placeholder="Click map to set…" disabled><br>
 
         <label>Start date</label><br>
         <input type="date" name="dateStart" onblur={ checkDate }><br>

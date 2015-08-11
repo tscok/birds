@@ -1,28 +1,41 @@
-<project>
-    <p if={ isLoading }>Loading…</p>
+var riotcontrol = require('riotcontrol')
+require('./member/memberlist.tag')
+require('./ring/ringsize.tag')
 
-    <div if={ !isLoading }>
-        <h1>{ project.title }<span if={ project.site }>, { project.site }</span></h1>
-        <p>{ project.dateStart } &ndash; { project.dateEnd }</p>
-        <memberlist if={ project.isOwner }></memberlist>
-        <ringsize data={ project.pid }></ringsize>
+<project>
+    <h2>Project</h2>
+    <p if={ loading }>Loading…</p>
+
+    <div if={ !loading }>
+        <h3>{ data.title }<span if={ data.site }>, { data.site }</span></h3>
+        <p>{ data.dateStart } &ndash; { data.dateEnd }</p>
+        <memberlist if={ data.isOwner }></memberlist>
+        <ringsize pid={ data.pid }></ringsize>
     </div>
 
     <script>
-        var riotcontrol = require('riotcontrol')
         var self = this
 
-        riotcontrol.on('route_project', function(pid, action) {
-            if (!action) {
-                riotcontrol.trigger('project_init', pid)
-                riotcontrol.trigger('memberlist_init', pid)
-                riotcontrol.trigger('ringsizes_init', pid)
-                // self.update({project: {}, isLoading: true})
-            }
-        })
+        self.loading = true
 
         riotcontrol.on('project_data', function(data) {
-            self.update({project: data, isLoading: false})
+            self.update({data: data, loading: false})
         })
+
+        // self.isLoading = true
+        // self.project = {}
+        
+        // riotcontrol.on('route_project', function(pid, action) {
+        //     if (!action) {
+        //         riotcontrol.trigger('project_init', pid)
+        //         riotcontrol.trigger('memberlist_init', pid)
+        //         riotcontrol.trigger('ringsizes_init', pid)
+        //         // self.update({project: {}, isLoading: true})
+        //     }
+        // })
+
+        // riotcontrol.on('project_data', function(data) {
+        //     self.update({project: data, isLoading: false})
+        // })
     </script>
 </project>

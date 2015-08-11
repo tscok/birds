@@ -1,10 +1,10 @@
 <map>
     <div id="mapCanvas"></div>
-
     <script>
         var riotcontrol = require('riotcontrol')
+        var self = this
 
-        riotcontrol.on('route_create', function() {
+        self.on('mount', function() {
             riotcontrol.trigger('map_init')
         })
     </script>

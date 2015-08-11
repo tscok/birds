@@ -2,8 +2,11 @@ var riotcontrol = require('riotcontrol');
 
 module.exports = function() {
     // User Authentication
-    var auth = require('./stores/auth');
-    var proxy = require('./stores/proxy');
+    var login = require('./stores/login');
+
+    // General
+    var main = require('./stores/main');
+    var nav = require('./stores/nav');
 
     // Profile
     var user = require('./stores/profile/user');
@@ -27,8 +30,10 @@ module.exports = function() {
 
 
     // Register stores.
-    riotcontrol.addStore(new auth());
-    riotcontrol.addStore(new proxy());
+    riotcontrol.addStore(new login());
+
+    riotcontrol.addStore(new main());
+    riotcontrol.addStore(new nav());
 
     riotcontrol.addStore(new user());
     riotcontrol.addStore(new projectlist());

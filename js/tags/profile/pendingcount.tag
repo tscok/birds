@@ -1,14 +1,17 @@
+var riotcontrol = require('riotcontrol')
+
 <pendingcount>
     <span if={ count }>({ count })</span>
 
     <script>
-        var riotcontrol = require('riotcontrol')
         var self = this
-
-        riotcontrol.on('pending_count_' + opts.data, function(num) {
-            self.update({count: num})
+        
+        riotcontrol.on('pendingcount_' + opts.pid, function(count) {
+            self.update({count: count})
         })
 
-        riotcontrol.trigger('count_pending', opts.data)
+        self.on('mount', function() {
+            riotcontrol.trigger('pendingcount_init', opts.pid)
+        })
     </script>
 </pendingcount>

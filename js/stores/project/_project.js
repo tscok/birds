@@ -1,22 +1,25 @@
 var riot = require('riot');
 var fbRef = require('../../firebase');
+var utils = require('../../utils');
 
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, uid, pid;
+    var self = this;
     
-    function init(projectId) {
-        uid = fbRef.getAuth().uid;
-        pid = projectId;
+    function init(route, id, action) {
+        if (route != 'project' || !!action) {
+            return;
+        }
 
-        fbRef.child('project/' + pid).on('value', function(snap) {
-            var data = snap.val();
-            data.pid = pid;
-            data.isOwner = data.ownerId === uid;
+        var authData = fbRef.getAuth();
+
+        fbRef.child('project/' + id).on('value', function(snap) {
+            var info = {pid: id, isOwner: authData.uid == snap.val().ownerId};
+            var data = utils.extend(snap.val(), info);
             self.trigger('project_data', data);
         });
     }
     
-    self.on('project_init', init);
+    self.on('route', init);
 };

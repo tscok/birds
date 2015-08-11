@@ -1,41 +1,35 @@
+var riotcontrol = require('riotcontrol')
+
 <join>
-    <span if={ typeof isPending == 'boolean' && typeof isMember == 'boolean' }>
-        <i if={ !isActive }>[I]</i>
-        <i if={ isPending }>[P]</i>
-        <i if={ isMember }>[M]</i>
-        <button type="button" if={ !isPending && !isMember && isActive } onclick={ request }>Join</button>
-        <button type="button" if={ isPending == true } onclick={ undo }>Undo</button>
+    <span if={ loading }>…</span>
+
+    <span if={ !loading }>
+        <span if={ pending }>[Pending]</span>
+        <span if={ member }>[Member]</span>
+        <button type="button" onclick={ join } if={ !pending && !member }>Join</button>
+        <button type="button" onclick={ undo } if={ pending }>Undo</button>
     </span>
-    <span if={ typeof isPending != 'boolean' && typeof isMember != 'boolean' }>…</span>
 
     <script>
-        var riotcontrol = require('riotcontrol')
         var self = this
 
-        self.isActive = opts.data.isActive
+        self.loading = true
 
-        request(e) {
+        join() {
             riotcontrol.trigger('membership_request', {pid: opts.data.pid})
-            self.isPending = true
+            self.pending = true
         }
 
-        undo(e) {
+        undo() {
             riotcontrol.trigger('membership_deny', {pid: opts.data.pid})
-            self.isPending = false
+            self.pending = false
         }
 
-        riotcontrol.on('join_pending', function(status, projectId) {
-            if (projectId === opts.data.pid) {
-                self.update({isPending: status})
-            }
+        riotcontrol.on('join_' + opts.data.pid, function(type, val) {
+            self[type] = val
+            self.update({loading: false})
         })
 
-        riotcontrol.on('join_member', function(status, projectId) {
-            if (projectId === opts.data.pid) {
-                self.update({isMember: status})
-            }
-        })
-
-        riotcontrol.trigger('join_status', opts.data.pid)
+        riotcontrol.trigger('join_get_status', opts.data.pid)
     </script>
 </join>

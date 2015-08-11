@@ -4,41 +4,41 @@
 3 info using node@v0.10.36
 4 verbose request where is /riot
 5 verbose request registry https://registry.npmjs.org/
-6 verbose request id 3469482cff34f1b8
+6 verbose request id 5ac57237926f3b49
 7 verbose url raw /riot
 8 verbose url resolving [ 'https://registry.npmjs.org/', './riot' ]
 9 verbose url resolved https://registry.npmjs.org/riot
 10 verbose request where is https://registry.npmjs.org/riot
-11 info trying registry request attempt 1 at 08:51:49
-12 verbose etag "CUS2I3MBMS5D12VKZTEERB421"
+11 info trying registry request attempt 1 at 08:35:09
+12 verbose etag "DZ35EPUDM50K6J1PN13LLQC9U"
 13 http GET https://registry.npmjs.org/riot
 14 http 200 https://registry.npmjs.org/riot
 15 silly registry.get cb [ 200,
 15 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-15 silly registry.get     etag: '"DZ35EPUDM50K6J1PN13LLQC9U"',
+15 silly registry.get     etag: '"BYN3N8IOROQ3JY5MF4QBE4VPP"',
 15 silly registry.get     'content-type': 'application/json',
 15 silly registry.get     'cache-control': 'max-age=60',
-15 silly registry.get     'content-length': '39780',
+15 silly registry.get     'content-length': '52495',
 15 silly registry.get     'accept-ranges': 'bytes',
-15 silly registry.get     date: 'Sun, 14 Jun 2015 06:51:47 GMT',
+15 silly registry.get     date: 'Thu, 06 Aug 2015 06:35:09 GMT',
 15 silly registry.get     via: '1.1 varnish',
 15 silly registry.get     age: '0',
 15 silly registry.get     connection: 'keep-alive',
-15 silly registry.get     'x-served-by': 'cache-fra1230-FRA',
+15 silly registry.get     'x-served-by': 'cache-fra1237-FRA',
 15 silly registry.get     'x-cache': 'MISS',
 15 silly registry.get     'x-cache-hits': '0',
-15 silly registry.get     'x-timer': 'S1434264707.737963,VS0,VE208',
+15 silly registry.get     'x-timer': 'S1438842909.361189,VS0,VE394',
 15 silly registry.get     vary: 'Accept' } ]
 16 info outdated updating [ [ '/Users/mikaelcarlsson/Documents/birds',
 16 info outdated     'riot',
-16 info outdated     '2.0.14',
 16 info outdated     '2.1.0',
-16 info outdated     '2.1.0',
-16 info outdated     '^2.0.14' ] ]
-17 verbose install where,what [ '/Users/mikaelcarlsson/Documents/birds', [ 'riot@2.1.0' ] ]
+16 info outdated     '2.2.3',
+16 info outdated     '2.2.3',
+16 info outdated     '^2.1.0' ] ]
+17 verbose install where,what [ '/Users/mikaelcarlsson/Documents/birds', [ 'riot@2.2.3' ] ]
 18 verbose readDependencies using package.json deps
-19 verbose cache add [ 'riot@2.1.0', null ]
-20 verbose cache add name=undefined spec="riot@2.1.0" args=["riot@2.1.0",null]
+19 verbose cache add [ 'riot@2.2.3', null ]
+20 verbose cache add name=undefined spec="riot@2.2.3" args=["riot@2.2.3",null]
 21 verbose parsed url { protocol: null,
 21 verbose parsed url   slashes: null,
 21 verbose parsed url   auth: null,
@@ -48,10 +48,10 @@
 21 verbose parsed url   hash: null,
 21 verbose parsed url   search: null,
 21 verbose parsed url   query: null,
-21 verbose parsed url   pathname: 'riot@2.1.0',
-21 verbose parsed url   path: 'riot@2.1.0',
-21 verbose parsed url   href: 'riot@2.1.0' }
-22 verbose cache add name="riot" spec="2.1.0" args=["riot","2.1.0"]
+21 verbose parsed url   pathname: 'riot@2.2.3',
+21 verbose parsed url   path: 'riot@2.2.3',
+21 verbose parsed url   href: 'riot@2.2.3' }
+22 verbose cache add name="riot" spec="2.2.3" args=["riot","2.2.3"]
 23 verbose parsed url { protocol: null,
 23 verbose parsed url   slashes: null,
 23 verbose parsed url   auth: null,
@@ -61,40 +61,40 @@
 23 verbose parsed url   hash: null,
 23 verbose parsed url   search: null,
 23 verbose parsed url   query: null,
-23 verbose parsed url   pathname: '2.1.0',
-23 verbose parsed url   path: '2.1.0',
-23 verbose parsed url   href: '2.1.0' }
-24 verbose addNamed [ 'riot', '2.1.0' ]
-25 verbose addNamed [ '2.1.0', '2.1.0' ]
-26 silly lockFile 2598e040-riot-2-1-0 riot@2.1.0
-27 verbose lock riot@2.1.0 /Users/mikaelcarlsson/.npm/2598e040-riot-2-1-0.lock
+23 verbose parsed url   pathname: '2.2.3',
+23 verbose parsed url   path: '2.2.3',
+23 verbose parsed url   href: '2.2.3' }
+24 verbose addNamed [ 'riot', '2.2.3' ]
+25 verbose addNamed [ '2.2.3', '2.2.3' ]
+26 silly lockFile 2a020d87-riot-2-2-3 riot@2.2.3
+27 verbose lock riot@2.2.3 /Users/mikaelcarlsson/.npm/2a020d87-riot-2-2-3.lock
 28 verbose registry.get https://registry.npmjs.org/riot not expired, no request
-29 silly lockFile 7c682b6e-ry-npmjs-org-riot-riot-2-1-0-tgz https://registry.npmjs.org/riot/-/riot-2.1.0.tgz
-30 verbose lock https://registry.npmjs.org/riot/-/riot-2.1.0.tgz /Users/mikaelcarlsson/.npm/7c682b6e-ry-npmjs-org-riot-riot-2-1-0-tgz.lock
-31 verbose addRemoteTarball [ 'https://registry.npmjs.org/riot/-/riot-2.1.0.tgz',
-31 verbose addRemoteTarball   '36c39ba68820e67b97846298b23236906e0ff393' ]
-32 info retry fetch attempt 1 at 08:51:49
-33 verbose fetch to= /var/folders/3f/j3_qq_0j3wq8gq_jk1jjw3bh0000gn/T/npm-43182-H5wajpSI/registry.npmjs.org/riot/-/riot-2.1.0.tgz
-34 http GET https://registry.npmjs.org/riot/-/riot-2.1.0.tgz
-35 http 200 https://registry.npmjs.org/riot/-/riot-2.1.0.tgz
-36 silly lockFile 7c682b6e-ry-npmjs-org-riot-riot-2-1-0-tgz https://registry.npmjs.org/riot/-/riot-2.1.0.tgz
-37 silly lockFile 7c682b6e-ry-npmjs-org-riot-riot-2-1-0-tgz https://registry.npmjs.org/riot/-/riot-2.1.0.tgz
-38 silly lockFile 2598e040-riot-2-1-0 riot@2.1.0
-39 silly lockFile 2598e040-riot-2-1-0 riot@2.1.0
-40 error Error: EACCES, mkdir '/Users/mikaelcarlsson/.npm/riot/2.1.0'
-40 error  { [Error: EACCES, mkdir '/Users/mikaelcarlsson/.npm/riot/2.1.0']
+29 silly lockFile 9cbf2e27-ry-npmjs-org-riot-riot-2-2-3-tgz https://registry.npmjs.org/riot/-/riot-2.2.3.tgz
+30 verbose lock https://registry.npmjs.org/riot/-/riot-2.2.3.tgz /Users/mikaelcarlsson/.npm/9cbf2e27-ry-npmjs-org-riot-riot-2-2-3-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/riot/-/riot-2.2.3.tgz',
+31 verbose addRemoteTarball   'dbc1b1344298a950274f00e63561377ad490dfeb' ]
+32 info retry fetch attempt 1 at 08:35:11
+33 verbose fetch to= /var/folders/3f/j3_qq_0j3wq8gq_jk1jjw3bh0000gn/T/npm-24651-KCVuvOjd/registry.npmjs.org/riot/-/riot-2.2.3.tgz
+34 http GET https://registry.npmjs.org/riot/-/riot-2.2.3.tgz
+35 http 200 https://registry.npmjs.org/riot/-/riot-2.2.3.tgz
+36 silly lockFile 9cbf2e27-ry-npmjs-org-riot-riot-2-2-3-tgz https://registry.npmjs.org/riot/-/riot-2.2.3.tgz
+37 silly lockFile 9cbf2e27-ry-npmjs-org-riot-riot-2-2-3-tgz https://registry.npmjs.org/riot/-/riot-2.2.3.tgz
+38 silly lockFile 2a020d87-riot-2-2-3 riot@2.2.3
+39 silly lockFile 2a020d87-riot-2-2-3 riot@2.2.3
+40 error Error: EACCES, mkdir '/Users/mikaelcarlsson/.npm/riot/2.2.3'
+40 error  { [Error: EACCES, mkdir '/Users/mikaelcarlsson/.npm/riot/2.2.3']
 40 error   errno: 3,
 40 error   code: 'EACCES',
-40 error   path: '/Users/mikaelcarlsson/.npm/riot/2.1.0',
+40 error   path: '/Users/mikaelcarlsson/.npm/riot/2.2.3',
 40 error   parent: 'Birds' }
 41 error Please try running this command again as root/Administrator.
-42 error System Darwin 14.3.0
+42 error System Darwin 14.4.0
 43 error command "node" "/usr/local/bin/npm" "update" "riot" "--save-dev"
 44 error cwd /Users/mikaelcarlsson/Documents/birds
 45 error node -v v0.10.36
 46 error npm -v 1.4.28
-47 error path /Users/mikaelcarlsson/.npm/riot/2.1.0
+47 error path /Users/mikaelcarlsson/.npm/riot/2.2.3
 48 error code EACCES
 49 error errno 3
-50 error stack Error: EACCES, mkdir '/Users/mikaelcarlsson/.npm/riot/2.1.0'
+50 error stack Error: EACCES, mkdir '/Users/mikaelcarlsson/.npm/riot/2.2.3'
 51 verbose exit [ 3, true ]

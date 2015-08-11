@@ -1,45 +1,59 @@
 var riot = require('riot');
+var promise = require('promise');
 var fbRef = require('../../firebase');
-var riotcontrol = require('riotcontrol');
+var utils = require('../../utils');
 
 module.exports = function() {
     riot.observable(this);
 
     var self = this;
+    var lists = {};
+    var types = ['own','member','pending'];
 
-    function init() {
-        var uid = fbRef.getAuth().uid;
-        fbRef.child('user_project/' + uid + '/own').on('value', listProjectData);
-        fbRef.child('user_project/' + uid + '/member').on('value', listProjectData);
-        fbRef.child('user_project/' + uid + '/pending').on('value', listProjectData);
-    }
+    fbRef.onAuth(function(authData) {
+        if (authData) {
+            for (var i = 0; i < types.length; i++) {
+                // Clear lists in view.
+                self.trigger('projectlist_clear', types[i]);
+                // Add firebase listeners.
+                fbRef.child('user_project/' + authData.uid + '/' + types[i]).on('value', handle);
+            }
+        }
+    });
 
-    function listProjectData(snap) {
-        var list = [];
+    function handle(snap) {
         var type = snap.key();
+        var count = snap.numChildren();
+
+        lists[type] = [];
 
         if (!snap.exists()) {
-            self.trigger('projectlist_clear', type);
-            return;
+            // trigger list type (empty array).
+            self.trigger('projectlist_data', type, lists[type]);
         }
 
         snap.forEach(function(childSnap) {
-            fbRef.child('project/' + childSnap.key()).once('value', function(project) {
-                list.push({
-                    pid: project.key(),
-                    title: project.val().title,
-                    site: project.val().site
-                });
-                self.trigger('projectlist_data', type, list);
+            var projectPromise = getProjectData(childSnap);
+            listProjectData(projectPromise, type, count);
+        });
+    }
+
+    function getProjectData(snap) {
+        return new promise(function(resolve, reject) {
+            fbRef.child('project/' + snap.key()).on('value', function(project) {
+                if (project.exists()) { resolve(project); }
             });
         });
     }
 
-    function test1(a,b,c) {
-        console.log('test1',a,b,c);
+    function listProjectData(promise, type, count) {
+        promise.then(function(data) {
+            lists[type].push(utils.extend(data.val(), {pid: data.key()}));
+
+            if (count == lists[type].length) {
+                // trigger list type
+                self.trigger('projectlist_data', type, lists[type]);
+            }
+        });
     }
-
-    riotcontrol.on('route', test1)
-
-    // self.on('projectlist_init', init);
 };

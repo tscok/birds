@@ -1,44 +1,54 @@
 var riot = require('riot');
 var fbRef = require('../../../firebase');
+var riotcontrol = require('riotcontrol');
 
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, pid;
+    // var self = this, pid;
 
-    var onComplete = function(error) {
-        if (error) {
-            self.trigger('alert', error.message, 'error')
-        }
-    }
+    // var onComplete = function(error) {
+    //     if (error) {
+    //         self.trigger('alert', error.message, 'error')
+    //     }
+    // }
 
-    function init(projectId) {
-        pid = projectId;
-        fbRef.child('ringsize/' + pid).orderByChild('size').on('value', function(snap) {
-            var list = [];
-            snap.forEach(function(childSnap) {
-                list.push({
-                    id: childSnap.key(),
-                    ringSize: childSnap.val().size,
-                    serialNumber: childSnap.val().snid
-                });
-            });
-            self.trigger('ringsizes_data', list)
-        });
-    }
+    // function init(id, action) {
+    //     // Skip if action (new, old, etc.) is defined.
+    //     if (action) {
+    //         return;
+    //     }
 
-    function add(data) {
-        fbRef.child('ringsize/' + pid).push({
-            snid: data.serialNumber,
-            size: data.ringSize
-        }, onComplete);
-    }
+    //     pid = id;
+    //     fbRef.child('ringsize/' + pid).orderByChild('size').on('value', function(snap) {
+    //         var list = [];
+    //         snap.forEach(function(childSnap) {
+    //             list.push({
+    //                 id: childSnap.key(),
+    //                 ringSize: childSnap.val().size,
+    //                 serialNumber: childSnap.val().snid
+    //             });
+    //         });
+    //         self.trigger('ringsizes_data', list)
+    //     });
+    // }
 
-    function remove(data) {
-        fbRef.child('ringsize/' + pid + '/' + data.id).remove(onComplete);
-    }
+    // function add(data) {
+    //     fbRef.child('ringsize/' + pid).push({
+    //         snid: data.serialNumber,
+    //         size: data.ringSize
+    //     }, onComplete);
+    // }
 
-    self.on('ringsizes_init', init);
-    self.on('ringsizes_add', add);
-    self.on('ringsizes_remove', remove);
+    // function remove(data) {
+    //     fbRef.child('ringsize/' + pid + '/' + data.id).remove(onComplete);
+    // }
+
+    // // On route.
+    // riotcontrol.on('route_project', init);
+
+    // // On action.
+    // // self.on('ringsizes_init', init);
+    // self.on('ringsizes_add', add);
+    // self.on('ringsizes_remove', remove);
 };

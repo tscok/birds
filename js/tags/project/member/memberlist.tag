@@ -1,41 +1,53 @@
-<memberlist>
-    <h2>Members</h2>
-    <p if={ loading && !Object.keys(members).length }>Loading…</p>
-    <p if={ !loading && !Object.keys(members).length }>No members found.</p>
+var riotcontrol = require('riotcontrol')
+require('./membership.tag')
+require('./memberrole.tag')
 
-    <list if={ members['pending'] } heading="Pending" items={ members['pending'] }>
+<memberlist>
+    <h3>Members</h3>
+    <p if={ loading }>Loading…</p>
+
+    <list heading="Pending" items={ pending }>
         <span>{ item.name }</span>
-        <membership data={ this }></membership>
+        <membership uid={ item.uid }></membership>
     </list>
 
-    <list if={ members['member'] } heading="Member" items={ members['member'] }>
+    <list heading="Member" items={ member }>
         <span>{ item.name }</span>
         <span>({ item.role }<span if={ item.sign }>, { item.sign }</span>)</span>
-        <memberrole data={ this }></memberrole>
+        <memberrole data={ item }></memberrole>
     </list>
 
     <script>
-        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.loading = true
 
-        // On route, clear members.
-        riotcontrol.on('route_project', function(pid, action) {
-            if (!action) {
-                self.update({members: {}})
-            }
+        riotcontrol.on('memberlist_data', function(type, data) {
+            self[type] = data
+            self.update({loading: false})
         })
 
-        // Per event type, populate members.
-        riotcontrol.on('memberlist_data', function(type, list) {
-            self.members[type] = list
+        riotcontrol.on('memberlist_clear', function(type) {
+            self[type] = []
             self.update()
         })
 
-        // On empty result, clear members and cancel loader.
-        riotcontrol.on('memberlist_empty', function() {
-            self.update({members: {}, loading: false})
-        })
+        // // On route, clear members.
+        // riotcontrol.on('route_project', function(pid, action) {
+        //     if (!action) {
+        //         self.update({members: {}})
+        //     }
+        // })
+
+        // // Per event type, populate members.
+        // riotcontrol.on('memberlist_data', function(type, list) {
+        //     self.members[type] = list
+        //     self.update()
+        // })
+
+        // // On empty result, clear members and cancel loader.
+        // riotcontrol.on('memberlist_empty', function() {
+        //     self.update({members: {}, loading: false})
+        // })
     </script>
 </memberlist>

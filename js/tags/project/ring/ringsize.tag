@@ -1,5 +1,7 @@
+var riotcontrol = require('riotcontrol')
+
 <ringsize>
-    <a href onclick={ toggleForm }>{ showForm ? 'Hide' : 'Show' } Ring Sizes</a>
+    <a href onclick={ toggleForm }>Toggle Ring Sizes</a>
     <form if={ showForm } name="frmRingsizes" onsubmit={ add }>
         <list items={ ringsizes }>
             <span>{ item.ringSize }</span><span>{ item.serialNumber }</span>
@@ -11,34 +13,36 @@
     </form>
 
     <script>
-        var riotcontrol = require('riotcontrol')
         var self = this
-
-        self.ringsizes = []
 
         toggleForm() {
             self.showForm = !self.showForm
         }
 
-        add() {
-            var data = {
-                ringSize: self.ringSize.value,
-                serialNumber: self.serialNumber.value.toUpperCase()
-            }
-            riotcontrol.trigger('ringsizes_add', data)
-            self.frmRingsizes.reset()
-        }
+        // self.ringsizes = []
+        // self.showForm = false
 
-        remove(e) {
-            riotcontrol.trigger('ringsizes_remove', e.item.item)
-        }
+        // add() {
+        //     var data = {
+        //         ringSize: self.ringSize.value,
+        //         serialNumber: self.serialNumber.value.toUpperCase()
+        //     }
+        //     riotcontrol.trigger('ringsizes_add', data)
+        //     self.frmRingsizes.reset()
+        // }
 
-        riotcontrol.on('ringsizes_data', function(list) {
-            self.update({ringsizes: list})
-        })
+        // remove(e) {
+        //     riotcontrol.trigger('ringsizes_remove', e.item.item)
+        // }
 
-        riotcontrol.on('route_change', function() {
-            self.update({showForm: false})
-        })
+        // riotcontrol.on('ringsizes_data', function(list) {
+        //     self.update({ringsizes: list})
+        // })
+
+        // riotcontrol.on('route', function(route, id, action) {
+        //     if (!action) {
+        //         self.update({showForm: false})
+        //     }
+        // })
     </script>
 </ringsize>

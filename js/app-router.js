@@ -1,41 +1,39 @@
 var riot = require('riot');
-var riotcontrol = require('riotcontrol');
 var fbRef = require('./firebase');
+var riotcontrol = require('riotcontrol');
 
 module.exports = function() {
 
-    var lastRoute = '';
+    var validRoute = {
+        'login':    {uidReq: false},
+        'profile':  {uidReq: true},
+        'search':   {uidReq: true},
+        'create':   {uidReq: true},
+        'project':  {uidReq: true}
+    };
+
+    function authRoute(route) {
+        var uid = fbRef.getAuth() ? fbRef.getAuth().uid : null;
+        return validRoute[route].uidReq ? !!uid : true;
+    }
 
     function validateRoute(route, id, action) {
-        var uid = fbRef.getAuth() ? fbRef.getAuth().uid : null;
-
-        // All valid routes and auth requirements.
-        var routes = {
-            'login':    {authRequired: false},
-            'register': {authRequired: false},
-            'profile':  {authRequired: true},
-            'search':   {authRequired: true},
-            'create':   {authRequired: true},
-            'project':  {authRequired: true}
-        };
-
-        if (route) {
-            if (routes[route]) {
-                var unauthorized = routes[route].authRequired && !uid;
-                var leaveAuthReq = !routes[route].authRequired && uid;
-                if (unauthorized || leaveAuthReq) {
-                    riotcontrol.trigger('logout');
-                } else {
-                    riotcontrol.trigger('proxy_route', route, id, action);
-
-                    console.log('route to', route, 'from', lastRoute || '??');
-                    lastRoute = route;
-                }
-            } else {
-                riotcontrol.trigger('alert', '404 - Route not found.', 'error');
-            }
-        } else {
+        if (route == 'logout') {
             riotcontrol.trigger('logout');
+            return;
+        }
+
+        if (route && validRoute[route]) {
+            if (authRoute(route)) {
+                riotcontrol.trigger('route', route, id, action);
+                riotcontrol.trigger('alert_clear');
+            } else {
+                riotcontrol.trigger('alert', '404 - Unauthorized for route "' + route + '".', 'warning');
+            }
+        } else if (route && !validRoute[route]) {
+            riotcontrol.trigger('alert', '404 - Route "' + route + '" not found.', 'warning');
+        } else {
+            riot.route('login');
         }
     }
 
@@ -44,4 +42,5 @@ module.exports = function() {
 
     // Runs on load/reload/refresh.
     riot.route.exec(validateRoute);
+
 };
