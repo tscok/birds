@@ -7,17 +7,17 @@ require('./pendingcount.tag')
     <p if={ loading }>Loading…</p>
 
     <list heading="Own" items={ own }>
-        <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
+        <a href="#project/{ item.pid }">{ item.title }<span if={ item.site }>, { item.site }</span></a>
         <pendingcount pid={ item.pid }></pendingcount>
     </list>
 
     <list heading="Member" items={ member }>
-        <a href="#project/{ item.pid }">{ item.title }, { item.site }</a>
+        <a href="#project/{ item.pid }">{ item.title }<span if={ item.site }>, { item.site }</span></a>
         <button type="button" onclick={ parent.parent.leaveProject }>X</button>
     </list>
 
     <list heading="Pending" items={ pending }>
-        <span>{ item.title }, { item.site }</span>
+        <span>{ item.title }<span if={ item.site }>, { item.site }</span></span>
         <button type="button" onclick={ parent.parent.undoPending }>X</button>
     </list>
 

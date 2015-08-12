@@ -1,6 +1,6 @@
 <app-nav>
     <nav if={ !uid } class="left">
-        <a href="#login">Login</a>
+        <a href="#login">Log in</a>
     </nav>
     <nav if={ uid && !pid } class="left">
         <a href="#create">Create Project</a>
@@ -13,7 +13,7 @@
     </nav>
     <nav if={ uid } class="right">
         <a href="#profile">{ name }</a>
-        <a href class="button" onclick={ logout }>Logout</a>
+        <a href class="button" onclick={ logout }>Log out</a>
     </nav>
 
     <script>

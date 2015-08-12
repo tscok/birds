@@ -41,5 +41,10 @@ require('./join.tag')
         riotcontrol.on('search_data', function(data) {
             self.update({result: data})
         })
+
+        riotcontrol.on('search_clear', function() {
+            self.frmSearch.reset()
+            self.update({result: []})
+        })
     </script>
 </search>

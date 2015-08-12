@@ -23,11 +23,9 @@ module.exports = function() {
 
     /* Create - mount only root element */
     require('./tags/create/_create.tag');
-    // require('./tags/create/map.tag');
 
     /* Search - mount only root element */
     require('./tags/search/_search.tag');
-    // require('./tags/search/join.tag');
 
     /* Project - mount only root element */
     require('./tags/project/_project.tag');

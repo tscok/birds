@@ -24,7 +24,8 @@ module.exports = function() {
                 }
             });
 
-            self.trigger('search_data', result);
+            // Return a complete data set, in reversed order (newst first).
+            self.trigger('search_data', result.reverse());
         });
     }
 
@@ -57,5 +58,12 @@ module.exports = function() {
         result.push(utils.extend(project, extras));
     }
 
+    function clearOnRoute(route) {
+        if (route == 'search') {
+            self.trigger('search_clear');
+        }
+    }
+
     self.on('search', search);
+    self.on('route', clearOnRoute);
 };

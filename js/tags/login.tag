@@ -1,15 +1,15 @@
 <login>
-    <h2>Login</h2>
+    <h2>Log in</h2>
     <form name="frmLogin" onsubmit={ login }>
         <label>Email</label><br>
         <input type="email" name="email"><br>
         <label>Password</label><br>
         <input type="password" name="password"><br>
-        <button type="submit" disabled={ isLoading }>Login</button>
+        <button type="submit" disabled={ isLoading }>Log in</button>
         <span if={ isLoading }>…</span>
     </form>
 
-    <h3>Login with</h3>
+    <h3>Log in with</h3>
     <button type="button" onclick={ socialLogin } data-provider="facebook">Facebook</button>
 
     <script>
@@ -27,7 +27,7 @@
 
         socialLogin(e) {
             var provider = e.target.getAttribute('data-provider');
-            riotcontrol.trigger('login', provider);
+            riotcontrol.trigger('social_login', provider);
         }
 
         riotcontrol.on('main_login login_fail', function() {

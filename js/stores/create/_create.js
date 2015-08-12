@@ -29,22 +29,21 @@ module.exports = function() {
 		});
 		
 		// Get ID of saved project.
-		var projectID = newProjectRef.key();
+		var projectId = newProjectRef.key();
 
-		// Add projectID to user profile.
-		userRef.child(projectID).set(true);
+		// Add projectId to user profile.
+		userRef.child(projectId).set(true);
 		
-		// Store Country data (if countryIso does not already exist).
 		countryRef.once('value', function(snap) {
-			if (snap.val() === null) {
+			// Store Country (if countryIso doesn't exist).
+			if (!snap.exists()) {
 				countryRef.set({full: data.countryName});
 			}
 			// List project under Country.
-			countryRef.child('project/' + projectID).set(true);
+			countryRef.child('project/' + projectId).set(true);
 		});
 
-		var route = 'profile';
-		// var route = 'project/'+ projectID;
+		var route = 'profile'; // 'project/' + projectId
 		riot.route(route);
 	}
 

@@ -53,9 +53,16 @@ module.exports = function() {
 		riot.route('login');
 	}
 
+	function logoutOnRoute(route) {
+		if (route == 'login' && fbRef.getAuth()) {
+			fbRef.unauth();
+		}
+	}
+
 	self.on('login', login);
 	self.on('social_login', socialLogin);
 	self.on('logout', logout);
+	self.on('route', logoutOnRoute);
 
 	// function authWithPassword(userData) {
 	// 	return new promise(function(resolve, reject) {

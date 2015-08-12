@@ -3,20 +3,19 @@ var riot = require('riot');
 module.exports = function() {
 	riot.observable(this);
 
-	var self = this, marker, geocoder;
+	var self = this, map, marker;
+	var geocoder = new google.maps.Geocoder();
+	var annsjon = new google.maps.LatLng(63.27114510000001, 12.449269500000014);
+	var mapOptions = {
+		zoom: 8,
+		center: annsjon,
+		mapTypeId: google.maps.MapTypeId.TERRAIN,
+		streetViewControl: false,
+		zoomControl: false,
+		scaleControl: false
+	};
 
 	function init() {
-		var delta = new google.maps.LatLng(63.27114510000001, 12.449269500000014);
-		var mapOptions = {
-			zoom: 8,
-			center: delta,
-			mapTypeId: google.maps.MapTypeId.TERRAIN,
-			streetViewControl: false,
-			zoomControl: false,
-			scaleControl: false
-		};
-
-		geocoder = new google.maps.Geocoder();
 		map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
 
 		google.maps.event.addListener(map, 'click', function(e){
@@ -27,13 +26,17 @@ module.exports = function() {
 
 	function addMarker(location) {
 		if(marker) {
-			marker.setMap(null);
+			clearMarker();
 		}
 		marker = new google.maps.Marker({
 			position: location,
 			map: map
 		});
-	};
+	}
+
+	function clearMarker() {
+		marker.setMap(null);
+	}
 
 	function setPositionData(location) {
 		var country, data = {};
@@ -48,7 +51,8 @@ module.exports = function() {
 				}
 			}
 		});
-	};
+	}
 
 	self.on('map_init', init);
+	self.on('map_reset', clearMarker);
 };
