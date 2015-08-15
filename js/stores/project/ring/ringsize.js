@@ -5,50 +5,52 @@ var riotcontrol = require('riotcontrol');
 module.exports = function() {
     riot.observable(this);
 
-    // var self = this, pid;
+    var self = this, ringsizeRef;
 
-    // var onComplete = function(error) {
-    //     if (error) {
-    //         self.trigger('alert', error.message, 'error')
-    //     }
-    // }
+    var onComplete = function(err) {
+        if (err) {
+            self.trigger('alert', err.message, 'error');
+        }
+    }
 
-    // function init(id, action) {
-    //     // Skip if action (new, old, etc.) is defined.
-    //     if (action) {
-    //         return;
-    //     }
+    function init(route, id, action) {
+        if (route != 'project' || !!action) {
+            return;
+        }
+        // Close form on route.
+        self.trigger('ringsize_init');
 
-    //     pid = id;
-    //     fbRef.child('ringsize/' + pid).orderByChild('size').on('value', function(snap) {
-    //         var list = [];
-    //         snap.forEach(function(childSnap) {
-    //             list.push({
-    //                 id: childSnap.key(),
-    //                 ringSize: childSnap.val().size,
-    //                 serialNumber: childSnap.val().snid
-    //             });
-    //         });
-    //         self.trigger('ringsizes_data', list)
-    //     });
-    // }
+        // Set ref and get project's rings.
+        ringsizeRef = fbRef.child('ringsize/' + id);
+        ringsizeRef.orderByChild('size').on('value', handle);
+    }
 
-    // function add(data) {
-    //     fbRef.child('ringsize/' + pid).push({
-    //         snid: data.serialNumber,
-    //         size: data.ringSize
-    //     }, onComplete);
-    // }
+    function handle(snap) {
+        var list = [];
+        var count = snap.numChildren();
 
-    // function remove(data) {
-    //     fbRef.child('ringsize/' + pid + '/' + data.id).remove(onComplete);
-    // }
+        snap.forEach(function(childSnap) {
+            list.push({
+                rsid: childSnap.key(),
+                size: childSnap.val().size,
+                snid: childSnap.val().snid
+            });
 
-    // // On route.
-    // riotcontrol.on('route_project', init);
+            if (count == list.length) {
+                self.trigger('ringsize_data', list);
+            }
+        });
+    }
 
-    // // On action.
-    // // self.on('ringsizes_init', init);
-    // self.on('ringsizes_add', add);
-    // self.on('ringsizes_remove', remove);
+    function add(data) {
+        ringsizeRef.push(data, onComplete);
+    }
+
+    function remove(item) {
+        ringsizeRef.child(item.rsid).remove(onComplete);
+    }
+    
+    self.on('route', init);
+    self.on('ringsize_add', add);
+    self.on('ringsize_remove', remove);
 };

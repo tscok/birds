@@ -2,13 +2,13 @@ var riotcontrol = require('riotcontrol')
 
 <ringsize>
     <a href onclick={ toggleForm }>Toggle Ring Sizes</a>
-    <form if={ showForm } name="frmRingsizes" onsubmit={ add }>
-        <list items={ ringsizes }>
-            <span>{ item.ringSize }</span><span>{ item.serialNumber }</span>
+    <form name="frmRingsize" onsubmit={ add } if={ showForm }>
+        <list items={ rings }>
+            <span>{ item.size }</span><span>{ item.snid }</span>
             <button type="button" onclick={ parent.parent.remove }>X</button>
         </list>
-        <input type="number" step="0.5" name="ringSize" placeholder="Ring Size" required>
-        <input type="text" name="serialNumber" placeholder="Serial Number" required>
+        <input type="number" step="0.5" name="size" placeholder="Ring size" required>
+        <input type="text" name="snid" placeholder="Serial number" required>
         <button type="submit">Add</button>
     </form>
 
@@ -19,30 +19,26 @@ var riotcontrol = require('riotcontrol')
             self.showForm = !self.showForm
         }
 
-        // self.ringsizes = []
-        // self.showForm = false
+        add(e) {
+            var data = {
+                size: self.size.value,
+                snid: self.snid.value.toUpperCase()
+            }
+            riotcontrol.trigger('ringsize_add', data)
+            self.frmRingsize.reset()
+            self.size.focus()
+        }
 
-        // add() {
-        //     var data = {
-        //         ringSize: self.ringSize.value,
-        //         serialNumber: self.serialNumber.value.toUpperCase()
-        //     }
-        //     riotcontrol.trigger('ringsizes_add', data)
-        //     self.frmRingsizes.reset()
-        // }
+        remove(e) {
+            riotcontrol.trigger('ringsize_remove', e.item.item)
+        }
 
-        // remove(e) {
-        //     riotcontrol.trigger('ringsizes_remove', e.item.item)
-        // }
+        riotcontrol.on('ringsize_data', function(list) {
+            self.update({rings: list})
+        })
 
-        // riotcontrol.on('ringsizes_data', function(list) {
-        //     self.update({ringsizes: list})
-        // })
-
-        // riotcontrol.on('route', function(route, id, action) {
-        //     if (!action) {
-        //         self.update({showForm: false})
-        //     }
-        // })
+        riotcontrol.on('ringsize_init', function(list) {
+            self.update({showForm: false})
+        })
     </script>
 </ringsize>

@@ -30,6 +30,7 @@ module.exports = function() {
 
 	function handleAuthResponse(promise, route) {
 		promise.then(function(authData) {
+			console.log('login', authData);
 			self.trigger('login_success');
 			riot.route(route);
 		}, function(error) {

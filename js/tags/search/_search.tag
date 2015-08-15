@@ -45,6 +45,7 @@ require('./join.tag')
         riotcontrol.on('search_clear', function() {
             self.frmSearch.reset()
             self.update({result: []})
+            self.needle.focus()
         })
     </script>
 </search>

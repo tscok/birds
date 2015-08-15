@@ -17,15 +17,15 @@ module.exports = function() {
 
 		// Save project.
 		var newProjectRef = projectRef.push({
-			'public': data['status'] === 'public',
-			'ownerId': uid,
-			'ownerName': utils.getLocalUser('name'),
 			'title': data['title'],
 			'site': data['site'],
-			'latlng': data['latlng'],
+			'ownerId': uid,
+			'ownerName': utils.getLocalUser('name'),
 			'country': data['countryIso'],
+			'latlng': data['latlng'],
 			'dateStart': data['dateStart'],
-			'dateEnd': data['dateEnd']
+			'dateEnd': data['dateEnd'],
+			'public': data['status'] === 'public'
 		});
 		
 		// Get ID of saved project.
