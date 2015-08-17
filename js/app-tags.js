@@ -29,8 +29,8 @@ module.exports = function() {
 
     /* Project - mount only root element */
     require('./tags/project/_project.tag');
-    // require('./tags/project/newring.tag');
-    // require('./tags/project/control.tag');
+    require('./tags/project/newring.tag');
+    require('./tags/project/control.tag');
     // require('./tags/project/member/memberlist.tag');
     // require('./tags/project/member/membership.tag');
     // require('./tags/project/member/memberrole.tag');

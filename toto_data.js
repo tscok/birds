@@ -1,10 +1,6 @@
 /*
 TODO:
 
-Project
-    - Add 'created' date to project
-    - Convert calendar dates to timestamps (ms)
-    - Group project dates
 
 NewRing / Control (module)
     - Create forms
@@ -15,6 +11,9 @@ Profile (module)
     - Add optional 'nationality' field
 
 Install MomentJS
+    - Add 'created' date to project
+    - Convert calendar dates to timestamps (ms)
+    - Group project dates
     - Display 'date created' in project lists (profile, search, etc.)
     - Display moments instead of raw dates ('X months ago', not 2015-06-15)
     - Display 'days left' in project.

@@ -1,4 +1,5 @@
 var riot = require('riot');
+var agent = require('superagent');
 
 module.exports = function() {
 	riot.observable(this);
@@ -19,13 +20,25 @@ module.exports = function() {
 		map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
 
 		google.maps.event.addListener(map, 'click', function(e){
+			// Local time
+			var ts = new Date().getTime() / 1000;
+			var url = 'https://maps.googleapis.com/maps/api/timezone/json?location=';
+			agent.get(url + e.latLng.lat() + ',' + e.latLng.lng() + '&timestamp=' + ts).end(function(err, res) {
+				var dstOffset = res.body.dstOffset;
+				var rawOffset = res.body.rawOffset;
+				var localTime = ((rawOffset - dstOffset) + ts) * 1000;
+				console.log(res.body);
+				console.log('local time', new Date(localTime));
+			})
+
+			// Marker
 			addMarker(e.latLng);
 			setPositionData(e.latLng);
 		});
 	}
 
 	function addMarker(location) {
-		if(marker) {
+		if (marker) {
 			clearMarker();
 		}
 		marker = new google.maps.Marker({
@@ -41,8 +54,8 @@ module.exports = function() {
 	function setPositionData(location) {
 		var country, data = {};
 		geocoder.geocode({'latLng': location}, function(results, status) {
-			if(status == google.maps.GeocoderStatus.OK) {
-				if(results[0]) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				if (results[0]) {
 					country = results[results.length - 1].address_components[0];
 					data.latLng = location.lat() +', '+ location.lng();
 					data.countryIso = country.short_name;

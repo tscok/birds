@@ -21,12 +21,15 @@ module.exports = function() {
     var search = require('./stores/search/_search');
     var join = require('./stores/search/join');
 
-    // Project
+    // Project - overview
     var project = require('./stores/project/_project');
     var memberlist = require('./stores/project/member/memberlist');
     var membership = require('./stores/project/member/membership');
     var memberrole = require('./stores/project/member/memberrole');
     var ringsize = require('./stores/project/ring/ringsize');
+
+    // Project - newring
+    var newring = require('./stores/project/newring');
 
 
     // Register stores.
@@ -50,4 +53,6 @@ module.exports = function() {
     riotcontrol.addStore(new membership());
     riotcontrol.addStore(new memberrole());
     riotcontrol.addStore(new ringsize());
+
+    riotcontrol.addStore(new newring());
 };

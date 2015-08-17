@@ -8,8 +8,8 @@
     </nav>
     <nav if={ uid && pid } class="left">
         <a href="#project/{ pid }">Overview</a>
-        <a href="#project/{ pid }/new">New Ring</a>
-        <a href="#project/{ pid }/old">Old Ring</a>
+        <a href="#project/{ pid }/newring">New Ring</a>
+        <a href="#project/{ pid }/control">Control</a>
     </nav>
     <nav if={ uid } class="right">
         <a href="#profile">{ name }</a>
