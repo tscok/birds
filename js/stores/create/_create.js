@@ -9,41 +9,43 @@ module.exports = function() {
 
 	var createProject = function(data) {
 		var uid = fbRef.getAuth().uid;
+		var country = data.country;
 
 		// Firebase locations.
 		var projectRef = fbRef.child('project');
-		var countryRef = fbRef.child('country/' + data['countryIso']);
-		var userRef = fbRef.child('user_project/' + uid + '/own/');
+		var countryRef = fbRef.child('country/' + country.id);
+		var userNameRef = fbRef.child('user/' + uid + '/name');
+		var userProjectRef = fbRef.child('userproject/' + uid + '/own');
+
+		// Modify data object.
+		data.country = country.id;
+		data.userId = uid;
 
 		// Save project.
-		var newProjectRef = projectRef.push({
-			'title': data['title'],
-			'site': data['site'],
-			'ownerId': uid,
-			'ownerName': utils.getLocalUser('name'),
-			'country': data['countryIso'],
-			'latlng': data['latlng'],
-			'dateStart': data['dateStart'],
-			'dateEnd': data['dateEnd'],
-			'public': data['status'] === 'public'
-		});
+		var newProjectRef = projectRef.push(data);
 		
-		// Get ID of saved project.
+		// Get ID of project.
 		var projectId = newProjectRef.key();
 
-		// Add projectId to user profile.
-		userRef.child(projectId).set(true);
-		
+		// Update project with user name.
+		userNameRef.once('value', function(name) {
+			projectRef.child(projectId).update({userName: name.val()});
+		});
+
+		// Add project ID to user project.
+		userProjectRef.child(projectId).set(true);
+
+		// Store country ISO.
 		countryRef.once('value', function(snap) {
-			// Store Country (if countryIso doesn't exist).
 			if (!snap.exists()) {
-				countryRef.set({full: data.countryName});
+				countryRef.set({name: country.name});
 			}
-			// List project under Country.
+			// List project by country.
 			countryRef.child('project/' + projectId).set(true);
 		});
 
-		var route = 'profile'; // 'project/' + projectId
+		// Route to project.
+		var route = 'project/' + projectId;
 		riot.route(route);
 	}
 

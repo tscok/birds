@@ -7,7 +7,7 @@ module.exports = function() {
     var self = this;
 
     function init(pid) {
-        fbRef.child('member_status/' + pid + '/pending').on('value', function(pending) {
+        fbRef.child('membership/' + pid + '/pending').on('value', function(pending) {
             if (pending.exists()) {
                 self.trigger('pendingcount_' + pid, pending.numChildren());
             }

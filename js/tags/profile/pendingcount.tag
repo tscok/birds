@@ -10,8 +10,6 @@ var riotcontrol = require('riotcontrol')
             self.update({count: count})
         })
 
-        self.on('mount', function() {
-            riotcontrol.trigger('pendingcount_init', opts.pid)
-        })
+        riotcontrol.trigger('pendingcount_init', opts.pid)
     </script>
 </pendingcount>

@@ -1,11 +1,19 @@
 var riotcontrol = require('riotcontrol')
 var utils = require('../../utils')
+var moment = require('moment')
 
 <create>
     <form name="frmCreate" onsubmit={ create }>
         <h2>Create Project</h2>
         <label>Project title</label><br>
-        <input type="text" name="title" placeholder="Project name" required><br>
+        <input type="text" name="title" placeholder="Project name" require><br>
+
+        <label>Start date</label><br>
+        <input type="date" name="dateStart" require><br>
+
+        <label>End date</label><br>
+        <input type="date" name="dateEnd" require><br>
+
         <label>Site name</label><br>
         <input type="text" name="site" placeholder="Site name"><br>
 
@@ -13,74 +21,105 @@ var utils = require('../../utils')
         <div id="mapCanvas"></div>
         <button type="button" onclick={ resetMap }>Reset map</button><br>
 
-        <label>Latitude / Longitude</label><br>
+        <label>Lat / Lng</label><br>
         <input type="text" name="latlng" placeholder="Click map to set…" disabled><br>
+        
         <label>Country</label><br>
         <input type="hidden" name="countryIso">
         <input type="hidden" name="countryName">
-        <input type="text" name="country" placeholder="Click map to set…" disabled><br>
+        <input type="text" name="countryDisplay" placeholder="Click map to set…" disabled><br>
 
-        <label>Start date</label><br>
-        <input type="date" name="dateStart" required><br>
-        <label>End date</label><br>
-        <input type="date" name="dateEnd" required><br>
+        <label>Timezone</label><br>
+        <input type="text" name="tzId" placeholder="Click map to set…" disabled><br>
+
+        <label>UTC offset</label><br>
+        <input type="hidden" name="tzAbbr">
+        <input type="hidden" name="tzOffset">
+        <input type="text" name="tzDisplay" placeholder="Click map to set…" disabled><br>
 
         <label>Privacy</label><br>
-        <input type="radio" name="status" value="public" checked> Public
-        <input type="radio" name="status" value="private"> Private<br>
+        <input type="radio" name="privacy" value="public" checked> Public
+        <input type="radio" name="privacy" value="private"> Private<br>
 
         <button type="submit">Create project</button>
-        <button type="reset">Reset</button>
+        <button type="button" onclick={ resetForm }>Reset</button>
     </form>
 
     <script>
         var self = this
+        self.date = {}
 
-        okDates() {
-            return self.dateStart.valueAsNumber < self.dateEnd.valueAsNumber
+        checkDates() {
+            self.date.created = moment().unix()
+            self.date.start = moment(self.dateStart.value).unix()
+            self.date.end = moment(self.dateEnd.value).unix()
+            return (self.date.start >= self.date.end)
         }
 
         create() {
-            if (!self.okDates()) {
-                riotcontrol.trigger('alert', 'Oops… Looks like a date error.', 'danger')
-                return;
+            if (self.checkDates()) {
+                var msg = 'Please correct; Start date cannot be later than, or equal to, End date.'
+                riotcontrol.trigger('alert', msg, 'warning')
+                return
             }
 
             var project = {
                 title: self.title.value,
                 site: self.site.value,
-                countryIso: self.countryIso.value,
-                countryName: self.countryName.value,
                 latlng: self.latlng.value,
-                dateStart: self.dateStart.value,
-                dateEnd: self.dateEnd.value,
-                status: utils.radioBtnVal('status')
-            };
+                country: {
+                    id: self.countryIso.value,
+                    name: self.countryName.value
+                },
+                tz: {
+                    id: self.tzId.value,
+                    abbr: self.tzAbbr.value,
+                    offset: self.tzOffset.value
+                },
+                date: self.date,
+                privacy: utils.radioBtnVal('privacy')
+            }
 
             riotcontrol.trigger('alert_clear')
-            riotcontrol.trigger('project_create', project);
-            self.frmCreate.reset();
+            riotcontrol.trigger('project_create', project)
+            self.frmCreate.reset()
+        }
+
+        resetForm() {
+            self.frmCreate.reset()
+            self.resetMap()
         }
 
         resetMap() {
             riotcontrol.trigger('map_reset')
-            self.setMapData({})
         }
 
         setMapData(data) {
             var iso = data.countryIso || ''
             var name = data.countryName || ''
             var latlng = data.latLng || ''
-            var country = name && iso ? name + ',' + iso : ''
+            var display = name && iso ? name + ',' + iso : ''
 
             self.countryIso.value = iso
             self.countryName.value = name
-            self.country.value = country
+            self.countryDisplay.value = display
             self.latlng.value = latlng
-            self.update()
+        }
+
+        setTzData(data) {
+            var tz = data.tz || ''
+            var abbr = data.abbr || ''
+            var offset = data.offset || ''
+            var display = offset && abbr ? offset + ', ' + abbr : ''
+
+            self.tzId.value = tz
+            self.tzAbbr.value = abbr
+            self.tzOffset.value = offset
+            self.tzDisplay.value = display
         }
 
         riotcontrol.on('map_data', self.setMapData)
+        riotcontrol.on('map_tzData', self.setTzData)
 
         self.on('mount', function() {
             riotcontrol.trigger('map_init')

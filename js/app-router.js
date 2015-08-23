@@ -28,7 +28,7 @@ module.exports = function() {
                 riotcontrol.trigger('route', route, id, action);
                 riotcontrol.trigger('alert_clear');
             } else {
-                riotcontrol.trigger('alert', '404 - Unauthorized for route "' + route + '".', 'warning');
+                riot.route('login');
             }
         } else if (route && !validRoute[route]) {
             riotcontrol.trigger('alert', '404 - Route "' + route + '" not found.', 'warning');

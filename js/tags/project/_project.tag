@@ -8,7 +8,7 @@ require('./ring/ringsize.tag')
 
     <div if={ !loading }>
         <h3>{ data.title }<span if={ data.site }>, { data.site }</span></h3>
-        <p>{ data.dateStart } &ndash; { data.dateEnd }</p>
+        <p>{ data.date.start } &ndash; { data.date.end }</p>
         <memberlist if={ data.isOwner }></memberlist>
         <ringsize pid={ data.pid }></ringsize>
     </div>
@@ -21,21 +21,5 @@ require('./ring/ringsize.tag')
         riotcontrol.on('project_data', function(data) {
             self.update({data: data, loading: false})
         })
-
-        // self.isLoading = true
-        // self.project = {}
-        
-        // riotcontrol.on('route_project', function(pid, action) {
-        //     if (!action) {
-        //         riotcontrol.trigger('project_init', pid)
-        //         riotcontrol.trigger('memberlist_init', pid)
-        //         riotcontrol.trigger('ringsizes_init', pid)
-        //         // self.update({project: {}, isLoading: true})
-        //     }
-        // })
-
-        // riotcontrol.on('project_data', function(data) {
-        //     self.update({project: data, isLoading: false})
-        // })
     </script>
 </project>

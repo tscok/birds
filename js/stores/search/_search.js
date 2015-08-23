@@ -1,13 +1,14 @@
 var riot = require('riot');
 var utils = require('../../utils');
 var fbRef = require('../../firebase');
+var moment = require('moment');
 
 module.exports = function() {
     riot.observable(this);
 
     var self = this, uid, pattern, category, result;
-    var types = ['title','site','ownerName'];
-    var publicRef = fbRef.child('project').orderByChild('public').equalTo(true);
+    var types = ['title','site','userName'];
+    var publicRef = fbRef.child('project').orderByChild('privacy').equalTo('public');
 
     function search(data) {
         uid = fbRef.getAuth().uid;
@@ -24,8 +25,11 @@ module.exports = function() {
                 }
             });
 
-            // Return a complete data set, in reversed order (newst first).
-            self.trigger('search_data', result.reverse());
+            // Sort result by end date, descending order.
+            result.sort(dateDesc)
+
+            // Return a complete data set.
+            self.trigger('search_data', result);
         });
     }
 
@@ -49,13 +53,24 @@ module.exports = function() {
     }
 
     function addResult(project, id) {
+        var name = project.userName;
         var extras = {
             pid: id,
-            isOwner: uid === project.ownerId,
-            ownerName: uid === project.ownerId ? 'You' : project.ownerName,
-            isActive: new Date(project.dateEnd).getTime() > new Date().getTime()
+            isOwner: uid === project.userId,
+            userName: uid === project.userId ? name + ' (You)' : name,
+            isActive: project.date.end > moment().unix()
         };
         result.push(utils.extend(project, extras));
+    }
+
+    function dateDesc(a, b) {
+        // newest first.
+        return (a.date.end > b.date.end) ? -1 : ((a.date.end < b.date.end) ? 1 : 0);
+    }
+
+    function dateAsc(a, b) {
+        // oldest first.
+        return (a.date.end < b.date.end) ? -1 : ((a.date.end > b.date.end) ? 1 : 0);
     }
 
     function clearOnRoute(route) {

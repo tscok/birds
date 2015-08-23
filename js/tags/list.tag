@@ -1,3 +1,5 @@
+var moment = require('moment')
+
 <list>
     <h3 if={ opts.heading && opts.items.length }>{ opts.heading }</h3>
     <ul if={ opts.items.length }>

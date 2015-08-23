@@ -16,7 +16,7 @@ module.exports = function() {
                 // Clear lists in view.
                 self.trigger('projectlist_clear', types[i]);
                 // Add firebase listeners.
-                fbRef.child('user_project/' + authData.uid + '/' + types[i]).on('value', handle);
+                fbRef.child('userproject/' + authData.uid + '/' + types[i]).on('value', handle);
             }
         }
     });

@@ -31,23 +31,5 @@ require('./memberrole.tag')
             self[type] = []
             self.update()
         })
-
-        // // On route, clear members.
-        // riotcontrol.on('route_project', function(pid, action) {
-        //     if (!action) {
-        //         self.update({members: {}})
-        //     }
-        // })
-
-        // // Per event type, populate members.
-        // riotcontrol.on('memberlist_data', function(type, list) {
-        //     self.members[type] = list
-        //     self.update()
-        // })
-
-        // // On empty result, clear members and cancel loader.
-        // riotcontrol.on('memberlist_empty', function() {
-        //     self.update({members: {}, loading: false})
-        // })
     </script>
 </memberlist>

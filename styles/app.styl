@@ -1,3 +1,8 @@
+@import 'color'
+@import 'alert'
+@import 'user'
+@import 'map'
+
 clearfix(){
 	&:before, &:after {
 		content: "";
@@ -30,34 +35,3 @@ form {
 	}
 }
 
-color-info = paleturquoise
-color-success = palegreen
-color-warning = moccasin
-color-danger = pink
-
-.alert {
-	padding: 15px;
-	&__text {
-		margin: 0;
-	}
-	&__close {
-
-	}
-	&--info {
-		background-color: color-info
-	}
-	&--success {
-		background-color: color-success
-	}
-	&--warning {
-		background-color: color-warning
-	}
-	&--danger {
-		background-color: color-danger
-	}
-}
-
-#mapCanvas {
-	width: 400px;
-	height: 200px;
-}

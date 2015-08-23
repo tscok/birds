@@ -1,5 +1,4 @@
 var riotcontrol = require('riotcontrol')
-require('./projectlist.tag')
 require('./pendingcount.tag')
 
 <projectlist>
@@ -45,30 +44,5 @@ require('./pendingcount.tag')
             self[type] = []
             self.update()
         })
-
-        // self.loading = true
-
-        // leaveProject(e) {
-        //     var data = e.item.item
-        //     riotcontrol.trigger('membership_revoke', data)
-        // }
-
-        // undoPending(e) {
-        //     var data = e.item.item
-        //     riotcontrol.trigger('membership_deny', data)
-        // }
-
-        // riotcontrol.on('projectlist_data', function(type, data) {
-        //     self[type] = data
-        //     self.loading = false
-        //     self.update()
-        //     console.log(type, 'updated', data);
-        // })
-
-        // riotcontrol.on('projectlist_clear', function(type) {
-        //     self[type] = []
-        //     self.update()
-        //     console.log(type, 'cleared');
-        // })
     </script>
 </projectlist>

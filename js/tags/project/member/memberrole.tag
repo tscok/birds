@@ -38,8 +38,10 @@ var utils = require('../../../utils')
                 pid: self.parent.id
             }
 
-            if (data.newRole == 'ringer' && !data.newSign) {
-                riotcontrol.trigger('alert', 'Please enter a Ringer signature unique to this project.', 'error')
+            var msg = 'Looks like you forgot to enter a signature.'
+            if (data.newRole == 'ringer' && !data.newSign.length) {
+                riotcontrol.trigger('alert', msg, 'warning')
+                self.sign.focus()
                 return;
             }
             

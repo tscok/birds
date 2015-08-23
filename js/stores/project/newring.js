@@ -5,7 +5,7 @@ var agent = require('superagent');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, ringsize, species;
+    var self = this, ringsize, signature, species;
     
     function init(route, id, action) {
         if (route != 'project' || action != 'newring') {
@@ -14,7 +14,11 @@ module.exports = function() {
 
         // List ringsizes.
         ringsize = [];
-        fbRef.child('ringsize/' + id).on('value', handle);
+        fbRef.child('ringsize/' + id).on('value', handleSizes);
+
+        // List signatures.
+        signature = [];
+        fbRef.child('ringer/' + id).on('value', handleSigns)
 
         // Load species JSON.
         agent.get('./artlista.min.json').end(function(err, res) {
@@ -24,12 +28,20 @@ module.exports = function() {
         });
     }
 
-    function handle(snap) {
+    function handleSigns(snap) {
         var count = snap.numChildren();
+        snap.forEach(function(childSnap) {
+            signature.push(childSnap.val());
+            if (count == signature.length) {
+                self.trigger('newring_signature', signature);
+            }
+        });
+    }
 
+    function handleSizes(snap) {
+        var count = snap.numChildren();
         snap.forEach(function(childSnap) {
             ringsize.push(childSnap.val());
-
             if (count == ringsize.length) {
                 self.trigger('newring_ringsize', ringsize);
             }

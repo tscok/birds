@@ -8,67 +8,63 @@ module.exports = function() {
 
     var self = this;
     var lists = {};
-    var types = ['member','pending'];
-    var lastId = '';
 
-    function init(route, id, action) {
-        if (route != 'project' || !!action) {
-            return;
-        }
-
-        // On change of project or reload.
-        if (lastId != id) {
-            for (var i = 0; i < types.length; i++) {
-                // Clear lists in view.
-                self.trigger('memberlist_clear', types[i]);
-                // Add firebase listeners.
-                fbRef.child('member_status/' + id + '/' + types[i]).on('value', handle);
-            };
-            lastId = id;
-        }
+    function init(projectId) {
+        var pid = projectId;
+        fbRef.child('membership/' + pid + '/pending').on('value', handle);
+        fbRef.child('membership/' + pid + '/member').on('value', handle);
     }
 
     function handle(snap) {
-        var type = snap.key();
+        var type = snap.ref().key();
         var count = snap.numChildren();
 
         lists[type] = [];
 
         if (!snap.exists()) {
-            // trigger list type (empty array).
-            self.trigger('memberlist_data', type, lists[type]);
+            self.trigger('memberlist_data', type, []);
+            return;
         }
 
         snap.forEach(function(childSnap) {
-            var memberInfo = utils.extend(childSnap.val(), {uid: childSnap.key()});
+            var userInfo = {uid: childSnap.key()};
             var namePromise = getMemberName(childSnap);
-            listMemberData(namePromise, memberInfo, type, count);
+            
+            if (childSnap.val() instanceof Object) {
+                userInfo = utils.extend(childSnap.val(), userInfo)
+            }
+            
+            listMemberData(namePromise, userInfo, type, count);
         });
     }
 
     function getMemberName(snap) {
         return new promise(function(resolve, reject) {
             fbRef.child('user/' + snap.key() + '/name').on('value', function(name) {
-                if (name.exists()) { resolve(name); }
+                if (name.exists()) { resolve(name.val()); }
             });
         });
     }
 
-    function listMemberData(promise, info, type, count) {
-        promise.then(function(data) {
-            info['name'] = data.val();
-            lists[type].push(info);
+    function listMemberData(namePromise, userInfo, type, count) {
+        namePromise.then(function(data) {
+            userInfo.name = data;
+            lists[type].push(userInfo);
 
             if (count == lists[type].length) {
-                // trigger list type
                 self.trigger('memberlist_data', type, lists[type]);
             }
         });
     }
 
+    function onRoute(route, id, action) {
+        if (route != 'project' || !!action) {
+            return;
+        }
+        init(id);
+    }
 
-
-    self.on('route', init);
+    self.on('route', onRoute);
 
     // function init(id, action) {
     //     // Skip if action (new, old, etc.) is defined.

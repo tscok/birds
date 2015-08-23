@@ -1,6 +1,7 @@
 var riot = require('riot');
 var agent = require('superagent');
 var moment = require('moment');
+var momentz = require('moment-timezone');
 
 module.exports = function() {
 	riot.observable(this);
@@ -18,7 +19,9 @@ module.exports = function() {
 	};
 
 	function init() {
-		map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
+		map = new google.maps.Map(document.getElementById('mapCanvas'));
+
+		resetMap();
 
 		google.maps.event.addListener(map, 'click', function(e){
 			coords = e.latLng.lat() + ',' + e.latLng.lng();
@@ -27,8 +30,8 @@ module.exports = function() {
 			addMarker(e.latLng);
 			// Location
 			getPositionData(e.latLng);
-			// Time
-			getLocalTime();
+			// Timezone
+			getTimezoneData();
 		});
 	}
 
@@ -43,7 +46,17 @@ module.exports = function() {
 	}
 
 	function clearMarker() {
+		if (!marker) {
+			return;
+		}
 		marker.setMap(null);
+	}
+
+	function resetMap() {
+		clearMarker();
+		map.setOptions(mapOptions);
+		self.trigger('map_data', {});
+		self.trigger('map_tzData', {});
 	}
 
 	function getPositionData(location) {
@@ -61,20 +74,30 @@ module.exports = function() {
 		});
 	}
 
-	function getLocalTime() {
-		var localtime;
-		var timestamp = moment().unix();
-		var baseURL = 'https://maps.googleapis.com/maps/api/timezone/json?location=';
-		var url = baseURL + coords + '&timestamp=' + timestamp + '&key=AIzaSyDU-QSezsFkEm9DikRmj7CH6RQnQIJhq4c';
+	function getTimezoneData() {
+		var ts = moment().unix();
+		var apiKey = 'AIzaSyDU-QSezsFkEm9DikRmj7CH6RQnQIJhq4c';
+		var baseURL = 'https://maps.googleapis.com/maps/api/timezone/json';
+		var url = baseURL + '?location=' + coords + '&timestamp=' + ts + '&key=' + apiKey;
+
 		agent.get(url).end(function(err, res) {
-			if (!err && res.status == 200) {
-				var offsets = res.body.dstOffset + res.body.rawOffset;
-				localtime = moment.unix(timestamp + offsets).utc().format('HH:mm:ss, YYYY-MM-DD');
-				console.log('local time:', localtime);
+			if (!err && res.status == 200 && res.body.status == 'OK') {
+				var id = res.body.timeZoneId; // ex. 'Europe/Stockholm'
+				var m = moment.tz(moment.unix(ts), id);
+				var abbr = m.format('z'); // ex. 'CEST'
+				var offset = m.format('Z'); // ex. '+02:00'
+				
+				self.trigger('map_tzData', {tz: id, abbr: abbr, offset: offset});
 			}
 		});
 	}
 
 	self.on('map_init', init);
-	self.on('map_reset', clearMarker);
+	self.on('map_reset', resetMap);
+
+	self.on('route', function(route) {
+		if (route == 'create') {
+			resetMap();
+		}
+	})
 };

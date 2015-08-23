@@ -3,12 +3,15 @@ var riotcontrol = require('riotcontrol')
 <newring>
     <h1>New Ring</h1>
     <form name="frmNewring" onsubmit={ save }>
+        <label>Ring ID</label><br>
+        <input type="text" name="id" placeholder="Ring ID" required><br>
+    
         <label>Species</label><br>
         <input type="text" name="species" placeholder="Species" oninput={ getSpecies } required><br>
         <div each={ specieslist } onclick={ setSpecies }>
-            <a href>{ Code } - { Scientific }<br><small>{ Swedish }/{ English }</small></a>
+            <span>{ Code } - { Scientific }<br><small>{ Swedish }/{ English }</small></span>
         </div>
-
+    
         <label>Ring no.</label><br>
         <select name="ring" required>
             <option value="" selected>Select…</option>
@@ -18,10 +21,10 @@ var riotcontrol = require('riotcontrol')
         <label>Ring size</label><br>
         <input type="hidden" name="snid" value="">
         <select name="size" onchange={ setSnid } disabled={ !ringsize }>
-            <option value="" selected>Select…</option>
+            <option value="0" selected>Select…</option>
             <option each={ ringsize } value={ size } data-snid={ snid }>{ size }</option>
         </select><br>
-
+    
         <label>Net</label><br>
         <input type="text" name="net" placeholder="Net"><br>
 
@@ -50,7 +53,11 @@ var riotcontrol = require('riotcontrol')
         </select><br>
 
         <label>Sign</label><br>
-        <input type="text" name="sign" placeholder="Sign"><br><!-- select module -->
+        <select name="sign">
+            <option value="" selected>Select…</option>
+            <option each={ val, i in signs } value={ val }>{ val }</option>
+        </select><br>
+
         <label>Weight</label><br>
         <input type="text" name="weight" placeholder="Weight"><br>
         <label>Wing length</label><br>
@@ -94,15 +101,20 @@ var riotcontrol = require('riotcontrol')
         setSpecies(e) {
             console.log(e.item);
             self.species.value = e.item.Code
-            self.size.value = e.item.Type1.replace(',','.')
-            console.log(self.size.selectedIndex);
-            self.setSnid()
+            self.setRingsize(e.item.Type1.replace(',','.'))
             self.update({specieslist: []})
             self.species.blur()
         }
 
-        setSnid() {
-            var item = self.size.options[self.size.selectedIndex]
+        setRingsize(size) {
+            self.size.value = size
+            var index = self.size.selectedIndex
+            if (index == -1) {
+                var msg = 'Suggested ring size (' + size + ') not listed in Ring Sizes.'
+                riotcontrol.trigger('alert', msg, 'warning')
+                return;
+            }
+            var item = self.size.options[index]
             self.snid.value = item.getAttribute('data-snid')
         }
 
@@ -132,6 +144,10 @@ var riotcontrol = require('riotcontrol')
 
         riotcontrol.on('newring_ringsize', function(data) {
             self.update({ringsize: data})
+        })
+
+        riotcontrol.on('newring_signature', function(data) {
+            self.update({signs: data})
         })
 
         riotcontrol.on('newring_species_data', function(data) {

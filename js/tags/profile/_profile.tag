@@ -13,11 +13,5 @@ require('./projectlist.tag');
          * move these components to main.tag and remove
          * this tag completely.
          */
-
-        // riotcontrol.on('route_profile', function() {
-        //     riotcontrol.trigger('user_update')
-        //     riotcontrol.trigger('projectlist_init')
-        //     console.log('hopp', new Date().getTime());
-        // })
     </script>
 </profile>
