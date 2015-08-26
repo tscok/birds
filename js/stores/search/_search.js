@@ -1,7 +1,7 @@
-var riot = require('riot');
-var utils = require('../../utils');
-var fbRef = require('../../firebase');
-var moment = require('moment');
+// var riot = require('riot');
+// var utils = require('../../utils');
+// var fbRef = require('../../firebase');
+// var moment = require('moment');
 
 module.exports = function() {
     riot.observable(this);

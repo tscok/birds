@@ -1,8 +1,4 @@
-var riot = require('riot');
-var fbRef = require('./firebase');
-var riotcontrol = require('riotcontrol');
-
-module.exports = function() {
+module.exports = function(riot, riotcontrol, fbRef) {
 
     var validRoute = {
         'login':    {uidReq: false},
@@ -42,5 +38,4 @@ module.exports = function() {
 
     // Runs on load/reload/refresh.
     riot.route.exec(validateRoute);
-
 };

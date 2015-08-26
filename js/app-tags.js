@@ -1,40 +1,41 @@
-var riot = require('riot');
+// var riot = require('riot');
 
-module.exports = function() {
-    /* Main */
-    require('./tags/main.tag');
-    require('./tags/nav.tag');
+module.exports = function(riot) {
+    // Main
+    var main = require('./tags/main.tag');
+    var nav = require('./tags/nav.tag');
 
-    /* General */
-    require('./tags/list.tag');
-    require('./tags/alert.tag');
+    // General
+    var list = require('./tags/list.tag');
+    var alert = require('./tags/alert.tag');
+    var dropdown = require('./tags/dropdown.tag')
 
-    /* Auth */
-    require('./tags/login.tag')
-    // require('./tags/auth/login.tag');
-    // require('./tags/auth/register.tag');
+    // Auth
+    var login = require('./tags/login.tag')
 
-    /* Profile - mount only root element */
-    require('./tags/profile/_profile.tag');
-    // require('./tags/profile/user.tag');
-    // require('./tags/profile/verify.tag');
-    // require('./tags/profile/projectlist.tag');
-    // require('./tags/profile/pendingcount.tag');
+    // Profile
+    var profile = require('./tags/profile/_profile.tag');
+    var user = require('./tags/profile/user.tag');
+    var projectlist = require('./tags/profile/projectlist.tag');
+    var pendingcount = require('./tags/profile/pendingcount.tag');
 
-    /* Create - mount only root element */
-    require('./tags/create/_create.tag');
+    // Create
+    var create = require('./tags/create/_create.tag');
 
-    /* Search - mount only root element */
-    require('./tags/search/_search.tag');
+    // Search
+    var search = require('./tags/search/_search.tag');
+    var join = require('./tags/search/join.tag');
 
-    /* Project - mount only root element */
-    require('./tags/project/_project.tag');
-    require('./tags/project/newring.tag');
-    require('./tags/project/control.tag');
-    // require('./tags/project/member/memberlist.tag');
-    // require('./tags/project/member/membership.tag');
-    // require('./tags/project/member/memberrole.tag');
-    // require('./tags/project/ring/ringsize.tag');
+    // Project
+    var project = require('./tags/project/_project.tag');
+    var memberlist = require('./tags/project/member/memberlist.tag');
+    var memberrole = require('./tags/project/member/memberrole.tag');
+    var membership = require('./tags/project/member/membership.tag');
+    var ringsize = require('./tags/project/ring/ringsize.tag');
 
-    riot.mount('*');
+    // Project Ring
+    var ringform = require('./tags/project/ring/ringform.tag')
+
+    // Mount only root elements.
+    riot.mount('app-main, app-nav');
 };

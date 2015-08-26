@@ -1,6 +1,6 @@
-var riot = require('riot');
-var fbRef = require('../../firebase');
-var agent = require('superagent');
+// var riot = require('riot');
+// var fbRef = require('../../firebase');
+// var agent = require('superagent');
 
 module.exports = function() {
     riot.observable(this);

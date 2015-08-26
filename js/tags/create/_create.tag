@@ -1,7 +1,3 @@
-var riotcontrol = require('riotcontrol')
-var utils = require('../../utils')
-var moment = require('moment')
-
 <create>
     <form name="frmCreate" onsubmit={ create }>
         <h2>Create Project</h2>
@@ -46,6 +42,9 @@ var moment = require('moment')
     </form>
 
     <script>
+        var riotcontrol = require('riotcontrol')
+        var utils = require('../../utils')
+        var moment = require('moment')
         var self = this
         self.date = {}
 

@@ -1,6 +1,9 @@
-var riotcontrol = require('riotcontrol');
+// var riotcontrol = require('riotcontrol');
+// var agent = require('superagent');
+// var moment = require('moment');
+// var momentz = require('moment-timezone');
 
-module.exports = function() {
+module.exports = function(riotcontrol) {
     // User Authentication
     var login = require('./stores/login');
 

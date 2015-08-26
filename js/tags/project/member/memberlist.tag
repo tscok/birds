@@ -1,7 +1,3 @@
-var riotcontrol = require('riotcontrol')
-require('./membership.tag')
-require('./memberrole.tag')
-
 <memberlist>
     <h3>Members</h3>
     <p if={ loading }>Loading…</p>
@@ -18,6 +14,7 @@ require('./memberrole.tag')
     </list>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.loading = true
@@ -27,9 +24,8 @@ require('./memberrole.tag')
             self.update({loading: false})
         })
 
-        riotcontrol.on('memberlist_clear', function(type) {
-            self[type] = []
-            self.update()
+        riotcontrol.on('memberlist_clear', function() {
+            self.update({pending: [], member: []})
         })
     </script>
 </memberlist>

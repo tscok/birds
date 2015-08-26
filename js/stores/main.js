@@ -1,4 +1,4 @@
-var riot = require('riot');
+// var riot = require('riot');
 
 module.exports = function() {
 	riot.observable(this);

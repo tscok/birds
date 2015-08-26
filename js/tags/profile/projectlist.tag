@@ -1,6 +1,3 @@
-var riotcontrol = require('riotcontrol')
-require('./pendingcount.tag')
-
 <projectlist>
     <h2>Projects</h2>
     <p if={ loading }>Loading…</p>
@@ -21,6 +18,7 @@ require('./pendingcount.tag')
     </list>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.loading = true

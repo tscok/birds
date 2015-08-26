@@ -1,5 +1,3 @@
-var riotcontrol = require('riotcontrol')
-
 <newring>
     <h1>New Ring</h1>
     <form name="frmNewring" onsubmit={ save }>
@@ -68,11 +66,13 @@ var riotcontrol = require('riotcontrol')
         <input type="text" name="arm" placeholder="Secondaries"><br>
         <label>Comment</label><br>
         <textarea name="comment"></textarea><br>
+        
         <button type="submit">Save record</button>
         <button type="reset">Reset</button>
     </form>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.brood = ['1.0','2.0','2+','3+']
@@ -91,7 +91,7 @@ var riotcontrol = require('riotcontrol')
         };
 
         getSpecies() {
-            if (self.species.value) {
+            if (self.species.value.length) {
                riotcontrol.trigger('newring_species', self.species.value)
             } else {
                 self.update({specieslist: []})
@@ -107,6 +107,9 @@ var riotcontrol = require('riotcontrol')
         }
 
         setRingsize(size) {
+            if (!self.size) {
+                return;
+            }
             self.size.value = size
             var index = self.size.selectedIndex
             if (index == -1) {

@@ -1,10 +1,9 @@
-var riotcontrol = require('riotcontrol')
-
 <membership>
     <button onclick={ allow }>Allow</button>
     <button onclick={ deny }>Deny</button>
     
     <script>
+        var riotcontrol = require('riotcontrol')
         var data = {
             pid: this.parent.id,
             uid: opts.uid

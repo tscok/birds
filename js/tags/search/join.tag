@@ -1,5 +1,3 @@
-var riotcontrol = require('riotcontrol')
-
 <join>
     <span if={ loading }>…</span>
 
@@ -11,6 +9,7 @@ var riotcontrol = require('riotcontrol')
     </span>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.loading = true

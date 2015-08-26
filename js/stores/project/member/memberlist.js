@@ -1,7 +1,7 @@
-var riot = require('riot');
-var promise = require('promise');
-var fbRef = require('../../../firebase');
-var utils = require('../../../utils');
+// var riot = require('riot');
+// var promise = require('promise');
+// var fbRef = require('../../../firebase');
+// var utils = require('../../../utils');
 
 module.exports = function() {
     riot.observable(this);
@@ -11,6 +11,7 @@ module.exports = function() {
 
     function init(projectId) {
         var pid = projectId;
+        self.trigger('memberlist_clear');
         fbRef.child('membership/' + pid + '/pending').on('value', handle);
         fbRef.child('membership/' + pid + '/member').on('value', handle);
     }
@@ -65,57 +66,4 @@ module.exports = function() {
     }
 
     self.on('route', onRoute);
-
-    // function init(id, action) {
-    //     // Skip if action (new, old, etc.) is defined.
-    //     if (action) {
-    //         return;
-    //     }
-
-    //     pid = id;
-
-    //     // Get member types.
-    //     fbRef.child('member_status/' + pid).on('value', function(snap) {
-    //         if (!snap.exists()) {
-    //             // No pending, no members. Trigger cancel event for loader…?
-    //             self.trigger('memberlist_empty');
-    //             return;
-    //         }
-
-    //         // Get members by type.
-    //         snap.forEach(function(childSnap) {
-    //             getMemberByType(childSnap);
-    //         });
-    //     });
-    // }
-
-    // function getMemberByType(snap) {
-    //     var list = [];
-    //     var type = snap.key();
-    //     var count = snap.numChildren();
-
-    //     snap.forEach(function(member) {
-
-    //         fbRef.child('user/' + member.key()).once('value', function(user) {
-    //             var userObj = {
-    //                 uid: user.key(),
-    //                 name: user.val().name,
-    //                 pid: pid
-    //             };
-
-    //             if (type === 'member') {
-    //                 list.push(utils.extend(member.val(), userObj));
-    //             } else {
-    //                 list.push(userObj);
-    //             }
-
-    //             if (count === list.length) {
-    //                 self.trigger('memberlist_data', type, list);
-    //             }
-    //         });
-    //     });
-    // }
-
-    // riotcontrol.on('route_project', init);
-    // self.on('memberlist_init', init);
 };

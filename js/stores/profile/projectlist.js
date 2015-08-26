@@ -1,7 +1,7 @@
-var riot = require('riot');
-var promise = require('promise');
-var fbRef = require('../../firebase');
-var utils = require('../../utils');
+// var riot = require('riot');
+// var promise = require('promise');
+// var fbRef = require('../../firebase');
+// var utils = require('../../utils');
 
 module.exports = function() {
     riot.observable(this);

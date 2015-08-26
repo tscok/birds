@@ -1,6 +1,3 @@
-require('./user.tag');
-require('./projectlist.tag');
-
 <profile>
     <user></user>
     <projectlist></projectlist>

@@ -1,9 +1,3 @@
-var riotcontrol = require('riotcontrol')
-var utils = require('../../utils')
-var moment = require('moment')
-require('./join.tag')
-
-
 <search>
     <form name="frmSearch" onsubmit={ find }>
         <h2>Find project</h2>
@@ -26,6 +20,9 @@ require('./join.tag')
     </list>
 
     <script>
+        var riotcontrol = require('riotcontrol')
+        var utils = require('../../utils')
+        var moment = require('moment')
         var self = this
 
         self.show = false

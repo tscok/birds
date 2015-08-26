@@ -1,7 +1,3 @@
-var riotcontrol = require('riotcontrol')
-require('./member/memberlist.tag')
-require('./ring/ringsize.tag')
-
 <project>
     <h2>Project</h2>
     <p if={ loading }>Loading…</p>
@@ -14,6 +10,7 @@ require('./ring/ringsize.tag')
     </div>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var self = this
 
         self.loading = true

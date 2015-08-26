@@ -5,8 +5,7 @@
     <create if={ route == 'create' }></create>
     <profile if={ route == 'profile' }></profile>
     <project if={ route == 'project' && id && !action }></project>
-    <newring if={ route == 'project' && id && action == 'newring' }></newring>
-    <control if={ route == 'project' && id && action == 'control'}></control>
+    <ringform if={ route == 'project' && id && action } action={ action }></ringform>
 
     <script>
         var riotcontrol = require('riotcontrol')

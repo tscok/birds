@@ -1,7 +1,7 @@
-var riot = require('riot');
-var agent = require('superagent');
-var moment = require('moment');
-var momentz = require('moment-timezone');
+// var riot = require('riot');
+// var agent = require('superagent');
+// var moment = require('moment');
+// var momentz = require('moment-timezone');
 
 module.exports = function() {
 	riot.observable(this);

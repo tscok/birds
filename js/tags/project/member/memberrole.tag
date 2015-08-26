@@ -1,6 +1,3 @@
-var riotcontrol = require('riotcontrol')
-var utils = require('../../../utils')
-
 <memberrole>
     <button onclick={ toggleForm }>…</button>
     <form name="frmRoles" onsubmit={ edit } if={ showForm }>
@@ -11,6 +8,8 @@ var utils = require('../../../utils')
     </form>
 
     <script>
+        var riotcontrol = require('riotcontrol')
+        var utils = require('../../../utils')
         var self = this
 
         self.isChecked = opts.data.role == 'ringer'

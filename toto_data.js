@@ -5,9 +5,11 @@ NewRing / Control
     - Create modules for "species lookup", "ring ID lookup", etc.
     - Create ringform module to house both newring and control inputs.
     - Make "species lookup" suggest ring size in newring, but not in control.
-    - Make JSON of Fagel3 document
-    - Compare winglength / weight input to fagel3 min/max values
-    -
+    - Make JSON of Fagel3 document.
+    - Set data-min/data-max attributes on winglength and weight inputs upon selecting a species.
+    - Compare winglength and weight input to min/max values. Give feedback on lows/highs.
+    - List only "active" ringers in signature list. Rewrite firebase ringer list?
+    - Create select-list module to display an array of data.
 
 Profile
     - onAuth with social media, save authData to firebase (id, profileImageURL, displayName, email)

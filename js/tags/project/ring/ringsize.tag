@@ -1,5 +1,3 @@
-var riotcontrol = require('riotcontrol')
-
 <ringsize>
     <a href onclick={ toggleForm }>Toggle Ring Sizes</a>
     <form name="frmRingsize" onsubmit={ add } if={ showForm }>
@@ -13,6 +11,7 @@ var riotcontrol = require('riotcontrol')
     </form>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var self = this
 
         toggleForm() {
