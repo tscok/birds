@@ -1,9 +1,6 @@
-// var riotcontrol = require('riotcontrol');
-// var agent = require('superagent');
-// var moment = require('moment');
-// var momentz = require('moment-timezone');
+var riotcontrol = require('riotcontrol');
 
-module.exports = function(riotcontrol) {
+module.exports = function() {
     // User Authentication
     var login = require('./stores/login');
 
@@ -31,8 +28,8 @@ module.exports = function(riotcontrol) {
     var memberrole = require('./stores/project/member/memberrole');
     var ringsize = require('./stores/project/ring/ringsize');
 
-    // Project - newring
-    var newring = require('./stores/project/newring');
+    // Project - ringform
+    var ringform = require('./stores/project/ring/ringform');
 
 
     // Register stores.
@@ -57,5 +54,5 @@ module.exports = function(riotcontrol) {
     riotcontrol.addStore(new memberrole());
     riotcontrol.addStore(new ringsize());
 
-    riotcontrol.addStore(new newring());
+    riotcontrol.addStore(new ringform());
 };

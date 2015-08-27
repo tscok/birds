@@ -2,7 +2,7 @@
     <label>{ capitalize(opts.select) }</label><br>
     <select name="{ opts.select }" onchange={ setParentValue } if={ opts.objects }>
         <option value="" selected>Select…</option>
-        <option each={ opts.items } value={ snid }>{ size }</option>
+        <option each={ opts.items } value={ key }>{ val }</option>
     </select>
     <select name="{ opts.select }" onchange={ setParentValue } if={ !opts.objects }>
         <option value="" selected>Select…</option>

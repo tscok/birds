@@ -44,19 +44,22 @@
     </form>
 
     <script>
+        var riotcontrol = require('riotcontrol')
         var serialize = require('form-serialize')
+        var self = this
 
-        this.sex = ['F','M']
-        this.age = ['1.0','2.0','2+','3+']
-        this.size = []
+        self.sex = ['F','M']
+        self.age = ['1.0','2.0','2+','3+']
+        self.size = [{key:'abc123', val:'0,5'},{key:'wer456', val:'1'}]
 
         save() {
             var data = serialize(self.frmRing, {hash: true})
-            console.log(data);
-            // data.age = data.select[0]
-            // data.sex = data.select[1]
-            // delete data.select
-            // console.log('save', opts.action, 'data', data);
+            console.log('save', opts.action, 'data', data);
+            self.frmRing.reset()
         }
+
+        riotcontrol.on('ringform_clear', function() {
+            self.frmRing.reset()
+        })
     </script>
 </ringform>

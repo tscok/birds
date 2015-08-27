@@ -1,7 +1,6 @@
-// var riot = require('riot');
-// var agent = require('superagent');
-// var moment = require('moment');
-// var momentz = require('moment-timezone');
+var riot = require('riot');
+var xhr = require('xhr');
+var moment = require('moment');
 
 module.exports = function() {
 	riot.observable(this);
@@ -80,16 +79,22 @@ module.exports = function() {
 		var baseURL = 'https://maps.googleapis.com/maps/api/timezone/json';
 		var url = baseURL + '?location=' + coords + '&timestamp=' + ts + '&key=' + apiKey;
 
-		agent.get(url).end(function(err, res) {
-			if (!err && res.status == 200 && res.body.status == 'OK') {
-				var id = res.body.timeZoneId; // ex. 'Europe/Stockholm'
-				var m = moment.tz(moment.unix(ts), id);
-				var abbr = m.format('z'); // ex. 'CEST'
-				var offset = m.format('Z'); // ex. '+02:00'
-				
-				self.trigger('map_tzData', {tz: id, abbr: abbr, offset: offset});
+		xhr({url: url, json: {}}, function(err, resp, body) {
+			if (!err && resp.statusCode == 200 && body) {
+				console.dir(body);
 			}
 		});
+
+		// agent.get(url).end(function(err, res) {
+		// 	if (!err && res.status == 200 && res.body.status == 'OK') {
+		// 		var id = res.body.timeZoneId; // ex. 'Europe/Stockholm'
+		// 		var m = moment.tz(moment.unix(ts), id);
+		// 		var abbr = m.format('z'); // ex. 'CEST'
+		// 		var offset = m.format('Z'); // ex. '+02:00'
+				
+		// 		self.trigger('map_tzData', {tz: id, abbr: abbr, offset: offset});
+		// 	}
+		// });
 	}
 
 	self.on('map_init', init);

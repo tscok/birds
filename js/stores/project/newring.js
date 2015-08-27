@@ -1,6 +1,6 @@
-// var riot = require('riot');
-// var fbRef = require('../../firebase');
-// var agent = require('superagent');
+var riot = require('riot');
+var xhr = require('xhr');
+var fbRef = require('../../firebase');
 
 module.exports = function() {
     riot.observable(this);
@@ -18,14 +18,26 @@ module.exports = function() {
 
         // List signatures.
         signature = [];
-        fbRef.child('ringer/' + id).on('value', handleSigns)
+        fbRef.child('ringer/' + id).on('value', handleSigns);
 
-        // Load species JSON.
-        agent.get('./artlista.min.json').end(function(err, res) {
-            if (!err && res.status == 200) {
-                species = res.body;
+        var xhrOptions = {
+            uri: './artlista.min.json',
+            headers: {'Content-Type':'application/json'},
+            json: {}
+        };
+
+        xhr(xhrOptions, function(err, resp, body) {
+            if (!err && resp.statusCode == 200 && body) {
+                species = body;
             }
         });
+
+        // Load species JSON.
+        // agent.get('./artlista.min.json').end(function(err, res) {
+        //     if (!err && res.status == 200) {
+        //         species = res.body;
+        //     }
+        // });
     }
 
     function handleSigns(snap) {

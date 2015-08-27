@@ -1,4 +1,8 @@
-module.exports = function(riot, riotcontrol, fbRef) {
+var riot = require('riot');
+var riotcontrol = require('riotcontrol');
+var fbRef = require('./firebase');
+
+module.exports = function() {
 
     var validRoute = {
         'login':    {uidReq: false},

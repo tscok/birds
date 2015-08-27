@@ -1,6 +1,6 @@
-// var riot = require('riot');
+var riot = require('riot');
 
-module.exports = function(riot) {
+module.exports = function() {
     // Main
     var main = require('./tags/main.tag');
     var nav = require('./tags/nav.tag');

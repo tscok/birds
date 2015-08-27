@@ -17,7 +17,7 @@
     "serve": "http-server -p 9090",
     "watch": "watch 'npm run styles' styles/",
     "styles": "stylus --include-css styles/app.styl -o bundle.css -c",
-    "riotify": "watchify -t riotify js/app.js -d -p [minifyify --map bundle.map.json --output bundle.map.json] -o bundle.js",
+    "riotify": "watchify -t riotify js/app.js -d -p [minifyify --map bundle.map.json --output bundle.map.json ] -o bundle.js",
     "dev": "parallelshell 'npm run serve -s' 'npm run riotify -s' 'npm run watch -s'"
   },
   "devDependencies": {
@@ -34,7 +34,7 @@
     "firebase": "^2.2.3",
     "form-serialize": "^0.6.0",
     "moment": "^2.10.6",
-    "moment-timezone": "^0.4.0",
-    "promise": "^6.1.0"
+    "promise": "^6.1.0",
+    "xhr": "^2.0.4"
   }
 }
