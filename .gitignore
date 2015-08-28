@@ -2,6 +2,7 @@
 ##########
 todo_*.*
 
-# Node Modules #
+# Node #
 ################
 node_modules
+npm-debug.log
