@@ -1,6 +1,20 @@
 /*
 TODO:
 
+Gulp
+    - Use gulp instead of command line tasks.
+    - Use gulp-less instead of stylus.
+    - Use gulp-riotify (browserify).
+    - Use gulp-livereload + browser plugin.
+    - Use gulp to minify js/less/json
+
+Git
+    - Add .gitignore 'node_modules'
+    - Run 'rm --cache node_modules' to remove node_modules from git.
+
+JSON
+    - Add Fagel3 json data for ringform module.
+
 NewRing / Control
     - Create modules for "species lookup", "ring ID lookup", etc.
     - Create ringform module to house both newring and control inputs.
