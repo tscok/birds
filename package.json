@@ -13,14 +13,16 @@
     "url": "https://github.com/tscok/birdb/issues"
   },
   "homepage": "https://github.com/tscok/birdb",
-  "scripts": {
-    "serve": "http-server -p 9090",
-    "watch": "watch 'npm run styles' styles/",
-    "styles": "stylus --include-css styles/app.styl -o bundle.css -c",
-    "riotify": "watchify -t riotify js/app.js -d -p [minifyify --map bundle.map.json --output bundle.map.json ] -o bundle.js",
-    "dev": "parallelshell 'npm run serve -s' 'npm run riotify -s' 'npm run watch -s'"
-  },
   "devDependencies": {
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0",
+    "gulp-less": "^3.0.3",
+    "gulp-livereload": "^3.8.0",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-minify-html": "^1.0.4",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-webserver": "^0.9.1",
     "minifyify": "^6.3.2",
     "parallelshell": "^1.1.1",
     "riot": "^2.2.3",
