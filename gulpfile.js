@@ -1,28 +1,29 @@
 var gulp = require('gulp');
+
 var less = require('gulp-less');
+var size = require('gulp-size');
+var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
-var livereload = require('gulp-livereload');
+var convert = require('gulp-convert');
 
 var minifyify = require('minifyify');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-
 var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
+var minifyJSON = require('gulp-jsonminify');
+var sourcemaps = require('gulp-sourcemaps');
 
 var server = require('gulp-webserver');
+var livereload = require('gulp-livereload');
 
-var watchify = require('watchify');
 var browserify = require('browserify');
+var watchify = require('watchify');
 var riotify = require('riotify');
+var assign = require('lodash.assign');
 
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 
-var gutil = require('gulp-util');
-var size = require('gulp-size');
-var assign = require('lodash.assign');
 
 // Output directory.
 var __dirname = './dist/';
@@ -85,11 +86,20 @@ gulp.task('less', function() {
 });
 
 
+gulp.task('json', function() {
+    return gulp.src(['json/*.json'])
+        .pipe(minifyJSON())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(__dirname));
+});
+
+
 gulp.task('server', ['html'], function() {
     return gulp.src('dist')
         .pipe(server({
             port: 9090,
-            open: true
+            open: true,
+            livereload: true
         }));
 });
 
@@ -98,11 +108,6 @@ gulp.task('watch', function() {
     livereload.listen();
     gulp.watch('less/**/*.less', ['less']);
     gulp.watch('./index.html', ['html']);
-});
-
-
-gulp.task('json', function() {
-    // ...
 });
 
 
