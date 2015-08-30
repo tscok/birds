@@ -1,3 +1,40 @@
-body {
-    background-color: lightgreen;
+@import "color";
+@import "alert";
+@import "user";
+@import "map";
+
+.clearfix() {
+    &:before, &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+* {
+    margin: 0;
+}
+
+header {
+    .clearfix;
+    background-color: #333;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    nav {
+        &.left { float: left; }
+        &.right { float: right; }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    }
+}
+
+form {
+    margin-bottom: 20px;
 }
