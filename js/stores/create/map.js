@@ -81,7 +81,10 @@ module.exports = function() {
 
 		xhr({url: url, json: {}}, function(err, resp, body) {
 			if (!err && resp.statusCode == 200 && body) {
-				console.dir(body);
+				var offset = (body.dstOffset + body.rawOffset) / 60;
+				var abbr = body.timeZoneName.match(/\b(\w)/g).join('');
+				var id = body.timeZoneId;
+				self.trigger('map_tzData', {tz: id, abbr: abbr, offset: offset});
 			}
 		});
 

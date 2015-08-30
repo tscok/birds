@@ -54,6 +54,9 @@
 
         save() {
             var data = serialize(self.frmRing, {hash: true})
+            data.ring = parseInt(data.ring) < 10 ? '0' + data.ring : data.ring;
+            data.ring = data.size + data.ring;
+            delete data.size;
             console.log('save', opts.action, 'data', data);
             self.frmRing.reset()
         }

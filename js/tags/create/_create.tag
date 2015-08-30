@@ -28,7 +28,7 @@
         <label>Timezone</label><br>
         <input type="text" name="tzId" placeholder="Click map to set…" disabled><br>
 
-        <label>UTC offset</label><br>
+        <label>UTC Offset (minutes)</label><br>
         <input type="hidden" name="tzAbbr">
         <input type="hidden" name="tzOffset">
         <input type="text" name="tzDisplay" placeholder="Click map to set…" disabled><br>
