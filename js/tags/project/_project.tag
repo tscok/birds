@@ -1,9 +1,8 @@
 <project>
-    <h2>Project</h2>
     <p if={ loading }>Loading…</p>
 
     <div if={ !loading }>
-        <h3>{ data.title }<span if={ data.site }>, { data.site }</span></h3>
+        <h2>{ data.title }<span if={ data.site }>, { data.site }</span></h2>
         <p>{ data.date.start } &ndash; { data.date.end }</p>
         <memberlist if={ data.isOwner }></memberlist>
         <ringsize pid={ data.pid }></ringsize>

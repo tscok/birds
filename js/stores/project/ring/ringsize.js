@@ -17,7 +17,7 @@ module.exports = function() {
             return;
         }
         // Close form on route.
-        self.trigger('ringsize_init');
+        self.trigger('ringsize_hide');
 
         // Set ref and get project's rings.
         ringsizeRef = fbRef.child('ringsize/' + id);
@@ -27,6 +27,11 @@ module.exports = function() {
     function handle(snap) {
         var list = [];
         var count = snap.numChildren();
+
+        if (!count) {
+            self.trigger('ringsize_data', list);
+            return;
+        }
 
         snap.forEach(function(childSnap) {
             list.push({

@@ -36,7 +36,7 @@
             self.update({rings: list})
         })
 
-        riotcontrol.on('ringsize_init', function(list) {
+        riotcontrol.on('ringsize_hide', function(list) {
             self.update({showForm: false})
         })
     </script>

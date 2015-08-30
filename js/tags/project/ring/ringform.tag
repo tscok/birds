@@ -1,4 +1,5 @@
 <ringform>
+    <h2>{ opts.action == 'newring' ? 'New Ring' : 'Control' }</h2>
     <form name="frmRing" onsubmit={ save }>
         <div if={ opts.action == 'control' }>
             <label>Ring ID</label><br>
