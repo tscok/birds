@@ -16,7 +16,6 @@
   "devDependencies": {
     "browserify": "^11.0.1",
     "gulp": "^3.9.0",
-    "gulp-convert": "^0.2.0",
     "gulp-csvtojson": "^0.1.0",
     "gulp-jsonminify": "^1.0.0",
     "gulp-less": "^3.0.3",

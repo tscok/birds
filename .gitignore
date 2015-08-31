@@ -4,6 +4,10 @@ todo_*.js
 todo_*.html
 
 # Node #
-################
+########
 node_modules
 npm-debug.log
+
+# Docs #
+########
+docs
