@@ -9,8 +9,8 @@ var size = require('gulp-size');
 var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var rename = require('gulp-rename');
 
-var sourcemaps = require('gulp-sourcemaps');
 var livereload = require('gulp-livereload');
 
 // Output directory.
@@ -42,8 +42,7 @@ function bundle() {
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
         .pipe(source('app.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({ loadMaps: true })) // loads map from browserify file
-        .pipe(sourcemaps.write('./')) // writes .map file
+        .pipe(rename({ suffix: '.min' }))
         .pipe(size())
         .pipe(gulp.dest(__dirname))
         .pipe(livereload());
