@@ -43,7 +43,7 @@ module.exports = function() {
                 }
             };
         };
-        self.trigger('ringform_species_data', matches.slice(0,5));
+        self.trigger('ringform_species_data', matches.slice(0,10));
     }
 
     function onRoute(route, id, action) {

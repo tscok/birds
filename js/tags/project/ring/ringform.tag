@@ -10,7 +10,7 @@
         <input type="text" name="species" placeholder="Species" oninput={ speciesLookup } autocomplete="off"><br>
         <div each={ specieslist } onclick={ setSpecies }>
             <span>{ Artkod } - { VetNamn }<br><small>{ SVnamn }/{ ENnamn }</small></span>
-        </div><br>
+        </div>
 
         <div if={ opts.action == 'newring' }>
             <label>Ring #</label><br>
@@ -32,9 +32,12 @@
         <dropdown select="sign" items={ sign }></dropdown><br>
 
         <label>Weight</label><br>
-        <input type="text" name="weight" placeholder="Weight"><br>
+        <input type="text" name="weight" placeholder="Weight" onblur={ checkWeight }>
+        <p if={ hint.weight }>Average weight of this species is { weight.min }&ndash;{ weight.max } g.</p><br>
+
         <label>Wing length</label><br>
-        <input type="text" name="wingl" placeholder="Wing Length"><br>
+        <input type="text" name="wingl" placeholder="Wing Length" onblur={ checkWing }>
+        <p if={ hint.wing }>Average winglength of this species is { wing.min }&ndash;{ wing.max } mm.</p><br>
 
         <label>Primaries</label><br>
         <input type="text" name="primaries" placeholder="Primaries"><br>
@@ -56,20 +59,43 @@
         self.age = ['1.0','2.0','2+','3+']
         self.size = [{key:'abc123', val:'0,5'},{key:'wer456', val:'1'}]
 
+        self.weight = {}
+        self.wing = {}
+        self.hint = {weight: false, wing: false}
+
+        checkWeight(e) {
+            var val = e.target.value;
+            if (!val) return
+            if (val < self.weight.min || val > self.weight.max) {
+                self.hint.weight = true
+            }
+        }
+
+        checkWing(e) {
+            var val = e.target.value
+            if (!val) return
+            if (val < self.wing.min || val > self.wing.max) {
+                self.hint.wing = true
+            }
+        }
+
         speciesLookup() {
             if (self.species.value.length > 2) {
                riotcontrol.trigger('ringform_species', self.species.value)
             } else {
-                self.update({specieslist: []})
+                self.update({specieslist: [], weight: {}, wing: {}})
             }
         }
 
         setSpecies(e) {
-            console.log(e.item);
-            // self.species.value = e.item.Code
-            // self.setRingsize(e.item.Type1.replace(',','.'))
-            // self.update({specieslist: []})
-            // self.species.blur()
+            var item = e.item
+            self.species.value = item.Artkod
+
+            self.weight = {min: item.MinVikt, max: item.MaxVikt}
+            self.wing = {min: item.MinVinge, max: item.MaxVinge}
+
+            self.update({specieslist: []})
+            self.species.blur()
         }
 
         save() {
