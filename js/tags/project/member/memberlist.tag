@@ -8,9 +8,8 @@
     </list>
 
     <list heading="Member" items={ member }>
-        <span>{ item.name }</span>
-        <span>({ item.role }<span if={ item.sign }>, { item.sign }</span>)</span>
-        <memberrole data={ item }></memberrole>
+        <span>{ item.name } ({ item.role }<span if={ item.sign }>, { item.sign }</span>)</span>
+        <span riot-tag="memberrole" data={ item }></span>
     </list>
 
     <script>

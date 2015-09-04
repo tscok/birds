@@ -1,11 +1,13 @@
 <memberrole>
     <button onclick={ toggleForm }>…</button>
-    <form name="frmRoles" onsubmit={ edit } if={ showForm }>
-        <label><input type="checkbox" name="ringer" onclick={ toggleTextfield } checked={ isChecked }> Ringer</label><br>
-        <input type="text" name="sign" placeholder="Signature" value={ signValue } disabled={ isDisabled }><br><br>
-        <button type="submit">Update</button>
-        <button type="button" onclick={ revoke }>Revoke</button>
-    </form>
+    <div if={ showForm }>
+        <form name="frmRoles" onsubmit={ edit }>
+            <label><input type="checkbox" name="ringer" onclick={ toggleTextfield } checked={ isChecked }> Ringer</label><br>
+            <input type="text" name="sign" placeholder="Signature" value={ signValue } disabled={ isDisabled }><br><br>
+            <button type="submit">Update</button>
+            <button type="button" onclick={ revoke }>Revoke</button>
+        </form>
+    </div>
 
     <script>
         var riotcontrol = require('riotcontrol')
@@ -15,9 +17,10 @@
         self.isChecked = opts.data.role == 'ringer'
         self.signValue = opts.data.sign
         self.isDisabled = !self.isChecked
+        self.showForm = false
 
         toggleForm() {
-            self.showForm = !self.showForm
+            self.update({showForm: self.showForm ? false : true})
         }
 
         toggleTextfield(e) {
