@@ -1,31 +1,8 @@
+@import "mixin";
 @import "color";
+@import "base";
+@import "form";
+@import "nav";
 @import "alert";
 @import "user";
 @import "map";
-@import "nav";
-
-.clearfix() {
-    &:before, &:after {
-        content: "";
-        display: table;
-    }
-    &:after {
-        clear: both;
-    }
-}
-
-* {
-    margin: 0;
-}
-
-html, body {
-    height: 100%;
-}
-
-body {
-    background-color: @color-whitesmoke;
-}
-
-form {
-    margin-bottom: 20px;
-}

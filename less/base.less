@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: @color-whitesmoke;
+}
+
+@footer: 50px;
+.site-wrapper {
+    min-height: 100%;
+    margin: 0 auto -@footer;
+}
+.site-footer-push,
+.site-footer {
+    height: @footer;
+}
+.site-footer {
+    line-height: @footer;
+    text-align: center;
+    background-color: rgba(0,0,0,.1);
+}
