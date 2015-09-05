@@ -6,16 +6,16 @@
 	<link rel="stylesheet" type="text/css" href="main.min.css">
 </head>
 <body>
-	<div class="main-content">
-		<header>
-			<app-nav></app-nav>
-		</header>
-		<main>
-			<app-main></app-main>
-		</main>
-		<div class="footer-push"></div>
-	</div>
-	<footer></footer>
+
+	<article class="site-wrapper">
+		<header riot-tag="app-nav"></header>
+		<main riot-tag="app-main"></main>
+		<div class="site-footer-push"></div>
+	</article>
+	
+	<footer class="site-footer">
+		<p><strong>birds</strong> v1.0 by <strong>Mikael Carlsson</strong></p>
+	</footer>
 
 	<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU-QSezsFkEm9DikRmj7CH6RQnQIJhq4c"></script>

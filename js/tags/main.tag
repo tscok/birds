@@ -1,11 +1,19 @@
 <app-main>
-    <alert></alert>
-    <login if={ route == 'login' }></login>
-    <search if={ route == 'search' }></search>
-    <create if={ route == 'create' }></create>
-    <profile if={ route == 'profile' }></profile>
-    <project if={ route == 'project' && id && !action }></project>
-    <ringform if={ route == 'project' && id && action } action={ action }></ringform>
+    <div riot-tag="alert"></div>
+    
+    <section riot-tag="login" if={ route == 'login' }></section>
+
+    <section riot-tag="search" if={ route == 'search' }></section>
+
+    <section riot-tag="create" if={ route == 'create' }></section>
+
+    <section riot-tag="user" if={ route == 'profile' }></section>
+
+    <section riot-tag="projectlist" if={ route == 'profile' }></section>
+
+    <section riot-tag="project" if={ route == 'project' && id && !action }></section>
+
+    <section riot-tag="ringform" if={ route == 'project' && id && action } action={ action }></section>
 
     <script>
         var riotcontrol = require('riotcontrol')
