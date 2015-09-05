@@ -11,7 +11,6 @@ module.exports = function() {
     // Profile
     var user = require('./stores/profile/user');
     var projectlist = require('./stores/profile/projectlist');
-    var pendingcount = require('./stores/profile/pendingcount');
 
     // Create
     var create = require('./stores/create/_create');
@@ -40,7 +39,6 @@ module.exports = function() {
 
     riotcontrol.addStore(new user());
     riotcontrol.addStore(new projectlist());
-    riotcontrol.addStore(new pendingcount());
 
     riotcontrol.addStore(new create());
     riotcontrol.addStore(new map());

@@ -4,7 +4,7 @@
 
     <list heading="Own" items={ own }>
         <a href="#project/{ item.pid }">{ item.title }<span if={ item.site }>, { item.site }</span></a>
-        <pendingcount pid={ item.pid }></pendingcount>
+        <span if={ item.pendingCount }> ({ item.pendingCount })</span>
     </list>
 
     <list heading="Member" items={ member }>

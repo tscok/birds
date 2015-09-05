@@ -41,14 +41,29 @@ module.exports = function() {
     function getProjectData(snap) {
         return new promise(function(resolve, reject) {
             fbRef.child('project/' + snap.key()).on('value', function(project) {
-                if (project.exists()) { resolve(project); }
+
+                // Resolve project data.
+                if (project.exists()) {
+
+                    // Check pending count for project.
+                    fbRef.child('membership/' + snap.key() + '/pending').on('value', function(pending) {
+                        var count = (pending.exists()) ? pending.numChildren() : 0;
+                        
+                        // Add data to project.
+                        var projectData = project.val();
+                        projectData.pid = project.key();
+                        projectData.pendingCount = count;
+
+                        resolve(projectData);
+                    });
+                }
             });
         });
     }
 
     function listProjectData(promise, type, count) {
         promise.then(function(data) {
-            lists[type].push(utils.extend(data.val(), {pid: data.key()}));
+            lists[type].push(data);
 
             if (count == lists[type].length) {
                 // trigger list type

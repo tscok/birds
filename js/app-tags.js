@@ -17,7 +17,6 @@ module.exports = function() {
     var profile = require('./tags/profile/_profile.tag');
     var user = require('./tags/profile/user.tag');
     var projectlist = require('./tags/profile/projectlist.tag');
-    var pendingcount = require('./tags/profile/pendingcount.tag');
 
     // Create
     var create = require('./tags/create/_create.tag');
