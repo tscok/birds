@@ -1,5 +1,5 @@
 <app-main>
-    <div riot-tag="alert"></div>
+    <section riot-tag="alert"></section>
     <section riot-tag="login" if={ route == 'login' }></section>
     <section riot-tag="search" if={ route == 'search' }></section>
     <section riot-tag="create" if={ route == 'create' }></section>
