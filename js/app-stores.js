@@ -9,19 +9,19 @@ module.exports = function() {
     var nav = require('./stores/nav');
 
     // Profile
-    var user = require('./stores/profile/user');
-    var projectlist = require('./stores/profile/projectlist');
+    var profile = require('./stores/profile/profile');
+    var projects = require('./stores/profile/projects');
 
     // Create
-    var create = require('./stores/create/_create');
+    var create = require('./stores/create/create');
     var map = require('./stores/create/map');
 
     // Search
-    var search = require('./stores/search/_search');
+    var search = require('./stores/search/search');
     var join = require('./stores/search/join');
 
     // Project - overview
-    var project = require('./stores/project/_project');
+    var project = require('./stores/project/project');
     var memberlist = require('./stores/project/member/memberlist');
     var membership = require('./stores/project/member/membership');
     var memberrole = require('./stores/project/member/memberrole');
@@ -37,8 +37,8 @@ module.exports = function() {
     riotcontrol.addStore(new main());
     riotcontrol.addStore(new nav());
 
-    riotcontrol.addStore(new user());
-    riotcontrol.addStore(new projectlist());
+    riotcontrol.addStore(new profile());
+    riotcontrol.addStore(new projects());
 
     riotcontrol.addStore(new create());
     riotcontrol.addStore(new map());

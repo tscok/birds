@@ -1,18 +1,11 @@
 <app-main>
     <div riot-tag="alert"></div>
-    
     <section riot-tag="login" if={ route == 'login' }></section>
-
     <section riot-tag="search" if={ route == 'search' }></section>
-
     <section riot-tag="create" if={ route == 'create' }></section>
-
-    <section riot-tag="user" if={ route == 'profile' }></section>
-
-    <section riot-tag="projectlist" if={ route == 'profile' }></section>
-
+    <section riot-tag="profile" if={ route == 'profile' }></section>
+    <section riot-tag="projects" if={ route == 'profile' }></section>
     <section riot-tag="project" if={ route == 'project' && id && !action }></section>
-
     <section riot-tag="ringform" if={ route == 'project' && id && action } action={ action }></section>
 
     <script>

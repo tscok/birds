@@ -14,7 +14,7 @@ module.exports = function() {
         if (authData) {
             for (var i = 0; i < types.length; i++) {
                 // Clear lists in view.
-                self.trigger('projectlist_clear', types[i]);
+                self.trigger('projects_clear', types[i]);
                 // Add firebase listeners.
                 fbRef.child('userproject/' + authData.uid + '/' + types[i]).on('value', handle);
             }
@@ -29,7 +29,7 @@ module.exports = function() {
 
         if (!snap.exists()) {
             // trigger list type (empty array).
-            self.trigger('projectlist_data', type, lists[type]);
+            self.trigger('projects_data', type, lists[type]);
         }
 
         snap.forEach(function(childSnap) {
@@ -67,7 +67,7 @@ module.exports = function() {
 
             if (count == lists[type].length) {
                 // trigger list type
-                self.trigger('projectlist_data', type, lists[type]);
+                self.trigger('projects_data', type, lists[type]);
             }
         });
     }

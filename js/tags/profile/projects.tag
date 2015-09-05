@@ -1,4 +1,4 @@
-<projectlist>
+<projects>
     <h2>Projects</h2>
     <p if={ loading }>Loading…</p>
 
@@ -33,14 +33,14 @@
             riotcontrol.trigger('membership_deny', data)
         }
 
-        riotcontrol.on('projectlist_data', function(type, data) {
+        riotcontrol.on('projects_data', function(type, data) {
             self[type] = data
             self.update({loading: false})
         })
 
-        riotcontrol.on('projectlist_clear', function(type) {
+        riotcontrol.on('projects_clear', function(type) {
             self[type] = []
             self.update()
         })
     </script>
-</projectlist>
+</projects>

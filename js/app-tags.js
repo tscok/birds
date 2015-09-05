@@ -14,19 +14,18 @@ module.exports = function() {
     var login = require('./tags/login.tag')
 
     // Profile
-    var profile = require('./tags/profile/_profile.tag');
-    var user = require('./tags/profile/user.tag');
-    var projectlist = require('./tags/profile/projectlist.tag');
+    var profile = require('./tags/profile/profile.tag');
+    var projects = require('./tags/profile/projects.tag');
 
     // Create
-    var create = require('./tags/create/_create.tag');
+    var create = require('./tags/create/create.tag');
 
     // Search
-    var search = require('./tags/search/_search.tag');
+    var search = require('./tags/search/search.tag');
     var join = require('./tags/search/join.tag');
 
     // Project
-    var project = require('./tags/project/_project.tag');
+    var project = require('./tags/project/project.tag');
     var memberlist = require('./tags/project/member/memberlist.tag');
     var memberrole = require('./tags/project/member/memberrole.tag');
     var membership = require('./tags/project/member/membership.tag');
