@@ -1,7 +1,9 @@
 <memberrole>
+    <button type="button" onclick={ toggleForm } style="position:absolute;right:0;top:0;">Edit</button>
+
     <form name="frmRoles" onsubmit={ editMember } if={ showForm }>
         <label><input type="checkbox" name="ringer" onclick={ toggleTextfield } checked={ isChecked }> Ringer</label><br>
-        <input type="text" name="sign" placeholder="Signature" value="{ opts.data.sign }" autocomplete="off" disabled={ isDisabled }><br>
+        <input type="text" name="sign" placeholder="Signature" autocomplete="off" disabled={ isDisabled }><br>
         <p if={ signMissing }>Please add a ringer signature unique to this project.</p><br>
         <button type="submit">Update member</button>
         <button type="button" onclick={ revoke }>Cancel membership</button>
@@ -19,7 +21,9 @@
         self.showForm = false
 
         toggleForm() {
-            self.update({showForm: self.showForm ? false : true})
+            self.showForm = self.showForm ? false : true
+            self.sign.value = opts.data.sign ? opts.data.sign : ''
+            self.update()
         }
 
         toggleTextfield(e) {
@@ -44,14 +48,14 @@
             var roleChanged = opts.data.role != frmData.newRole
             var signChanged = currentSign != frmData.newSign
 
-            console.log('roleChanged %s, signChanged %s', roleChanged, signChanged);
-            console.dir(data);
+            // console.log('roleChanged %s, signChanged %s', roleChanged, signChanged);
+            // console.dir(data);
 
             self.signMissing = false
 
             // Nothing changed.
             if (!roleChanged && (!signChanged || !frmData.newSign)) {
-                console.log('nothing changed', data);
+                // console.log('nothing changed', data);
                 self.update({showForm: false})
                 return
             }
@@ -65,19 +69,19 @@
 
             // Update ringer signature.
             if (!roleChanged && signChanged && frmData.newSign) {
-                console.log('update');
+                // console.log('update');
                 riotcontrol.trigger('memberrole_update', data)
             }
 
             // Promote to ringer.
             if (roleChanged && frmData.newRole == 'ringer' && frmData.newSign) {
-                console.log('promote');
+                // console.log('promote');
                 riotcontrol.trigger('memberrole_promote', data)
             }
 
             // Demote to assistant.
             if (roleChanged && frmData.newRole == 'assistant') {
-                console.log('demote');
+                // console.log('demote');
                 riotcontrol.trigger('memberrole_demote', data)
             }
         }

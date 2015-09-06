@@ -11,11 +11,11 @@
         </tr>
     </table>
 
-    <table>
+    <table style="width:100%;">
         <tr each={ item, i in member }>
-            <td>
+            <td style="position:relative;">
                 <span>{ item.name } ({ item.role }<span if={ item.sign }>, { item.sign }</span>)</span>
-                <button type="button" onclick={ parent.toggleMemberroleForm }>…</button>
+                <!-- <button type="button" onclick={ parent.toggleMemberroleForm }>…</button> -->
                 <div riot-tag="memberrole" data={ item }></div>
             </td>
         </tr>
@@ -27,13 +27,14 @@
 
         self.loading = true
 
-        toggleMemberroleForm(e) {
-            if (self.tags.memberrole instanceof Array) {
-                self.tags.memberrole[e.item.i].toggleForm()
-            } else {
-                self.tags.memberrole.toggleForm()
-            }
-        }
+        // toggleMemberroleForm(e) {
+        //     console.log('item', e.item.i, 'type', self.tags.memberrole);
+        //     if (self.tags.memberrole instanceof Array) {
+        //         self.tags.memberrole[e.item.i].toggleForm()
+        //     } else {
+        //         self.tags.memberrole.toggleForm()
+        //     }
+        // }
 
         riotcontrol.on('memberlist_data', function(type, data) {
             self[type] = data

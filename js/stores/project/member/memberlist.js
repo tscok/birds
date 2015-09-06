@@ -18,7 +18,7 @@ module.exports = function() {
         var type = snap.ref().key();
         var count = snap.numChildren();
 
-        console.log(type, count);
+        // console.log(type, count);
 
         lists[type] = [];
 
@@ -54,7 +54,7 @@ module.exports = function() {
             lists[type].push(userInfo);
 
             if (count == lists[type].length) {
-                console.log(lists[type]);
+                // console.log(lists[type]);
                 self.trigger('memberlist_data', type, lists[type]);
             }
         });

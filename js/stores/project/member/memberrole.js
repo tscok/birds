@@ -16,52 +16,54 @@ module.exports = function() {
     };
 
     function isSignUsed(data) {
-        console.log('compare to', data.newSign);
-        var user;
-        ringerRef.once('value', function(snap) {
-            console.log(snap.val());
-            // snap.forEach(function(childSnap) {
-            //     console.log(childSnap.val().sign);
-            //     if (childSnap.val().sign == data.newSign) {
-            //         user = childSnap.key();
-            //     }
-            // });
-        });
+        return new promise(function(resolve, reject) {
+            ringerRef.once('value', function(snap) {
+                var user;
 
-        if (user && user != data.uid) {
-            var message = '"' + data.newSign + '" is already used.';
-            self.trigger('alert', message, 'warning');
-            return true;
-        }
-        console.log('all good');
-        self.trigger('alert_clear');
-        return false;
+                // Check for ringers who has the signature.
+                snap.forEach(function(childSnap) {
+                    if (childSnap.val().sign == data.newSign) {
+                        user = childSnap.key();
+                        return true;
+                    }
+                });
+
+                // Check if holder/claimer is the same user.
+                if (user && user != data.uid) {
+                    self.trigger('alert', '"'+data.newSign+'" is assigned to another member.', 'error');
+                    resolve(true);
+                }
+
+                resolve(false);
+            });
+        });
     }
 
     function promote(data) {
-        // Check data.newSign.
-        if (isSignUsed(data)) {
-            return;
-        }
-        // Promote member.
-        // memberRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
-        // ringerRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
+        isSignUsed(data).then(function(isUsed) {
+            if (isUsed) {
+                return;
+            }
+            memberRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
+            ringerRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
+        });
     }
 
     function update(data) {
-        // Check data.newSign.
-        if (isSignUsed(data)) {
-            return;
-        }
-        // Update member.
-        // memberRef.child(data.uid).update({sign: data.newSign}, onComplete);
-        // ringerRef.child(data.uid).update({sign: data.newSign}, onComplete);
+        isSignUsed(data).then(function(isUsed) {
+            if (isUsed) {
+                return;
+            }
+            memberRef.child(data.uid).update({sign: data.newSign}, onComplete);
+            ringerRef.child(data.uid).update({sign: data.newSign}, onComplete);
+        });
     }
 
     function demote(data) {
-        // memberRef.child(data.uid).update({role: data.newRole}, onComplete);
+        console.log(data);
+        memberRef.child(data.uid).update({role: data.newRole}, onComplete);
+        ringerRef.child(data.uid).update({role: data.newRole}, onComplete);
     }
-
 
     self.on('memberrole_promote', promote);
     self.on('memberrole_update', update);
@@ -69,7 +71,7 @@ module.exports = function() {
 
     // Setup firebase ref on route.
     self.on('route', function(route, id, action) {
-        if (route == 'project' && !action && !memberRef) {
+        if (route == 'project' && !action && !memberRef && !ringerRef) {
             memberRef = fbRef.child('membership/' + id + '/member');
             ringerRef = fbRef.child('ringer/' + id);
         }
