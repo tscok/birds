@@ -5,62 +5,73 @@ var fbRef = require('../../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this;
+    var self = this, memberRef, ringerRef;
 
-    function edit(data) {
-        var memberRef = fbRef.child('membership/' + data.pid + '/member');
+    var onComplete = function(err) {
+        if (err) {
+            self.trigger('alert', err.message, 'error');
+        } else {
+            self.trigger('memberrole_hide');
+        }
+    };
 
-        // Get signature list as promise.
-        var ringerList = new promise(function(resolve, reject) {
-            var ringers = {}, signatures = [];
-            memberRef.once('value', function(snap) {
-                snap.forEach(function(childSnap) {
-                    if (childSnap.val().role == 'ringer') {
-                        ringers[childSnap.key()] = childSnap.val();
-                        signatures.push(childSnap.val().sign);
-                    }
-                });
-                resolve({
-                    ringers: ringers,
-                    signatures: signatures
-                });
-            });
+    function isSignUsed(data) {
+        console.log('compare to', data.newSign);
+        var user;
+        ringerRef.once('value', function(snap) {
+            console.log(snap.val());
+            // snap.forEach(function(childSnap) {
+            //     console.log(childSnap.val().sign);
+            //     if (childSnap.val().sign == data.newSign) {
+            //         user = childSnap.key();
+            //     }
+            // });
         });
-        
-        if (data.newRole == 'ringer') {
-            promoteOrUpdate();
-        } else if (data.newRole != data.role) {
-            demote();
-        }
 
-        function promoteOrUpdate() {
-            ringerList.then(function(res) {
-                var index = res.signatures.indexOf(data.newSign);
-                if (index != -1 && res.ringers[data.uid].sign != data.newSign) {
-                    self.trigger('alert', 'Signature "'+ data.newSign +'" already in use.', 'warning');
-                    return;
-                }
-
-                if (data.newRole != data.role) {
-                    promote();
-                } else if (data.newSign != data.sign) {
-                    update();
-                }
-            });
+        if (user && user != data.uid) {
+            var message = '"' + data.newSign + '" is already used.';
+            self.trigger('alert', message, 'warning');
+            return true;
         }
-
-        function promote() {
-            memberRef.child(data.uid).update({role: data.newRole, sign: data.newSign});
-        }
-
-        function update() {
-            memberRef.child(data.uid).update({sign: data.newSign});
-        }
-
-        function demote() {
-            memberRef.child(data.uid).update({role: data.newRole});
-        }
+        console.log('all good');
+        self.trigger('alert_clear');
+        return false;
     }
 
-    self.on('memberrole_edit', edit);
+    function promote(data) {
+        // Check data.newSign.
+        if (isSignUsed(data)) {
+            return;
+        }
+        // Promote member.
+        // memberRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
+        // ringerRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
+    }
+
+    function update(data) {
+        // Check data.newSign.
+        if (isSignUsed(data)) {
+            return;
+        }
+        // Update member.
+        // memberRef.child(data.uid).update({sign: data.newSign}, onComplete);
+        // ringerRef.child(data.uid).update({sign: data.newSign}, onComplete);
+    }
+
+    function demote(data) {
+        // memberRef.child(data.uid).update({role: data.newRole}, onComplete);
+    }
+
+
+    self.on('memberrole_promote', promote);
+    self.on('memberrole_update', update);
+    self.on('memberrole_demote', demote);
+
+    // Setup firebase ref on route.
+    self.on('route', function(route, id, action) {
+        if (route == 'project' && !action && !memberRef) {
+            memberRef = fbRef.child('membership/' + id + '/member');
+            ringerRef = fbRef.child('ringer/' + id);
+        }
+    });
 };
