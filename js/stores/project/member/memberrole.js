@@ -45,7 +45,7 @@ module.exports = function() {
                 return;
             }
             memberRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
-            ringerRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
+            ringerRef.child(data.uid).update({role: data.newRole, sign: data.newSign, active: true}, onComplete);
         });
     }
 
@@ -62,7 +62,7 @@ module.exports = function() {
     function demote(data) {
         console.log(data);
         memberRef.child(data.uid).update({role: data.newRole}, onComplete);
-        ringerRef.child(data.uid).update({role: data.newRole}, onComplete);
+        ringerRef.child(data.uid).update({role: data.newRole, active: false}, onComplete);
     }
 
     self.on('memberrole_promote', promote);

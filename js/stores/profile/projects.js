@@ -45,17 +45,11 @@ module.exports = function() {
                 // Resolve project data.
                 if (project.exists()) {
 
-                    // Check pending count for project.
-                    fbRef.child('membership/' + snap.key() + '/pending').on('value', function(pending) {
-                        var count = (pending.exists()) ? pending.numChildren() : 0;
-                        
-                        // Add data to project.
-                        var projectData = project.val();
-                        projectData.pid = project.key();
-                        projectData.pendingCount = count;
+                    // Add data to project.
+                    var projectData = project.val();
+                    projectData.pid = project.key();
 
-                        resolve(projectData);
-                    });
+                    resolve(projectData);
                 }
             });
         });

@@ -4,7 +4,7 @@
 
     <list heading="Own" items={ own }>
         <a href="#project/{ item.pid }">{ item.title }<span if={ item.site }>, { item.site }</span></a>
-        <span if={ item.pendingCount }> ({ item.pendingCount })</span>
+        <span riot-tag="pending" pid={ item.pid }></span>
     </list>
 
     <list heading="Member" items={ member }>

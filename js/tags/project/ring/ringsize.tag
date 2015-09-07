@@ -8,6 +8,7 @@
         <input type="number" step="0.5" name="size" placeholder="Ring size" required>
         <input type="text" name="snid" placeholder="Serial number" required>
         <button type="submit">Add</button>
+        <button type="reset">Cancel</button>
     </form>
 
     <script>
