@@ -1,5 +1,6 @@
 var riot = require('riot');
 var promise = require('promise');
+var moment = require('moment');
 var fbRef = require('../../firebase');
 var utils = require('../../utils');
 
@@ -24,7 +25,13 @@ module.exports = function() {
         projects[type].length = 0;
         snap.forEach(function(childSnap) {
             var data = childSnap.val();
+            // Add pid to data.
             data.pid = childSnap.key();
+            // Date formatting.
+            data.date.created = moment.unix(data.date.created).format('ll');
+            data.date.start = moment.unix(data.date.start).format('ll');
+            data.date.end = moment.unix(data.date.end).format('ll');
+
             projects[type].push(data);
         });
         self.trigger('projects_data', type, projects[type]);
