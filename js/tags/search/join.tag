@@ -10,12 +10,19 @@
 
     <script>
         var riotcontrol = require('riotcontrol')
+        var moment = require('moment')
         var self = this
 
         self.loading = true
 
         join() {
-            riotcontrol.trigger('membership_request', {pid: opts.data.pid})
+            var info = {
+                pid: opts.data.pid,
+                title: opts.data.title,
+                site: opts.data.site,
+                date: moment().unix()
+            }
+            riotcontrol.trigger('membership_request', info)
             self.pending = true
         }
 

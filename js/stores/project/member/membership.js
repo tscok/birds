@@ -1,4 +1,5 @@
 var riot = require('riot');
+var promise = require('promise');
 var fbRef = require('../../../firebase');
 
 module.exports = function() {
@@ -12,11 +13,28 @@ module.exports = function() {
         }
     };
 
+    // Retrieve current user's name.
+    function getUserName(uid) {
+        var userNameRef = fbRef.child('user/' + uid + '/name');
+        return new promise(function(resolve, reject) {
+            userNameRef.once('value', function(name) {
+                resolve(name.val());
+            });
+        });
+    }
+
     // Request membership.
     function request(data) {
         var uid = data.uid || fbRef.getAuth().uid;
-        fbRef.child('membership/' + data.pid + '/pending/' + uid).set(true);
-        fbRef.child('userproject/' + uid + '/pending/' + data.pid).set(true);
+        getUserName(uid).then(function(name) {
+            fbRef.child('membership/' + data.pid + '/pending/' + uid).set({name: name});
+            var projectInfo = {
+                title: data.title,
+                site: data.site,
+                date: data.date
+            }
+            fbRef.child('userproject/' + uid + '/pending/' + data.pid).set(projectInfo);
+        });
     }
 
     // Deny membership request.

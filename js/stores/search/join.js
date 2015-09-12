@@ -4,25 +4,21 @@ var fbRef = require('../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, pid;
-    var types = ['pending','member'];
-
-    var handle = function(type, snap) {
-        self.trigger('join_' + pid, type, snap.exists());
-    }
+    var self = this;
 
     function status(projectId) {
-        pid = projectId;
-        
+        var pid = projectId;
         var uid = fbRef.getAuth().uid;
-        var userProjectRef;
         
-        for (var i = 0; i < types.length; i++) {
-            userProjectRef = fbRef.child('userproject/' + uid + '/' + types[i] + '/' + pid);
-            userProjectRef.on('value', function(snap) {
-                handle(types[i], snap);
-            });
-        };
+        pendingRef = fbRef.child('userproject/' + uid + '/pending/' + pid);
+        memberRef = fbRef.child('userproject/' + uid + '/member/' + pid);
+
+        pendingRef.on('value', handle);
+        memberRef.on('value', handle);
+
+        function handle(snap) {
+            self.trigger('join_' + pid, snap.key(), snap.exists());
+        }
     }
 
     self.on('join_get_status', status)
