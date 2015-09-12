@@ -87,17 +87,6 @@ module.exports = function() {
 				self.trigger('map_tzData', {tz: id, abbr: abbr, offset: offset});
 			}
 		});
-
-		// agent.get(url).end(function(err, res) {
-		// 	if (!err && res.status == 200 && res.body.status == 'OK') {
-		// 		var id = res.body.timeZoneId; // ex. 'Europe/Stockholm'
-		// 		var m = moment.tz(moment.unix(ts), id);
-		// 		var abbr = m.format('z'); // ex. 'CEST'
-		// 		var offset = m.format('Z'); // ex. '+02:00'
-				
-		// 		self.trigger('map_tzData', {tz: id, abbr: abbr, offset: offset});
-		// 	}
-		// });
 	}
 
 	self.on('map_init', init);

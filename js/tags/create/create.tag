@@ -2,16 +2,16 @@
     <form name="frmCreate" onsubmit={ create }>
         <h2>Create Project</h2>
         <label>Project title</label><br>
-        <input type="text" name="title" placeholder="Project name" require><br>
+        <input type="text" name="title" placeholder="Project name" required><br>
 
         <label>Start date</label><br>
-        <input type="date" name="dateStart" require><br>
+        <input type="date" name="dateStart" required><br>
 
         <label>End date</label><br>
-        <input type="date" name="dateEnd" require><br>
+        <input type="date" name="dateEnd" required><br>
 
         <label>Site name</label><br>
-        <input type="text" name="site" placeholder="Site name"><br>
+        <input type="text" name="site" placeholder="Site name" required><br>
 
         <label>Site location</label><br>
         <div id="mapCanvas"></div>
@@ -43,8 +43,9 @@
 
     <script>
         var riotcontrol = require('riotcontrol')
-        var utils = require('../../utils')
         var moment = require('moment')
+        var utils = require('../../utils')
+        
         var self = this
         self.date = {}
 
@@ -52,25 +53,25 @@
             self.date.created = moment().unix()
             self.date.start = moment(self.dateStart.value).unix()
             self.date.end = moment(self.dateEnd.value).unix()
-            return (self.date.start >= self.date.end)
+            return self.date.start >= self.date.end
         }
 
         create() {
             if (self.checkDates()) {
-                var msg = 'Please correct; Start date cannot be later than, or equal to, End date.'
+                var msg = 'Start date cannot be later than, or equal to, End date.'
                 riotcontrol.trigger('alert', msg, 'warning')
                 return
             }
 
-            var project = {
+            var projectData = {
                 title: self.title.value,
                 site: self.site.value,
                 latlng: self.latlng.value,
                 country: {
-                    id: self.countryIso.value,
+                    iso: self.countryIso.value,
                     name: self.countryName.value
                 },
-                tz: {
+                timezone: {
                     id: self.tzId.value,
                     abbr: self.tzAbbr.value,
                     offset: self.tzOffset.value
@@ -80,7 +81,7 @@
             }
 
             riotcontrol.trigger('alert_clear')
-            riotcontrol.trigger('project_create', project)
+            riotcontrol.trigger('project_create', projectData)
             self.frmCreate.reset()
         }
 
@@ -94,27 +95,29 @@
         }
 
         setMapData(data) {
-            var iso = data.countryIso || ''
-            var name = data.countryName || ''
-            var latlng = data.latLng || ''
-            var display = name && iso ? name + ',' + iso : ''
+            // var iso = data.countryIso || ''
+            // var name = data.countryName || ''
+            // var latlng = data.latLng || ''
+            var display = data.countryName && data.countryIso ? data.countryName + ',' + data.countryIso : ''
 
-            self.countryIso.value = iso
-            self.countryName.value = name
+            self.countryIso.value = data.countryIso || null
+            self.countryName.value = data.countryName || null
+            self.latlng.value = data.latLng || null
             self.countryDisplay.value = display
-            self.latlng.value = latlng
+            self.update()
         }
 
         setTzData(data) {
-            var tz = data.tz || ''
-            var abbr = data.abbr || ''
-            var offset = data.offset || ''
-            var display = offset && abbr ? offset + ', ' + abbr : ''
+            // var tz = data.tz || ''
+            // var abbr = data.abbr || ''
+            // var offset = data.offset || ''
+            var display = data.offset && data.abbr ? data.offset + ', ' + data.abbr : ''
 
-            self.tzId.value = tz
-            self.tzAbbr.value = abbr
-            self.tzOffset.value = offset
+            self.tzId.value = data.tz || null
+            self.tzAbbr.value = data.abbr || null
+            self.tzOffset.value = data.offset || null
             self.tzDisplay.value = display
+            self.update()
         }
 
         riotcontrol.on('map_data', self.setMapData)

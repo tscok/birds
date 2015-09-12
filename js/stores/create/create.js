@@ -12,12 +12,12 @@ module.exports = function() {
 
 		// Firebase locations.
 		var projectRef = fbRef.child('project');
-		var countryRef = fbRef.child('country/' + country.id);
+		var countryRef = fbRef.child('country/' + country.iso);
 		var userNameRef = fbRef.child('user/' + uid + '/name');
 		var userProjectRef = fbRef.child('userproject/' + uid + '/own');
 
 		// Modify data object.
-		data.country = country.id;
+		data.country = country.iso;
 		data.userId = uid;
 
 		// Save project.
@@ -31,8 +31,12 @@ module.exports = function() {
 			projectRef.child(projectId).update({userName: name.val()});
 		});
 
-		// Add project ID to user project.
-		userProjectRef.child(projectId).set(true);
+		// Add project data to user project.
+		userProjectRef.child(projectId).set({
+			title: data.title,
+			site: data.site,
+			date: data.date
+		});
 
 		// Store country ISO.
 		countryRef.once('value', function(snap) {
