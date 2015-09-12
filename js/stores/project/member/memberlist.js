@@ -6,8 +6,8 @@ var utils = require('../../../utils');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, pendingRef, memberRef;
-    var lists = {};
+    var self = this;
+    var memberlist = {pending: [], member: []};
 
     function init(pid) {
         fbRef.child('membership/' + pid + '/pending').on('value', handle);
@@ -15,56 +15,20 @@ module.exports = function() {
     }
 
     function handle(snap) {
-        var type = snap.ref().key();
-        var count = snap.numChildren();
-
-        // console.log(type, count);
-
-        lists[type] = [];
-
-        if (!snap.exists()) {
-            self.trigger('memberlist_data', type, []);
-            return;
-        }
-
-        snap.forEach(function(childSnap) {
-            var userInfo = {uid: childSnap.key()};
-            var namePromise = getMemberName(childSnap);
-
-            // Combine member object with uid.
-            if (childSnap.val() instanceof Object) {
-                userInfo = utils.extend(childSnap.val(), userInfo)
-            }
-
-            listMemberData(namePromise, userInfo, type, count);
+        var type = snap.key();
+        memberlist[type].length = 0;
+        snap.forEach(function(user) {
+            var data = user.val();
+            data.uid = user.key();
+            memberlist[type].push(data);
         });
+
+        self.trigger('memberlist_data', type, memberlist[type]);
     }
-
-    function getMemberName(snap) {
-        return new promise(function(resolve, reject) {
-            fbRef.child('user/' + snap.key() + '/name').on('value', function(name) {
-                resolve(name.exists() ? name.val() : 'John Doe');
-            });
-        });
-    }
-
-    function listMemberData(namePromise, userInfo, type, count) {
-        namePromise.then(function(data) {
-            userInfo.name = data;
-            lists[type].push(userInfo);
-
-            if (count == lists[type].length) {
-                // console.log(lists[type]);
-                self.trigger('memberlist_data', type, lists[type]);
-            }
-        });
-    }
-
 
     self.on('route', function(route, id, action) {
-        if (route != 'project' || !!action) {
-            return;
+        if (route == 'project' && id && !action) {
+            init(id);
         }
-        init(id);
     });
 };
