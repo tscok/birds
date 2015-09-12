@@ -8,15 +8,12 @@ module.exports = function() {
 
     var self = this;
     
-    function init(route, id, action) {
-        if (route != 'project' || !!action) {
-            return;
-        }
+    function init(pid) {
 
         var authData = fbRef.getAuth();
 
-        fbRef.child('project/' + id).on('value', function(snap) {
-            var info = {pid: id, isOwner: authData.uid == snap.val().userId};
+        fbRef.child('project/' + pid).on('value', function(snap) {
+            var info = {pid: pid, isOwner: authData.uid == snap.val().userId};
             var data = utils.extend(snap.val(), info);
 
             var start = moment.unix(data.date.start)
@@ -28,5 +25,9 @@ module.exports = function() {
         });
     }
     
-    self.on('route', init);
+    self.on('route', function(route, id, action) {
+        if (route == 'project' && id && !action) {
+            init(id);
+        }
+    });
 };

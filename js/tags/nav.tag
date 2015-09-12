@@ -11,17 +11,13 @@
         </nav>
         <nav if={ uid } class="site-header__nav site-header__nav--right">
             <a href="#profile">{ name }</a>
-            <a href class="button" onclick={ logout }>Log out</a>
+            <a href="#logout">Log out</a>
         </nav>
     </div>
 
     <script>
         var riotcontrol = require('riotcontrol');
         var self = this
-
-        logout() {
-            riotcontrol.trigger('logout');
-        }
 
         riotcontrol.on('nav', function(pid, user) {
             self.update({pid: pid, uid: user.uid, name: user.name || 'Profile'})

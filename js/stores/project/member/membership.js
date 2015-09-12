@@ -40,32 +40,8 @@ module.exports = function() {
         fbRef.child('membership/' + data.pid + '/member/' + uid).remove();
     }
 
-    // Validate membership (on route).
-    function validate(route, id) {
-        if (route != 'project') { return; }
-        var pid = id;
-        var uid = fbRef.getAuth().uid;
-        var msg = 'Access denied. Membership required.';
-        var membership = fbRef.child('membership/' + pid + '/member/' + uid);
-        var ownership = fbRef.child('project/' + pid + '/userId');
-        ownership.once('value', function(owner) {
-            if (owner.val() !== uid ) {
-                membership();
-            }
-        });
-        function membership() {
-            membership.once('value', function(member) {
-                if (!member.exists()) {
-                    self.trigger('alert', msg, 'error');
-                    riot.route('profile');
-                }
-            });
-        }
-    }
-
     self.on('membership_request', request);
     self.on('membership_deny', deny);
     self.on('membership_allow', allow);
     self.on('membership_revoke', revoke);
-    self.on('route', validate);
 };

@@ -16,7 +16,7 @@ module.exports = function() {
         return {uid: uid, name: name, image: image}
     }
 
-    self.on('route', function(route, id, action) {
+    self.on('route', function(route, id) {
         self.trigger('nav', id, getUser());
     });
 }
