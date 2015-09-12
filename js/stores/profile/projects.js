@@ -7,62 +7,26 @@ module.exports = function() {
     riot.observable(this);
 
     var self = this;
-    var lists = {};
-    var types = ['own','member','pending'];
+    var projects = {own: [], member: [], pending: []};
 
     fbRef.onAuth(function(authData) {
         if (authData) {
-            for (var i = 0; i < types.length; i++) {
-                // Clear lists in view.
-                self.trigger('projects_clear', types[i]);
-                // Add firebase listeners.
-                fbRef.child('userproject/' + authData.uid + '/' + types[i]).on('value', handle);
-            }
+            fbRef.child('userproject/' + authData.uid + '/own').on('value', handle);
+            fbRef.child('userproject/' + authData.uid + '/member').on('value', handle);
+            fbRef.child('userproject/' + authData.uid + '/pending').on('value', handle);
+        } else {
+            self.trigger('projects_clear');
         }
     });
 
     function handle(snap) {
         var type = snap.key();
-        var count = snap.numChildren();
-
-        lists[type] = [];
-
-        if (!snap.exists()) {
-            // trigger list type (empty array).
-            self.trigger('projects_data', type, lists[type]);
-        }
-
+        projects[type].length = 0;
         snap.forEach(function(childSnap) {
-            var projectPromise = getProjectData(childSnap);
-            listProjectData(projectPromise, type, count);
+            var data = childSnap.val();
+            data.pid = childSnap.key();
+            projects[type].push(data);
         });
-    }
-
-    function getProjectData(snap) {
-        return new promise(function(resolve, reject) {
-            fbRef.child('project/' + snap.key()).on('value', function(project) {
-
-                // Resolve project data.
-                if (project.exists()) {
-
-                    // Add data to project.
-                    var projectData = project.val();
-                    projectData.pid = project.key();
-
-                    resolve(projectData);
-                }
-            });
-        });
-    }
-
-    function listProjectData(promise, type, count) {
-        promise.then(function(data) {
-            lists[type].push(data);
-
-            if (count == lists[type].length) {
-                // trigger list type
-                self.trigger('projects_data', type, lists[type]);
-            }
-        });
+        self.trigger('projects_data', type, projects[type]);
     }
 };

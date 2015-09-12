@@ -14,7 +14,7 @@
 
     <list heading="Pending" items={ pending }>
         <span>{ item.title }<span if={ item.site }>, { item.site }</span></span>
-        <button type="button" onclick={ parent.parent.undoPending }>X</button>
+        <button type="button" onclick={ parent.parent.removePending }>X</button>
     </list>
 
     <script>
@@ -28,19 +28,19 @@
             riotcontrol.trigger('membership_revoke', data)
         }
 
-        undoPending(e) {
+        removePending(e) {
             var data = e.item.item
             riotcontrol.trigger('membership_deny', data)
         }
 
         riotcontrol.on('projects_data', function(type, data) {
+            console.log('data served',data);
             self[type] = data
             self.update({loading: false})
         })
 
-        riotcontrol.on('projects_clear', function(type) {
-            self[type] = []
-            self.update()
+        riotcontrol.on('projects_clear', function() {
+            self.update({own: [], member: [], pending: []})
         })
     </script>
 </projects>
