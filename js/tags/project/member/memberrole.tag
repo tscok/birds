@@ -1,23 +1,21 @@
 <memberrole>
-    <button type="button" onclick={ toggleForm } style="position:absolute;right:0;top:0;">Edit</button>
+    <button type="button" onclick={ toggleForm }>Edit</button>
 
     <form name="frmRoles" onsubmit={ editMember } if={ showForm }>
-        <label><input type="checkbox" name="ringer" onclick={ toggleTextfield } checked={ isChecked }> Ringer</label><br>
-        <input type="text" name="sign" placeholder="Signature" autocomplete="off" disabled={ isDisabled }><br>
-        <p if={ signMissing }>Please add a ringer signature unique to this project.</p><br>
+        <label><input type="checkbox" name="ringer" onclick={ toggleTextfield } checked={ isChecked }> Ringer</label> 
+        <input type="text" name="sign" placeholder="Signature" autocomplete="off" oninput={ clearHint } disabled={ isDisabled }><br>
+        <p if={ showHint }>Please add a signature for this ringer. Letters only, A-Z.</p><br>
         <button type="submit">Update member</button>
         <button type="button" onclick={ revoke }>Cancel membership</button>
     </form>
 
     <script>
         var riotcontrol = require('riotcontrol')
-        var serialize = require('form-serialize')
         var utils = require('../../../utils')
         var self = this
 
         self.isChecked = opts.data.role == 'ringer'
         self.isDisabled = !self.isChecked
-        self.noChanges = true
         self.showForm = false
 
         toggleForm() {
@@ -35,16 +33,29 @@
             }
         }
 
-        editMember() {
+        clearHint() {
+            self.showHint = false
+        }
 
+        editMember(e) {
             var frmData = {
                 newRole: self.ringer.checked ? 'ringer' : 'assistant',
-                newSign: self.ringer.checked ? self.sign.value.toUpperCase() : '',
+                newSign: self.ringer.checked ? self.sign.value.trim().toUpperCase() : '',
                 pid: self.parent.id
             }
 
+            var lettersOnly = /^[A-Z]+$/.test(frmData.newSign);
+
+            if (frmData.newRole == 'ringer' && !lettersOnly) {
+                self.sign.value = frmData.newSign
+                self.showHint = true
+                self.sign.focus()
+                return
+            }
+
             var data = utils.extend(opts.data, frmData)
-            var currentSign = opts.data.sign ? opts.data.sign : ''
+            riotcontrol.trigger('memberrole_edit', data)
+            /*var currentSign = opts.data.sign ? opts.data.sign : ''
             var roleChanged = opts.data.role != frmData.newRole
             var signChanged = currentSign != frmData.newSign
 
@@ -83,7 +94,7 @@
             if (roleChanged && frmData.newRole == 'assistant') {
                 // console.log('demote');
                 riotcontrol.trigger('memberrole_demote', data)
-            }
+            }*/
         }
 
         revoke() {

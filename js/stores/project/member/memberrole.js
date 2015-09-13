@@ -5,75 +5,83 @@ var fbRef = require('../../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, memberRef, ringerRef;
+    var self = this, ringerRef, memberRef;
 
-    var onComplete = function(err) {
+    function edit(data) {
+        ringerRef = fbRef.child('ringer/' + data.pid);
+        memberRef = fbRef.child('membership/' + data.pid + '/member');
+
+        var roleChanged = data.newRole != data.role;
+        var signChanged = data.newSign != data.sign;
+
+        // No changes.
+        if (!roleChanged && !signChanged) {
+            self.trigger('memberrole_hide');
+            return;
+        }
+
+        if (data.newSign) {
+            isSignTaken(data).then(function(isTaken) {
+                if (isTaken) {
+                    self.trigger('alert', '"'+ data.newSign +'" is assigned to another member!', 'warning');
+                    return;
+                }
+
+                // Promote to ringer.
+                if (roleChanged && data.newRole == 'ringer') {
+                    var memberData = {role: data.newRole, sign: data.newSign};
+                    var ringerData = {sign: data.newSign, active: true};
+                    editMember(data.uid, memberData, ringerData);
+                }
+
+                // Update ringer.
+                if (!roleChanged && signChanged) {
+                    var memberData = {sign: data.newSign};
+                    var ringerData = {sign: data.newSign};
+                    editMember(data.uid, memberData, ringerData);
+                }
+            });
+        }
+
+        // Demote to assistant.
+        if (roleChanged && data.newRole == 'assistant') {
+            var memberData = {role: data.newRole};
+            var ringerData = {active: false};
+            editMember(data.uid, memberData, ringerData);
+        }
+    }
+
+    function editMember(uid, memberData, ringerData) {
+        memberRef.child(uid).update(memberData, onComplete);
+        ringerRef.child(uid).update(ringerData, onComplete);
+    }
+
+    function onComplete(err) {
         if (err) {
             self.trigger('alert', err.message, 'error');
         } else {
+            self.trigger('alert', 'Member updated!', 'success');
             self.trigger('memberrole_hide');
         }
-    };
+    }
 
-    function isSignUsed(data) {
+    function isSignTaken(data) {
         return new promise(function(resolve, reject) {
-            ringerRef.once('value', function(snap) {
-                var user;
-
-                // Check for ringers who has the signature.
-                snap.forEach(function(childSnap) {
-                    if (childSnap.val().sign == data.newSign) {
-                        user = childSnap.key();
-                        return true;
+            ringerRef.orderByChild('sign').equalTo(data.newSign)
+            .once('value', function(snap) {
+                var takenByUid;
+                if (snap.exists()) {
+                    snap.forEach(function(childSnap) {
+                        takenByUid = childSnap.key();
+                    });
+                    if (takenByUid && takenByUid != data.uid) {
+                        resolve(true);
                     }
-                });
-
-                // Check if holder/claimer is the same user.
-                if (user && user != data.uid) {
-                    self.trigger('alert', '"'+data.newSign+'" is assigned to another member.', 'error');
-                    resolve(true);
                 }
-
                 resolve(false);
             });
         });
     }
 
-    function promote(data) {
-        isSignUsed(data).then(function(isUsed) {
-            if (isUsed) {
-                return;
-            }
-            memberRef.child(data.uid).update({role: data.newRole, sign: data.newSign}, onComplete);
-            ringerRef.child(data.uid).update({role: data.newRole, sign: data.newSign, active: true}, onComplete);
-        });
-    }
-
-    function update(data) {
-        isSignUsed(data).then(function(isUsed) {
-            if (isUsed) {
-                return;
-            }
-            memberRef.child(data.uid).update({sign: data.newSign}, onComplete);
-            ringerRef.child(data.uid).update({sign: data.newSign}, onComplete);
-        });
-    }
-
-    function demote(data) {
-        console.log(data);
-        memberRef.child(data.uid).update({role: data.newRole}, onComplete);
-        ringerRef.child(data.uid).update({role: data.newRole, active: false}, onComplete);
-    }
-
-    self.on('memberrole_promote', promote);
-    self.on('memberrole_update', update);
-    self.on('memberrole_demote', demote);
-
-    // Setup firebase ref on route.
-    self.on('route', function(route, id, action) {
-        if (route == 'project' && !action && !memberRef && !ringerRef) {
-            memberRef = fbRef.child('membership/' + id + '/member');
-            ringerRef = fbRef.child('ringer/' + id);
-        }
-    });
+    self.on('memberrole_edit', edit);
 };
