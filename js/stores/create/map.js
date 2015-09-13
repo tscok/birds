@@ -91,10 +91,4 @@ module.exports = function() {
 
 	self.on('map_init', init);
 	self.on('map_reset', resetMap);
-
-	self.on('route', function(route) {
-		if (route == 'create') {
-			resetMap();
-		}
-	})
 };

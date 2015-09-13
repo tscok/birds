@@ -52,5 +52,11 @@ module.exports = function() {
 		riot.route(route);
 	}
 
-	self.on('project_create', createProject);
-}
+	self.on('create_project', createProject);
+	self.on('route', function(route) {
+		if (route == 'create') {
+			self.trigger('create_clear');
+			self.trigger('map_reset');
+		}
+	});
+};

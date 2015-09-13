@@ -2,7 +2,7 @@
     <form name="frmCreate" onsubmit={ create }>
         <h2>Create Project</h2>
         <label>Project title</label><br>
-        <input type="text" name="title" placeholder="Project name" required><br>
+        <input type="text" name="title" placeholder="Project name" autocomplete="off" required><br>
 
         <label>Start date</label><br>
         <input type="date" name="dateStart" required><br>
@@ -11,7 +11,7 @@
         <input type="date" name="dateEnd" required><br>
 
         <label>Site name</label><br>
-        <input type="text" name="site" placeholder="Site name" required><br>
+        <input type="text" name="site" placeholder="Site name" autocomplete="off" required><br>
 
         <label>Site location</label><br>
         <div id="mapCanvas"></div>
@@ -81,8 +81,7 @@
             };
 
             riotcontrol.trigger('alert_clear')
-            riotcontrol.trigger('project_create', projectData)
-            self.frmCreate.reset()
+            riotcontrol.trigger('create_project', projectData)
         }
 
         resetForm() {
@@ -116,6 +115,7 @@
 
         riotcontrol.on('map_data', self.setMapData)
         riotcontrol.on('map_tzData', self.setTzData)
+        riotcontrol.on('create_clear', self.resetForm)
 
         self.on('mount', function() {
             riotcontrol.trigger('map_init')
