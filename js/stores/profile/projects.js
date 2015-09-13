@@ -30,14 +30,17 @@ module.exports = function() {
             data.pid = childSnap.key();
 
             // Date formatting.
+            var now = moment();
+            var nowUnix = moment(now).unix();
+            var formatStr = 'YYYY-MM-DD';
             if (type == 'pending') {
-                var now = moment();
                 var then = moment.unix(data.date);
-                data.date = then.from(now, true);
+                data.pendingSince = then.from(now, true);
             } else {
-                data.date.created = moment.unix(data.date.created).format('ll');
-                data.date.start = moment.unix(data.date.start).format('ll');
-                data.date.end = moment.unix(data.date.end).format('ll');
+                data.dateCreated = moment.unix(data.date.created).format(formatStr);
+                data.dateStart = moment.unix(data.date.start).format(formatStr);
+                data.dateEnd = moment.unix(data.date.end).format(formatStr);
+                data.dateStatus = nowUnix <= data.date.end ? (nowUnix < data.date.start ? 'Not started' : 'Active') : 'Completed';
             }
 
             // List project data.

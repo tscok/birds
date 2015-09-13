@@ -9,6 +9,12 @@ module.exports = function() {
     var self = this;
     var memberlist = {pending: [], member: []};
 
+    fbRef.onAuth(function(authData) {
+        if (!authData) {
+            self.trigger('memberlist_clear');
+        }
+    });
+
     function init(pid) {
         fbRef.child('membership/' + pid + '/pending').on('value', handle);
         fbRef.child('membership/' + pid + '/member').on('value', handle);

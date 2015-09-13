@@ -3,7 +3,7 @@
 
     <div if={ !loading }>
         <h2>{ data.title }<span if={ data.site }>, { data.site }</span></h2>
-        <p>{ data.date.start } &ndash; { data.date.end }</p>
+        <p>{ data.dateStart } &ndash; { data.dateEnd }</p>
         <memberlist if={ data.isOwner }></memberlist>
         <ringsize pid={ data.pid }></ringsize>
     </div>
@@ -16,6 +16,10 @@
 
         riotcontrol.on('project_data', function(data) {
             self.update({data: data, loading: false})
+        })
+
+        riotcontrol.on('project_clear', function() {
+            self.update({data: null, loading: true})
         })
     </script>
 </project>

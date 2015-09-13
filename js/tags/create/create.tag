@@ -78,7 +78,7 @@
                 },
                 date: self.date,
                 privacy: utils.radioBtnVal('privacy')
-            }
+            };
 
             riotcontrol.trigger('alert_clear')
             riotcontrol.trigger('project_create', projectData)
@@ -95,9 +95,6 @@
         }
 
         setMapData(data) {
-            // var iso = data.countryIso || ''
-            // var name = data.countryName || ''
-            // var latlng = data.latLng || ''
             var display = data.countryName && data.countryIso ? data.countryName + ',' + data.countryIso : ''
 
             self.countryIso.value = data.countryIso || null
@@ -108,9 +105,6 @@
         }
 
         setTzData(data) {
-            // var tz = data.tz || ''
-            // var abbr = data.abbr || ''
-            // var offset = data.offset || ''
             var display = data.offset && data.abbr ? data.offset + ', ' + data.abbr : ''
 
             self.tzId.value = data.tz || null

@@ -26,14 +26,11 @@ module.exports = function() {
     // Request membership.
     function request(data) {
         var uid = data.uid || fbRef.getAuth().uid;
+        var pid = data.pid;
+        delete data.pid;
         getUserName(uid).then(function(name) {
-            fbRef.child('membership/' + data.pid + '/pending/' + uid).set({name: name});
-            var projectInfo = {
-                title: data.title,
-                site: data.site,
-                date: data.date
-            }
-            fbRef.child('userproject/' + uid + '/pending/' + data.pid).set(projectInfo);
+            fbRef.child('membership/' + pid + '/pending/' + uid).set({name: name});
+            fbRef.child('userproject/' + uid + '/pending/' + pid).set(data);
         });
     }
 
@@ -46,16 +43,23 @@ module.exports = function() {
 
     // Allow membership request.
     function allow(data) {
-        deny(data); // Remove pending status by calling deny().
-        fbRef.child('userproject/' + data.uid + '/member/' + data.pid).set(true);
-        fbRef.child('membership/' + data.pid + '/member/' + data.uid).set({role: 'assistant'});
+        var uid = data.uid;
+        var pid = data.pid;
+        delete data.uid;
+        delete data.pid;
+        // Use deny() to remove pending.
+        deny({pid: pid, uid: uid});
+        getUserName(uid).then(function(name) {
+            fbRef.child('userproject/' + uid + '/member/' + pid).set(data);
+            fbRef.child('membership/' + pid + '/member/' + uid).set({name: name, role: 'assistant'});
+        });
     }
 
     // Revoke membership.
     function revoke(data) {
         var uid = data.uid || fbRef.getAuth().uid;
-        fbRef.child('userproject/' + uid + '/member/' + data.pid).remove();
-        fbRef.child('membership/' + data.pid + '/member/' + uid).remove();
+        fbRef.child('userproject/' + uid + '/member/' + data.pid).remove(onComplete);
+        fbRef.child('membership/' + data.pid + '/member/' + uid).remove(onComplete);
     }
 
     self.on('membership_request', request);

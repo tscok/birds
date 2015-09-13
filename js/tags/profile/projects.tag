@@ -3,17 +3,17 @@
     <p if={ loading }>Loading…</p>
 
     <list heading="Own" items={ own }>
-        <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, Ends { item.date.end }</span>
+        <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.dateStart } &ndash; { item.dateEnd }</span>
         <span riot-tag="pending" pid={ item.pid }></span>
     </list>
 
     <list heading="Member" items={ member }>
-        <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.date.start }-{ item.date.end }</span>
+        <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.dateStatus }</span>
         <button type="button" onclick={ parent.parent.leaveProject }>X</button>
     </list>
 
     <list heading="Pending" items={ pending }>
-        <span>{ item.title }, { item.site }, { item.date }</span>
+        <span>{ item.title }, { item.site }, { item.pendingSince }</span>
         <button type="button" onclick={ parent.parent.removePending }>X</button>
     </list>
 

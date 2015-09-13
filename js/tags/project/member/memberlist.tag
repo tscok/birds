@@ -22,5 +22,9 @@
             self[type] = data
             self.update({loading: false})
         })
+
+        riotcontrol.on('memberlist_clear', function() {
+            self.update({pending: [], member: []})
+        })
     </script>
 </memberlist>
