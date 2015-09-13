@@ -1,14 +1,14 @@
 <ringsize>
     <a href onclick={ toggleForm }>Toggle Ring Sizes</a>
-    <form name="frmRingsize" onsubmit={ add } if={ showForm }>
+    <form name="frmRingsize" onsubmit={ saveSize } if={ showForm }>
         <list items={ rings }>
             <span>{ item.size }</span><span>{ item.snid }</span>
-            <button type="button" onclick={ parent.parent.remove }>X</button>
+            <button type="button" onclick={ parent.parent.removeSize }>X</button>
         </list>
-        <input type="number" step="0.5" name="size" placeholder="Ring size" required>
-        <input type="text" name="snid" placeholder="Serial number" required>
-        <button type="submit">Add</button>
-        <button type="reset">Cancel</button>
+        <input type="number" step="0.5" name="size" placeholder="Ring size" required><br>
+        <input type="text" name="snid" placeholder="Serial number" required><br>
+        <button type="submit">Save</button>
+        <button type="button" onclick={ resetForm }>Cancel</button>
     </form>
 
     <script>
@@ -19,7 +19,7 @@
             self.showForm = !self.showForm
         }
 
-        add(e) {
+        saveSize(e) {
             var data = {
                 size: self.size.value,
                 snid: self.snid.value.toUpperCase()
@@ -29,8 +29,13 @@
             self.size.focus()
         }
 
-        remove(e) {
+        removeSize(e) {
             riotcontrol.trigger('ringsize_remove', e.item.item)
+        }
+
+        resetForm(e) {
+            self.frmRingsize.reset()
+            self.toggleForm()
         }
 
         riotcontrol.on('ringsize_data', function(list) {
