@@ -1,53 +1,77 @@
 <ringform>
     <h2>{ opts.action == 'newring' ? 'New Ring' : 'Control' }</h2>
-    <form name="frmRing" onsubmit={ save }>
-        <div if={ opts.action == 'control' }>
-            <label>Ring ID</label><br>
-            <input type="text" name="ringid" placeholder="Ring ID" oninput={ idLookup }>
-        </div>
-        
-        <label>Species</label><br>
-        <input type="text" name="species" placeholder="Species" oninput={ speciesLookup } autocomplete="off"><br>
-        <div each={ specieslist } onclick={ setSpecies }>
-            <span>{ Artkod } - { VetNamn }<br><small>{ SVnamn }/{ ENnamn }</small></span>
-        </div>
+    <form name="frmRing">
+        <div riot-tag="ringid" if={ opts.action == 'control' }></div>
+
+        <div riot-tag="species"></div>
 
         <div if={ opts.action == 'newring' }>
             <label>Ring #</label><br>
-            <input type="number" step="1" min="0" max="99" name="ring" placeholder="Ring #"><br>
-            <dropdown select="size" items={ size } objects={ true }></dropdown><br>
+            <input type="number" name="ringNumber" step="1" min="0" max="99">
         </div>
 
-        <label>Net</label><br>
-        <input type="text" name="net" placeholder="Net"><br>
+        <div riot-tag="dropdown" label="size" if={ opts.action == 'newring' }>
+            <option each={ size } value={ snid }>{ size }</option>
+        </div>
 
-        <dropdown select="age" items={ age }></dropdown><br>
-        <dropdown select="sex" items={ sex }></dropdown><br>
+        <div>
+            <label>Net</label><br>
+            <input type="text" name="net">
+        </div>
 
-        <label>PJM</label><br>
-        <input type="number" step="1" min="0" max="9" name="pjm"><br>
-        <label>Fat</label><br>
-        <input type="number" step="1" min="0" max="9" name="fat"><br>
+        <div riot-tag="dropdown" label="age">
+            <option each={ val in parent.age } value={ val }>{ val }</option>
+        </div>
 
-        <dropdown select="sign" items={ sign }></dropdown><br>
+        <div riot-tag="dropdown" label="sex">
+            <option each={ val in parent.sex } value={ val }>{ val }</option>
+        </div>
 
-        <label>Weight</label><br>
-        <input type="text" name="weight" placeholder="Weight" onblur={ checkWeight }>
-        <p if={ hint.weight }>Average weight of this species is { weight.min }&ndash;{ weight.max } g.</p><br>
+        <div>
+            <label>PJM</label><br>
+            <input type="number" step="1" min="0" max="9" name="pjm">
+        </div>
 
-        <label>Wing length</label><br>
-        <input type="text" name="wingl" placeholder="Wing Length" onblur={ checkWing }>
-        <p if={ hint.wing }>Average winglength of this species is { wing.min }&ndash;{ wing.max } mm.</p><br>
+        <div>
+            <label>Fat</label><br>
+            <input type="number" step="1" min="0" max="9" name="fat">
+        </div>
 
-        <label>Primaries</label><br>
-        <input type="text" name="primaries" placeholder="Primaries"><br>
-        <label>Secondaries</label><br>
-        <input type="text" name="secondaries" placeholder="Secondaries"><br>
-        <label>Comment</label><br>
-        <textarea name="comment"></textarea><br>
+        <div riot-tag="dropdown" label="sign">
+            <option each={ parent.ringers } value="{ sign }">{ sign }</option>
+        </div>
 
-        <button type="submit">Save</button>
-        <button type="reset">Reset</button>
+        <div>
+            <label>Weight</label><br>
+            <input type="text" name="weight" onblur={ checkMinMax }>
+            <p if={ minMax.weight.hint }>Average weight of this species is { minMax.weight.min }&ndash;{ minMax.weight.max } g.</p>
+        </div>
+
+        <div>
+            <label>Wing length</label><br>
+            <input type="text" name="wing" onblur={ checkMinMax }>
+            <p if={ minMax.wing.hint }>Average winglength of this species is { minMax.wing.min }&ndash;{ minMax.wing.max } mm.</p>
+        </div>
+
+        <div>
+            <label>Primaries</label><br>
+            <input type="text" name="primaries">
+        </div>
+
+        <div>
+            <label>Secondaries</label><br>
+            <input type="text" name="secondaries">
+        </div>
+
+        <div>
+            <label>Comment</label><br>
+            <textarea name="comment"></textarea>
+        </div>
+
+        <div>
+            <button type="button" onclick={ save }>Save</button>
+            <button type="reset">Reset</button>
+        </div>
     </form>
 
     <script>
@@ -57,62 +81,52 @@
 
         self.sex = ['F','M']
         self.age = ['1.0','2.0','2+','3+']
-        self.size = [{key:'abc123', val:'0,5'},{key:'wer456', val:'1'}]
 
-        self.weight = {}
-        self.wing = {}
-        self.hint = {weight: false, wing: false}
-
-        checkWeight(e) {
-            var val = e.target.value;
-            if (!val) return
-            if (val < self.weight.min || val > self.weight.max) {
-                self.hint.weight = true
-            }
-        }
-
-        checkWing(e) {
+        checkMinMax(e) {
+            var elm = e.target.name
             var val = e.target.value
-            if (!val) return
-            if (val < self.wing.min || val > self.wing.max) {
-                self.hint.wing = true
+            if (!val) {
+                return
+            }
+            if (val < self.minMax[elm].min || val > self.minMax[elm].max) {
+                self.minMax[elm].hint = true
             }
         }
 
-        speciesLookup() {
-            if (self.species.value.length > 2) {
-               riotcontrol.trigger('ringform_species', self.species.value)
-            } else {
-                self.update({specieslist: [], weight: {}, wing: {}})
+        setData(data) {
+            self.minMax = {
+                weight: {
+                    min: data.MinVikt,
+                    max: data.MaxVikt,
+                    hint: false
+                },
+                wing: {
+                    min: data.MinVinge,
+                    max: data.MaxVinge,
+                    hint: false
+                }
             }
-        }
-
-        setSpecies(e) {
-            var item = e.item
-            self.species.value = item.Artkod
-
-            self.weight = {min: item.MinVikt, max: item.MaxVikt}
-            self.wing = {min: item.MinVinge, max: item.MaxVinge}
-
-            self.update({specieslist: []})
-            self.species.blur()
         }
 
         save() {
             var data = serialize(self.frmRing, {hash: true})
-            data.ring = parseInt(data.ring) < 10 ? '0' + data.ring : data.ring;
-            data.ring = data.size + data.ring;
+            data.ringNumber = parseInt(data.ringNumber) < 10 ? '0' + data.ringNumber : data.ringNumber
+            data.ringNumber = data.size + data.ringNumber
             delete data.size;
             console.log('save', opts.action, 'data', data);
-            self.frmRing.reset()
+            // self.frmRing.reset()
         }
 
         riotcontrol.on('ringform_clear', function() {
             self.frmRing.reset()
         })
 
-        riotcontrol.on('ringform_species_data', function(data) {
-            self.update({specieslist: data})
+        riotcontrol.on('ringers_data', function(data) {
+            self.update({ringers: data})
+        })
+
+        riotcontrol.on('sizes_data', function(data) {
+            self.update({sizes: data})
         })
     </script>
 </ringform>

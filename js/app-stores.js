@@ -28,8 +28,10 @@ module.exports = function() {
     var memberrole = require('./stores/project/member/memberrole');
     var ringsize = require('./stores/project/ring/ringsize');
 
-    // Project - ringform
+    // Project - ring
     var ringform = require('./stores/project/ring/ringform');
+    var species = require('./stores/project/ring/species');
+    var ringid = require('./stores/project/ring/ringid');
 
 
     // Register stores.
@@ -55,4 +57,6 @@ module.exports = function() {
     riotcontrol.addStore(new ringsize());
 
     riotcontrol.addStore(new ringform());
+    riotcontrol.addStore(new species());
+    riotcontrol.addStore(new ringid());
 };

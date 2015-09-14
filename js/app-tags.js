@@ -25,15 +25,17 @@ module.exports = function() {
     var search = require('./tags/search/search.tag');
     var join = require('./tags/search/join.tag');
 
-    // Project
+    // Project - overview
     var project = require('./tags/project/project.tag');
     var memberlist = require('./tags/project/member/memberlist.tag');
     var memberrole = require('./tags/project/member/memberrole.tag');
     var membership = require('./tags/project/member/membership.tag');
     var ringsize = require('./tags/project/ring/ringsize.tag');
 
-    // Project Ring
-    var ringform = require('./tags/project/ring/ringform.tag')
+    // Project - ring
+    var ringform = require('./tags/project/ring/ringform.tag');
+    var species = require('./tags/project/ring/species.tag');
+    var ringid = require('./tags/project/ring/ringid.tag');
 
     // Mount only root elements.
     riot.mount('app-main, app-nav');

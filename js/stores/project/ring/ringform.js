@@ -5,54 +5,26 @@ var fbRef = require('../../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, ringsizeRef, species, matches;
-    var headers = ['Artkod','ENnamn','SVnamn','VetNamn'];
+    var self = this, ringerRef, ringers;
 
-    function init() {
+    function init(route, id, action) {
+        if (route != 'project' && !id && !action) {
+            return;
+        }
         self.trigger('ringform_clear');
-
-        loadSpecies();
+        ringerRef = fbRef.child('ringer/' + id).orderByChild('active').equalTo(true);
+        ringerRef.on('value', ringerHandle);
     }
 
-    function loadSpecies() {
-        if (species) {
-            return;
+    function ringerHandle(snap) {
+        ringers = [];
+        if (snap.exists()) {
+            snap.forEach(function(childSnap) {
+                ringers.push({uid: childSnap.key(), sign: childSnap.val().sign});
+            });
+            self.trigger('ringers_data', ringers);
         }
-
-        var xhrOptions = {
-            uri: './artlista.min.json',
-            headers: {'Content-Type':'application/json'},
-            json: {}
-        };
-
-        xhr(xhrOptions, function(err, resp, body) {
-            if (!err && resp.statusCode == 200 && body) {
-                species = body;
-            }
-        });
     }
 
-    function matchSpecies(fragment) {
-        matches = [];
-        var pattern = new RegExp(fragment, 'i');
-        for (var i = 0; i < species.length; i++) {
-            for (var x = 0; x < headers.length; x++) {
-                if (pattern.test(species[i][headers[x]])) {
-                    matches.push(species[i]);
-                    continue;
-                }
-            };
-        };
-        self.trigger('ringform_species_data', matches.slice(0,10));
-    }
-
-    function onRoute(route, id, action) {
-        if (route != 'project' || !action) {
-            return;
-        }
-        init();
-    }
-
-    self.on('route', onRoute);
-    self.on('ringform_species', matchSpecies);
+    self.on('route', init);
 };
