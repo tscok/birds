@@ -4,7 +4,7 @@ var fbRef = require('../../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, ringsizeRef;
+    var self = this, ringsizeRef, ringsizes = [];
 
     var onComplete = function(err) {
         if (err) {
@@ -13,37 +13,31 @@ module.exports = function() {
     }
 
     function init(route, id, action) {
-        if (route != 'project' || !!action) {
+        if (route != 'project' && !id) {
             return;
         }
-        // Close form on route.
+        
         self.trigger('ringsize_hide');
 
-        // Set ref and get project's rings.
+        if (ringsizes.length) {
+            self.trigger('ringsize_data', ringsizes);
+            return;
+        }
+
         ringsizeRef = fbRef.child('ringsize/' + id);
         ringsizeRef.orderByChild('size').on('value', handle);
     }
 
     function handle(snap) {
-        var list = [];
-        var count = snap.numChildren();
-
-        if (!count) {
-            self.trigger('ringsize_data', list);
-            return;
-        }
-
+        ringsizes.length = 0;
         snap.forEach(function(childSnap) {
-            list.push({
+            ringsizes.push({
                 rsid: childSnap.key(),
                 size: childSnap.val().size,
                 snid: childSnap.val().snid
             });
-
-            if (count == list.length) {
-                self.trigger('ringsize_data', list);
-            }
         });
+        self.trigger('ringsize_data', ringsizes);
     }
 
     function add(data) {

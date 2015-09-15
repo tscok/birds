@@ -8,14 +8,11 @@ module.exports = function() {
     var self = this, species;
     var headers = ['Artkod','ENnamn','SVnamn','VetNamn'];
 
-    function init(route, id, action) {
-        if (route != 'project' && !id && !action) {
-            return;
-        }
-        if (!species) {
+    fbRef.onAuth(function(authData) {
+        if (authData) {
             speciesLoad();
         }
-    }
+    });
 
     function speciesLoad() {
         var xhrOptions = {
@@ -46,5 +43,4 @@ module.exports = function() {
     }
 
     self.on('species_match', speciesMatch);
-    self.on('route', init);
 };

@@ -1,6 +1,6 @@
 <ringid>
     <label>Ring ID</label><br>
-    <input type="text" name="ringid" onblur={ lookup } autocomplete="off">
+    <input type="text" name="ringid" onblur={ lookup } autocomplete="off" required>
 
     <script>
         var riotcontrol = require('riotcontrol')

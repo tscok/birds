@@ -1,9 +1,8 @@
 <species>
     <label>Species</label><br>
-    <input type="text" name="species" oninput={ lookup } onblur={ delayClear } autocomplete="off">
-    <div each={ result } onclick={ specify }>
-        <span>{ Artkod } - { VetNamn }</span><br>
-        <small>{ SVnamn } / { ENnamn }</small>
+    <input type="text" name="species" oninput={ lookup } onblur={ delayClear } autocomplete="off" required>
+    <div each={ result } onclick={ specify } class="autocomplete">
+        <span>{ Artkod } - { VetNamn }</span><br><small>{ SVnamn } / { ENnamn }</small>
     </div>
     
     <script>
@@ -12,8 +11,9 @@
 
         specify(e) {
             var item = e.item
+            console.log(item);
             self.species.value = item.Artkod
-            this.parent.setData(item)
+            this.parent.setSpeciesData(item)
         }
         
         lookup(e) {
@@ -32,7 +32,7 @@
             if (self.result.length) {
                 setTimeout(function() {
                     self.clearResult()
-                }, 100)
+                }, 250)
             }
         }
 

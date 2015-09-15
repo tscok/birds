@@ -10,8 +10,9 @@
             <input type="number" name="ringNumber" step="1" min="0" max="99">
         </div>
 
-        <div riot-tag="dropdown" label="size" if={ opts.action == 'newring' }>
-            <option each={ size } value={ snid }>{ size }</option>
+        <input type="hidden" name="snid">
+        <div riot-tag="dropdown" label="ringSize" if={ opts.action == 'newring' }>
+            <option each={ ringsize } value={ size }>{ size }</option>
         </div>
 
         <div>
@@ -93,7 +94,7 @@
             }
         }
 
-        setData(data) {
+        setSpeciesData(data) {
             self.minMax = {
                 weight: {
                     min: data.MinVikt,
@@ -106,13 +107,47 @@
                     hint: false
                 }
             }
+            self.setRingsize(data.Rtyp1.replace(',','.'))
+        }
+
+        setRingsize(size) {
+            if (opts.action == 'control') {
+                return
+            }
+            self.frmRing.ringSize.value = size
+
+            // Warn when suggested size is not listed.
+            var index = self.frmRing.ringSize.selectedIndex
+            if (index == -1) {
+                var msg = 'Suggested ring size (' + size + ') not listed in Ring Sizes.'
+                riotcontrol.trigger('alert', msg, 'warning')
+                return
+            }
+
+            // Set hidden 'snid' value.
+            self.setSnid(size)
+        }
+
+        setSnid(size) {
+            self.ringsize.forEach(function(item) {
+                if (item.size == size) {
+                    self.snid.value = item.snid
+                }
+            })
         }
 
         save() {
             var data = serialize(self.frmRing, {hash: true})
+            if (opts.action == 'newring' && !data.ringSize) {
+                riotcontrol.trigger('alert', 'Ring size missing. Unable to create unique ring id.', 'error')
+                return
+            }
+            data.species = data.species.toUpperCase()
             data.ringNumber = parseInt(data.ringNumber) < 10 ? '0' + data.ringNumber : data.ringNumber
-            data.ringNumber = data.size + data.ringNumber
-            delete data.size;
+            data.id = data.snid ? data.snid + data.ringNumber : data.ringNumber
+            delete data.ringNumber
+            delete data.ringSize
+            delete data.snid
             console.log('save', opts.action, 'data', data);
             // self.frmRing.reset()
         }
@@ -125,8 +160,8 @@
             self.update({ringers: data})
         })
 
-        riotcontrol.on('sizes_data', function(data) {
-            self.update({sizes: data})
+        riotcontrol.on('ringsize_data', function(data) {
+            self.update({ringsize: data})
         })
     </script>
 </ringform>
