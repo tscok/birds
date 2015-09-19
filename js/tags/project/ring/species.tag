@@ -29,11 +29,12 @@
         }
 
         delayClear(e) {
-            if (self.result.length) {
-                setTimeout(function() {
-                    self.clearResult()
-                }, 250)
+            if (!self.species.value.length || !self.result.length) {
+                return;
             }
+            setTimeout(function() {
+                self.clearResult()
+            }, 250)
         }
 
         riotcontrol.on('species_data', function(data) {

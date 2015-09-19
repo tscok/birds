@@ -1,5 +1,5 @@
 var riot = require('riot');
-var fbRef = require('../../../firebase');
+var fbRef = require('../../firebase');
 
 module.exports = function() {
     riot.observable(this);

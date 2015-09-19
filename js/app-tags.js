@@ -30,7 +30,7 @@ module.exports = function() {
     var memberlist = require('./tags/project/member/memberlist.tag');
     var memberrole = require('./tags/project/member/memberrole.tag');
     var membership = require('./tags/project/member/membership.tag');
-    var ringsize = require('./tags/project/ring/ringsize.tag');
+    var ringsize = require('./tags/project/ringsize.tag');
 
     // Project - ring
     var ringform = require('./tags/project/ring/ringform.tag');

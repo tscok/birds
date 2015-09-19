@@ -1,18 +1,20 @@
 <ringform>
     <h2>{ opts.action == 'newring' ? 'New Ring' : 'Control' }</h2>
-    <form name="frmRing">
+    <form name="frmRing" onsubmit={ save }>
         <div riot-tag="ringid" if={ opts.action == 'control' }></div>
 
         <div riot-tag="species"></div>
 
         <div if={ opts.action == 'newring' }>
-            <label>Ring #</label><br>
-            <input type="number" name="ringNumber" step="1" min="0" max="99">
-        </div>
-
-        <input type="hidden" name="snid">
-        <div riot-tag="dropdown" label="ringSize" if={ opts.action == 'newring' }>
-            <option each={ ringsize } value={ size }>{ size }</option>
+            <div>
+                <label>Ring #</label><br>
+                <input type="number" name="ringNumber" step="1" min="0" max="99" required>
+            </div>
+            
+            <input type="hidden" name="snid">
+            <div riot-tag="dropdown" label="ringSize" require="required">
+                <option each={ ringsize } value={ size }>{ size }</option>
+            </div>
         </div>
 
         <div>
@@ -38,7 +40,7 @@
             <input type="number" step="1" min="0" max="9" name="fat">
         </div>
 
-        <div riot-tag="dropdown" label="sign">
+        <div riot-tag="dropdown" label="sign" require="required">
             <option each={ parent.ringers } value="{ sign }">{ sign }</option>
         </div>
 
@@ -70,7 +72,7 @@
         </div>
 
         <div>
-            <button type="button" onclick={ save }>Save</button>
+            <button type="submit">Save</button>
             <button type="reset">Reset</button>
         </div>
     </form>
@@ -115,16 +117,12 @@
                 return
             }
             self.frmRing.ringSize.value = size
-
-            // Warn when suggested size is not listed.
             var index = self.frmRing.ringSize.selectedIndex
             if (index == -1) {
                 var msg = 'Suggested ring size (' + size + ') not listed in Ring Sizes.'
                 riotcontrol.trigger('alert', msg, 'warning')
                 return
             }
-
-            // Set hidden 'snid' value.
             self.setSnid(size)
         }
 
@@ -138,13 +136,15 @@
 
         save() {
             var data = serialize(self.frmRing, {hash: true})
-            if (opts.action == 'newring' && !data.ringSize) {
-                riotcontrol.trigger('alert', 'Ring size missing. Unable to create unique ring id.', 'error')
-                return
+            if (opts.action == 'newring') {
+                if (!data.ringSize) {
+                    riotcontrol.trigger('alert', 'Ring size missing. Unable to create unique ring id.', 'error')
+                    return
+                }
+                data.ringNumber = parseInt(data.ringNumber) < 10 ? '0' + data.ringNumber : data.ringNumber
+                data.id = data.snid ? data.snid + data.ringNumber : data.ringNumber
             }
             data.species = data.species.toUpperCase()
-            data.ringNumber = parseInt(data.ringNumber) < 10 ? '0' + data.ringNumber : data.ringNumber
-            data.id = data.snid ? data.snid + data.ringNumber : data.ringNumber
             delete data.ringNumber
             delete data.ringSize
             delete data.snid

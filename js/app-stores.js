@@ -26,7 +26,7 @@ module.exports = function() {
     var memberlist = require('./stores/project/member/memberlist');
     var membership = require('./stores/project/member/membership');
     var memberrole = require('./stores/project/member/memberrole');
-    var ringsize = require('./stores/project/ring/ringsize');
+    var ringsize = require('./stores/project/ringsize');
 
     // Project - ring
     var ringform = require('./stores/project/ring/ringform');

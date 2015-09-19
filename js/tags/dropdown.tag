@@ -1,10 +1,11 @@
 <dropdown>
     <label>{ capitalize(opts.label) }</label><br>
-    <select id="select" name="{ opts.label }"></select>
+    <select id="select" name="{ opts.label }" required="{ opts.require }"></select>
     <div id="options" style="display:none;">
         <option value="">Select…</option>
         <yield/>
     </div>
+    var riotcontrol = require('riotcontrol')
 
     capitalize(s) {
         return s[0].toUpperCase() + s.substr(1)
