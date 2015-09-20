@@ -1,6 +1,7 @@
 <ringform>
     <h2>{ opts.action == 'newring' ? 'New Ring' : 'Control' }</h2>
-    <form name="frmRing" onsubmit={ save }>
+
+    <form name="frmRing" onsubmit={ saveRing }>
         <div riot-tag="ringid" if={ opts.action == 'control' }></div>
 
         <div riot-tag="species"></div>
@@ -46,34 +47,34 @@
 
         <div>
             <label>Weight</label><br>
-            <input type="text" name="weight" onblur={ checkMinMax }>
+            <input type="text" name="weight" autocomplete="off" onblur={ checkMinMax }>
             <p if={ minMax.weight.hint }>Average weight of this species is { minMax.weight.min }&ndash;{ minMax.weight.max } g.</p>
         </div>
 
         <div>
             <label>Wing length</label><br>
-            <input type="text" name="wing" onblur={ checkMinMax }>
+            <input type="text" name="wing" autocomplete="off" onblur={ checkMinMax }>
             <p if={ minMax.wing.hint }>Average winglength of this species is { minMax.wing.min }&ndash;{ minMax.wing.max } mm.</p>
         </div>
 
         <div>
             <label>Primaries</label><br>
-            <input type="text" name="primaries">
+            <input type="text" name="primaries" autocomplete="off">
         </div>
 
         <div>
             <label>Secondaries</label><br>
-            <input type="text" name="secondaries">
+            <input type="text" name="secondaries" autocomplete="off">
         </div>
 
         <div>
             <label>Comment</label><br>
-            <textarea name="comment"></textarea>
+            <textarea name="comment" autocomplete="off"></textarea>
         </div>
 
         <div>
             <button type="submit">Save</button>
-            <button type="reset">Reset</button>
+            <button type="button" onclick={ resetForm }>Reset</button>
         </div>
     </form>
 
@@ -89,6 +90,11 @@
             var elm = e.target.name
             var val = e.target.value
             if (!val) {
+                return
+            }
+            var minVal = self.minMax[elm].min
+            var maxVal = self.minMax[elm].max
+            if (!minVal && !maxVal) {
                 return
             }
             if (val < self.minMax[elm].min || val > self.minMax[elm].max) {
@@ -134,7 +140,7 @@
             })
         }
 
-        save() {
+        saveRing() {
             var data = serialize(self.frmRing, {hash: true})
             if (opts.action == 'newring') {
                 if (!data.ringSize) {
@@ -152,9 +158,9 @@
             // self.frmRing.reset()
         }
 
-        riotcontrol.on('ringform_clear', function() {
+        resetForm() {
             self.frmRing.reset()
-        })
+        }
 
         riotcontrol.on('ringers_data', function(data) {
             self.update({ringers: data})
@@ -163,5 +169,7 @@
         riotcontrol.on('ringsize_data', function(data) {
             self.update({ringsize: data})
         })
+        
+        riotcontrol.on('ringform_reset', self.resetForm)
     </script>
 </ringform>

@@ -1,5 +1,5 @@
 <create>
-    <form name="frmCreate" onsubmit={ create }>
+    <form name="frmCreate" onsubmit={ saveProject }>
         <h2>Create Project</h2>
         <label>Project title</label><br>
         <input type="text" name="title" placeholder="Project name" autocomplete="off" required><br>
@@ -56,7 +56,7 @@
             return self.date.start >= self.date.end
         }
 
-        create() {
+        saveProject() {
             if (self.checkDates()) {
                 var msg = 'Start date cannot be later than, or equal to, End date.'
                 riotcontrol.trigger('alert', msg, 'warning')
@@ -115,7 +115,7 @@
 
         riotcontrol.on('map_data', self.setMapData)
         riotcontrol.on('map_tzData', self.setTzData)
-        riotcontrol.on('create_clear', self.resetForm)
+        riotcontrol.on('create_reset', self.resetForm)
 
         self.on('mount', function() {
             riotcontrol.trigger('map_init')

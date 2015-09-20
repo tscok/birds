@@ -6,7 +6,7 @@
         <input type="text" name="sign" placeholder="Signature" autocomplete="off" oninput={ clearHint } disabled={ isDisabled }><br>
         <p if={ showHint }>Please add a signature for this ringer. Letters only, A-Z.</p><br>
         <button type="submit">Update member</button>
-        <button type="button" onclick={ revoke }>Cancel membership</button>
+        <button type="button" onclick={ revoke } if={ !isOwner }>Cancel membership</button>
     </form>
 
     <script>
@@ -21,6 +21,7 @@
         toggleForm() {
             self.showForm = self.showForm ? false : true
             self.sign.value = opts.data.sign ? opts.data.sign : ''
+            self.isOwner = self.parent.data.isOwner
             self.update()
         }
 
@@ -39,7 +40,7 @@
 
         editMember(e) {
             var frmData = {
-                newRole: self.ringer.checked ? 'ringer' : 'assistant',
+                newRole: self.isOwner ? 'owner' : (self.ringer.checked ? 'ringer' : 'assistant'),
                 newSign: self.ringer.checked ? self.sign.value.trim().toUpperCase() : '',
                 pid: self.parent.id
             }
@@ -55,46 +56,6 @@
 
             var data = utils.extend(opts.data, frmData)
             riotcontrol.trigger('memberrole_edit', data)
-            /*var currentSign = opts.data.sign ? opts.data.sign : ''
-            var roleChanged = opts.data.role != frmData.newRole
-            var signChanged = currentSign != frmData.newSign
-
-            // console.log('roleChanged %s, signChanged %s', roleChanged, signChanged);
-            // console.dir(data);
-
-            self.signMissing = false
-
-            // Nothing changed.
-            if (!roleChanged && (!signChanged || !frmData.newSign)) {
-                // console.log('nothing changed', data);
-                self.update({showForm: false})
-                return
-            }
-
-            // Signature missing, show hint.
-            if (frmData.newRole == 'ringer' && !frmData.newSign) {
-                self.signMissing = true
-                self.sign.focus()
-                return
-            }
-
-            // Update ringer signature.
-            if (!roleChanged && signChanged && frmData.newSign) {
-                // console.log('update');
-                riotcontrol.trigger('memberrole_update', data)
-            }
-
-            // Promote to ringer.
-            if (roleChanged && frmData.newRole == 'ringer' && frmData.newSign) {
-                // console.log('promote');
-                riotcontrol.trigger('memberrole_promote', data)
-            }
-
-            // Demote to assistant.
-            if (roleChanged && frmData.newRole == 'assistant') {
-                // console.log('demote');
-                riotcontrol.trigger('memberrole_demote', data)
-            }*/
         }
 
         revoke() {

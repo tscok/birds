@@ -5,8 +5,8 @@
             <span>{ item.size }</span><span>{ item.snid }</span>
             <button type="button" onclick={ parent.parent.removeSize }>X</button>
         </list>
-        <input type="number" step="0.5" name="size" placeholder="Ring size" required><br>
-        <input type="text" name="snid" placeholder="Serial number" required><br>
+        <input type="number" step="0.5" name="size" placeholder="Ring size" autocomplete="off" required><br>
+        <input type="text" name="snid" placeholder="Serial number" autocomplete="off" required><br>
         <button type="submit">Save</button>
         <button type="button" onclick={ resetForm }>Cancel</button>
     </form>

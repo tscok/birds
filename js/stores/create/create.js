@@ -6,6 +6,12 @@ module.exports = function() {
 
 	var self = this;
 
+	var onComplete = function(err) {
+        if (err) {
+            self.trigger('alert', err.message, 'warning');
+        }
+    };
+
 	var createProject = function(data) {
 		var uid = fbRef.getAuth().uid;
 		var country = data.country;
@@ -21,14 +27,19 @@ module.exports = function() {
 		data.userId = uid;
 
 		// Save project.
-		var newProjectRef = projectRef.push(data);
+		var newProjectRef = projectRef.push(data, onComplete);
 		
 		// Get ID of project.
 		var projectId = newProjectRef.key();
-
+		var memberRef = fbRef.child('membership/' + projectId + '/member');
+		
 		// Update project with user name.
 		userNameRef.once('value', function(name) {
-			projectRef.child(projectId).update({userName: name.val()});
+			var myName = name.val();
+			projectRef.child(projectId).update({userName: myName}, onComplete);
+
+			// Add myself as member/owner of project.
+	        memberRef.child(uid).set({name: myName, role: 'owner'}, onComplete);
 		});
 
 		// Add project data to user project.
@@ -36,15 +47,15 @@ module.exports = function() {
 			title: data.title,
 			site: data.site,
 			date: data.date
-		});
+		}, onComplete);
 
 		// Store country ISO.
 		countryRef.once('value', function(snap) {
 			if (!snap.exists()) {
-				countryRef.set({name: country.name});
+				countryRef.set({name: country.name}, onComplete);
 			}
 			// List project by country.
-			countryRef.child('project/' + projectId).set(true);
+			countryRef.child('project/' + projectId).set(true, onComplete);
 		});
 
 		// Route to project.
@@ -55,7 +66,7 @@ module.exports = function() {
 	self.on('create_project', createProject);
 	self.on('route', function(route) {
 		if (route == 'create') {
-			self.trigger('create_clear');
+			self.trigger('create_reset');
 			self.trigger('map_reset');
 		}
 	});

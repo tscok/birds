@@ -12,7 +12,7 @@ module.exports = function() {
         memberRef = fbRef.child('membership/' + data.pid + '/member');
 
         var roleChanged = data.newRole != data.role;
-        var signChanged = data.newSign != data.sign;
+        var signChanged = data.newSign ? (data.newSign != data.sign) : false;
 
         // No changes.
         if (!roleChanged && !signChanged) {
@@ -28,7 +28,7 @@ module.exports = function() {
                 }
 
                 // Promote to ringer.
-                if (roleChanged && data.newRole == 'ringer') {
+                if (roleChanged && (data.newRole == 'ringer' || data.newRole == 'owner')) {
                     var memberData = {role: data.newRole, sign: data.newSign};
                     var ringerData = {sign: data.newSign, active: true};
                     editMember(data.uid, memberData, ringerData);

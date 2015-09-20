@@ -28,6 +28,7 @@ module.exports = function() {
         var uid = data.uid || fbRef.getAuth().uid;
         var pid = data.pid;
         delete data.pid;
+        // Get user name before status update.
         getUserName(uid).then(function(name) {
             fbRef.child('membership/' + pid + '/pending/' + uid).set({name: name});
             fbRef.child('userproject/' + uid + '/pending/' + pid).set(data);
@@ -49,6 +50,7 @@ module.exports = function() {
         delete data.pid;
         // Use deny() to remove pending.
         deny({pid: pid, uid: uid});
+        // Get user name before status update.
         getUserName(uid).then(function(name) {
             fbRef.child('userproject/' + uid + '/member/' + pid).set(data);
             fbRef.child('membership/' + pid + '/member/' + uid).set({name: name, role: 'assistant'});

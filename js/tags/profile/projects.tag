@@ -2,20 +2,26 @@
     <h2>Projects</h2>
     <p if={ loading }>Loading…</p>
 
-    <list heading="Own" items={ own }>
-        <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.dateStart } &ndash; { item.dateEnd }</span>
-        <span riot-tag="pending" pid={ item.pid }></span>
-    </list>
+    <div if={ !loading }>
+        <list heading="Own" items={ own }>
+            <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.dateStart } &ndash; { item.dateEnd }</span>
+            <span riot-tag="pending" pid={ item.pid }></span>
+        </list>
 
-    <list heading="Member" items={ member }>
-        <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.dateStatus }</span>
-        <button type="button" onclick={ parent.parent.leaveProject }>X</button>
-    </list>
+        <p if={ !own.length }>Project leader type? It's easy to <a href="#create">create a project</a> for others to join, or private if you prefer.</p>
 
-    <list heading="Pending" items={ pending }>
-        <span>{ item.title }, { item.site }, { item.pendingSince }</span>
-        <button type="button" onclick={ parent.parent.removePending }>X</button>
-    </list>
+        <list heading="Member" items={ member }>
+            <span><a href="#project/{ item.pid }">{ item.title }</a>, { item.site }, { item.dateStatus }</span>
+            <button type="button" onclick={ parent.parent.leaveProject }>X</button>
+        </list>
+
+        <p if={ !member.length }>No leader type? Know of an existing project? Try to <a href="#search">find it here</a>, then send a membership request.</p>
+
+        <list heading="Pending" items={ pending } if={ pending.length }>
+            <span>{ item.title }, { item.site }, { item.pendingSince }</span>
+            <button type="button" onclick={ parent.parent.removePending }>X</button>
+        </list>
+    </div>
 
     <script>
         var riotcontrol = require('riotcontrol')

@@ -4,22 +4,26 @@ var fbRef = require('../../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, ringerRef, ringers = [];
+    var self = this, projectId, ringerRef, ringers = [];
 
     function init(route, id, action) {
         if (route != 'project' && !id && !action) {
             return;
         }
 
-        self.trigger('ringform_clear');
+        // Reset ringform.
+        self.trigger('ringform_reset');
 
-        if (ringers.length) {
+        // Still viewing the same project.
+        if (projectId == id) {
             self.trigger('ringers_data', ringers);
             return;
         }
 
         ringerRef = fbRef.child('ringer/' + id).orderByChild('active').equalTo(true);
         ringerRef.on('value', handle);
+
+        projectId = id;
     }
 
     function handle(snap) {

@@ -1,5 +1,5 @@
 <list>
-    <h3 if={ opts.heading && opts.items.length }>{ opts.heading }</h3>
+    <h3 if={ opts.heading }>{ opts.heading }</h3>
     <ul if={ opts.items.length }>
         <li each={ item, i in opts.items }>
             <yield/>

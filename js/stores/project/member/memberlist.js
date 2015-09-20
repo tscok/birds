@@ -6,7 +6,7 @@ var utils = require('../../../utils');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this;
+    var self = this, projectId;
     var memberlist = {pending: [], member: []};
 
     fbRef.onAuth(function(authData) {
@@ -15,9 +15,26 @@ module.exports = function() {
         }
     });
 
-    function init(pid) {
-        fbRef.child('membership/' + pid + '/pending').on('value', handle);
-        fbRef.child('membership/' + pid + '/member').on('value', handle);
+    function init(route, id, action) {
+        if (route != 'project' && !id) {
+            return;
+        }
+
+        // Close memberrole form(s).
+        self.trigger('memberrole_hide');
+
+        // Still viewing the same project.
+        if (projectId == id) {
+            self.trigger('memberlist_data', 'pending', memberlist.pending);
+            self.trigger('memberlist_data', 'member', memberlist.member);
+            return;
+        }
+
+        fbRef.child('membership/' + id + '/pending').on('value', handle);
+        fbRef.child('membership/' + id + '/member').on('value', handle);
+
+        // Save current id.
+        projectId = id;
     }
 
     function handle(snap) {
@@ -32,9 +49,5 @@ module.exports = function() {
         self.trigger('memberlist_data', type, memberlist[type]);
     }
 
-    self.on('route', function(route, id, action) {
-        if (route == 'project' && id && !action) {
-            init(id);
-        }
-    });
+    self.on('route', init);
 };
