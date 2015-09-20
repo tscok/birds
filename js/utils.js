@@ -13,6 +13,11 @@ utils.extend = function(o1, o2) {
     return o1;
 }
 
+// Strings
+utils.capitalize = function(str) {
+    return str[0].toUpperCase() + str.substr(1);
+}
+
 // Form data
 utils.radioBtnVal = function(name) {
     return document.querySelector('[name='+name+']:checked').value;

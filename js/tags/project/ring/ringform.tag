@@ -45,16 +45,12 @@
             <option each={ parent.ringers } value="{ sign }">{ sign }</option>
         </div>
 
-        <div>
-            <label>Weight</label><br>
-            <input type="text" name="weight" autocomplete="off" onblur={ checkMinMax }>
-            <p if={ minMax.weight.hint }>Average weight of this species is { minMax.weight.min }&ndash;{ minMax.weight.max } g.</p>
+        <div riot-tag="minmax" label="weight" min="{data.MinVikt}" max="{data.MaxVikt}" unit="g">
+            <span>Avg. weight is</span>
         </div>
 
-        <div>
-            <label>Wing length</label><br>
-            <input type="text" name="wing" autocomplete="off" onblur={ checkMinMax }>
-            <p if={ minMax.wing.hint }>Average winglength of this species is { minMax.wing.min }&ndash;{ minMax.wing.max } mm.</p>
+        <div riot-tag="minmax" label="wing" min="{data.MinVinge}" max="{data.MaxVinge}" unit="mm">
+            <span>Avg. wing length is</span>
         </div>
 
         <div>
@@ -86,35 +82,8 @@
         self.sex = ['F','M']
         self.age = ['1.0','2.0','2+','3+']
 
-        checkMinMax(e) {
-            var elm = e.target.name
-            var val = e.target.value
-            if (!val) {
-                return
-            }
-            var minVal = self.minMax[elm].min
-            var maxVal = self.minMax[elm].max
-            if (!minVal && !maxVal) {
-                return
-            }
-            if (val < self.minMax[elm].min || val > self.minMax[elm].max) {
-                self.minMax[elm].hint = true
-            }
-        }
-
         setSpeciesData(data) {
-            self.minMax = {
-                weight: {
-                    min: data.MinVikt,
-                    max: data.MaxVikt,
-                    hint: false
-                },
-                wing: {
-                    min: data.MinVinge,
-                    max: data.MaxVinge,
-                    hint: false
-                }
-            }
+            self.update({data: data})
             self.setRingsize(data.Rtyp1.replace(',','.'))
         }
 
@@ -141,21 +110,20 @@
         }
 
         saveRing() {
-            var data = serialize(self.frmRing, {hash: true})
+            var frmData = serialize(self.frmRing, {hash: true})
             if (opts.action == 'newring') {
-                if (!data.ringSize) {
+                if (!frmData.ringSize) {
                     riotcontrol.trigger('alert', 'Ring size missing. Unable to create unique ring id.', 'error')
                     return
                 }
-                data.ringNumber = parseInt(data.ringNumber) < 10 ? '0' + data.ringNumber : data.ringNumber
-                data.id = data.snid ? data.snid + data.ringNumber : data.ringNumber
+                frmData.ringNumber = parseInt(frmData.ringNumber) < 10 ? '0' + frmData.ringNumber : frmData.ringNumber
+                frmData.id = frmData.snid ? frmData.snid + frmData.ringNumber : frmData.ringNumber
             }
-            data.species = data.species.toUpperCase()
-            delete data.ringNumber
-            delete data.ringSize
-            delete data.snid
-            console.log('save', opts.action, 'data', data);
-            // self.frmRing.reset()
+            frmData.species = frmData.species.toUpperCase()
+            delete frmData.ringNumber
+            delete frmData.ringSize
+            delete frmData.snid
+            riotcontrol.trigger('ringform_save', opts.action, frmData)
         }
 
         resetForm() {

@@ -36,6 +36,7 @@ module.exports = function() {
     var ringform = require('./tags/project/ring/ringform.tag');
     var species = require('./tags/project/ring/species.tag');
     var ringid = require('./tags/project/ring/ringid.tag');
+    var minmax = require('./tags/project/ring/minmax.tag');
 
     // Mount only root elements.
     riot.mount('app-main, app-nav');

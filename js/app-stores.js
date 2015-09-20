@@ -32,6 +32,7 @@ module.exports = function() {
     var ringform = require('./stores/project/ring/ringform');
     var species = require('./stores/project/ring/species');
     var ringid = require('./stores/project/ring/ringid');
+    var ringers = require('./stores/project/ring/ringers');
 
 
     // Register stores.
@@ -59,4 +60,5 @@ module.exports = function() {
     riotcontrol.addStore(new ringform());
     riotcontrol.addStore(new species());
     riotcontrol.addStore(new ringid());
+    riotcontrol.addStore(new ringers());
 };
