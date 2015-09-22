@@ -5,7 +5,7 @@
         <h2>{ data.title }<span if={ data.site }>, { data.site }</span></h2>
         <p>{ data.dateStart } &ndash; { data.dateEnd }</p>
         <memberlist if={ data.isOwner }></memberlist>
-        <ringsize pid={ data.pid }></ringsize>
+        <ringlist pid={ data.pid }></ringlist>
     </div>
 
     <script>

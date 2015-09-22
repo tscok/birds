@@ -30,10 +30,11 @@ module.exports = function() {
     var memberlist = require('./tags/project/member/memberlist.tag');
     var memberrole = require('./tags/project/member/memberrole.tag');
     var membership = require('./tags/project/member/membership.tag');
-    var ringsize = require('./tags/project/ringsize.tag');
+    var ringlist = require('./tags/project/ringlist.tag');
 
     // Project - ring
     var ringform = require('./tags/project/ring/ringform.tag');
+    var ringsize = require('./tags/project/ring/ringsize.tag');
     var species = require('./tags/project/ring/species.tag');
     var ringid = require('./tags/project/ring/ringid.tag');
     var minmax = require('./tags/project/ring/minmax.tag');

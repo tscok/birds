@@ -21,7 +21,7 @@
         toggleForm() {
             self.showForm = self.showForm ? false : true
             self.sign.value = opts.data.sign ? opts.data.sign : ''
-            self.isOwner = self.parent.data.isOwner
+            self.isOwner = opts.data.role == 'owner'
             self.update()
         }
 
@@ -40,7 +40,7 @@
 
         editMember(e) {
             var frmData = {
-                newRole: self.isOwner ? 'owner' : (self.ringer.checked ? 'ringer' : 'assistant'),
+                newRole: self.ringer.checked ? 'ringer' : 'assistant',
                 newSign: self.ringer.checked ? self.sign.value.trim().toUpperCase() : '',
                 pid: self.parent.id
             }

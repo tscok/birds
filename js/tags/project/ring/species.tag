@@ -13,7 +13,7 @@
             var item = e.item
             console.log(item);
             self.species.value = item.Artkod
-            this.parent.setSpeciesData(item)
+            this.parent.setRingformData(item)
         }
         
         lookup(e) {

@@ -12,10 +12,7 @@
                 <input type="number" name="ringNumber" step="1" min="0" max="99" required>
             </div>
             
-            <input type="hidden" name="snid">
-            <div riot-tag="dropdown" label="ringSize" require="required">
-                <option each={ ringsize } value={ size }>{ size }</option>
-            </div>
+            <div riot-tag="ringsize"></div>
         </div>
 
         <div>
@@ -82,31 +79,11 @@
         self.sex = ['F','M']
         self.age = ['1.0','2.0','2+','3+']
 
-        setSpeciesData(data) {
+        setRingformData(data) {
             self.update({data: data})
-            self.setRingsize(data.Rtyp1.replace(',','.'))
-        }
-
-        setRingsize(size) {
-            if (opts.action == 'control') {
-                return
+            if (opts.action == 'newring') {
+                self.tags.ringsize.setRingsize(data.Rtyp1.replace(',','.'))
             }
-            self.frmRing.ringSize.value = size
-            var index = self.frmRing.ringSize.selectedIndex
-            if (index == -1) {
-                var msg = 'Suggested ring size (' + size + ') not listed in Ring Sizes.'
-                riotcontrol.trigger('alert', msg, 'warning')
-                return
-            }
-            self.setSnid(size)
-        }
-
-        setSnid(size) {
-            self.ringsize.forEach(function(item) {
-                if (item.size == size) {
-                    self.snid.value = item.snid
-                }
-            })
         }
 
         saveRing() {
@@ -132,10 +109,6 @@
 
         riotcontrol.on('ringers_data', function(data) {
             self.update({ringers: data})
-        })
-
-        riotcontrol.on('ringsize_data', function(data) {
-            self.update({ringsize: data})
         })
         
         riotcontrol.on('ringform_reset', self.resetForm)

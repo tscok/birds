@@ -20,6 +20,9 @@ module.exports = function() {
             return;
         }
 
+        // Never let owner role change.
+        data.newRole = (data.role == 'owner') ? 'owner' : data.newRole;
+
         if (data.newSign) {
             isSignTaken(data).then(function(isTaken) {
                 if (isTaken) {

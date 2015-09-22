@@ -26,7 +26,7 @@ module.exports = function() {
     var memberlist = require('./stores/project/member/memberlist');
     var membership = require('./stores/project/member/membership');
     var memberrole = require('./stores/project/member/memberrole');
-    var ringsize = require('./stores/project/ringsize');
+    var ringlist = require('./stores/project/ringlist');
 
     // Project - ring
     var ringform = require('./stores/project/ring/ringform');
@@ -55,7 +55,7 @@ module.exports = function() {
     riotcontrol.addStore(new memberlist());
     riotcontrol.addStore(new membership());
     riotcontrol.addStore(new memberrole());
-    riotcontrol.addStore(new ringsize());
+    riotcontrol.addStore(new ringlist());
 
     riotcontrol.addStore(new ringform());
     riotcontrol.addStore(new species());

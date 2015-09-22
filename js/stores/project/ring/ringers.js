@@ -4,26 +4,13 @@ var fbRef = require('../../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, projectId, ringers = [];
+    var self = this, pid, ringers = [];
 
-    function init(route, id, action) {
-        if (route != 'project' && !id && !action) {
-            return;
-        }
+    function init(id) {
+        pid = id;
 
-        // Reset ringform.
-        self.trigger('ringform_reset');
-
-        // Still viewing the same project.
-        if (projectId == id) {
-            self.trigger('ringers_data', ringers);
-            return;
-        }
-
-        var ringerRef = fbRef.child('ringer/' + id).orderByChild('active').equalTo(true);
+        var ringerRef = fbRef.child('ringer/' + pid).orderByChild('active').equalTo(true);
         ringerRef.on('value', handle);
-
-        projectId = id;
     }
 
     function handle(snap) {
@@ -34,5 +21,21 @@ module.exports = function() {
         self.trigger('ringers_data', ringers);
     }
 
-    self.on('route', init);
+    function onRoute(route, id, action) {
+        if (route != 'project' || !id || !action) {
+            // Not ringform.
+            return;
+        }
+
+        if (pid == id && ringers.length) {
+            // Project did not change.
+            self.trigger('ringers_data', ringers);
+            return;
+        }
+
+        // Initialize ringer data.
+        init(id);
+    }
+
+    self.on('route', onRoute);
 };

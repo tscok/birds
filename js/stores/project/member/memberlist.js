@@ -6,35 +6,16 @@ var utils = require('../../../utils');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, projectId;
+    var self = this, pid;
     var memberlist = {pending: [], member: []};
 
-    fbRef.onAuth(function(authData) {
-        if (!authData) {
-            self.trigger('memberlist_clear');
-        }
-    });
+    function init(id) {
+        pid = id;
 
-    function init(route, id, action) {
-        if (route != 'project' && !id) {
-            return;
-        }
+        self.trigger('memberlist_clear');
 
-        // Close memberrole form(s).
-        self.trigger('memberrole_hide');
-
-        // Still viewing the same project.
-        if (projectId == id) {
-            self.trigger('memberlist_data', 'pending', memberlist.pending);
-            self.trigger('memberlist_data', 'member', memberlist.member);
-            return;
-        }
-
-        fbRef.child('membership/' + id + '/pending').on('value', handle);
-        fbRef.child('membership/' + id + '/member').on('value', handle);
-
-        // Save current id.
-        projectId = id;
+        fbRef.child('membership/' + pid + '/pending').on('value', handle);
+        fbRef.child('membership/' + pid + '/member').on('value', handle);
     }
 
     function handle(snap) {
@@ -49,5 +30,22 @@ module.exports = function() {
         self.trigger('memberlist_data', type, memberlist[type]);
     }
 
-    self.on('route', init);
+    function onRoute(route, id, action) {
+        if (route != 'project' || !id || !!action) {
+            // Not project overview.
+            return;
+        }
+
+        if (pid == id && (memberlist.pending.length || memberlist.member.length)) {
+            // Project did not change.
+            self.trigger('memberlist_data', 'pending', memberlist.pending);
+            self.trigger('memberlist_data', 'member', memberlist.member);
+            return;
+        }
+
+        // Initialize member data.
+        init(id);
+    }
+
+    self.on('route', onRoute);
 };

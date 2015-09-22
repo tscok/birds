@@ -6,30 +6,20 @@ var moment = require('moment')
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, projectId, projectData;
+    var self = this, pid, projectData;
     
-    function init(route, id, action) {
-        if (route != 'project' || !id) {
-            return;
-        }
-
-        // Clear current project data in view.
+    function init(id) {
+        pid = id;
+        
         self.trigger('project_clear');
 
-        // Still viewing the same project.
-        if (projectId == id) {
-            self.trigger('project_data', projectData);
-            return;
-        }
-
-        projectId = id;
-        fbRef.child('project/' + projectId).on('value', handle);
+        fbRef.child('project/' + pid).on('value', handle);
     }
 
     function handle(snap) {
         // Gather extras.
         var extras = {
-            pid: projectId,
+            pid: pid,
             isOwner: fbRef.getAuth().uid == snap.val().userId
         };
 
@@ -47,5 +37,21 @@ module.exports = function() {
         self.trigger('project_data', projectData);
     }
 
-    self.on('route', init);
+    function onRoute(route, id, action) {
+        if (route != 'project' || !id || !!action) {
+            // Not project overview.
+            return;
+        }
+
+        if (pid == id && projectData) {
+            // Project did not change.
+            self.trigger('project_data', projectData);
+            return;
+        }
+
+        // Initialize project data.
+        init(id);
+    }
+
+    self.on('route', onRoute);
 };
