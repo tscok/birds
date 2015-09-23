@@ -47,6 +47,7 @@ module.exports = function() {
 
         if (pid == id && ringlist.length) {
             // Project did not change.
+            self.trigger('ringlist_hide');
             self.trigger('ringlist_data', ringlist);
             return;
         }

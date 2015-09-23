@@ -9,7 +9,9 @@
         </div>
 
         <form name="frmRinglist" onsubmit={ saveSize }>
+            <label>Size</label><br>
             <input type="number" step="0.5" name="size" placeholder="Ring size" autocomplete="off" required><br>
+            <label>Serial number</label><br>
             <input type="text" name="snid" placeholder="Serial number" autocomplete="off" required><br>
             <button type="submit">Save</button>
             <button type="button" onclick={ resetForm }>Cancel</button>
