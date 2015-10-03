@@ -48,12 +48,6 @@ module.exports = function() {
 		handleAuthResponse(loginPromise, 'profile');
 	}
 
-	function logout() {
-		fbRef.unauth();
-		riot.route('login');
-	}
-
 	self.on('login', login);
 	self.on('social_login', socialLogin);
-	self.on('logout', logout);
 }

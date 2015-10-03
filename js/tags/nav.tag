@@ -16,11 +16,11 @@
     </div>
 
     <script>
-        var riotcontrol = require('riotcontrol');
+        var riotcontrol = require('riotcontrol')
         var self = this
 
-        riotcontrol.on('nav', function(pid, user) {
-            self.update({pid: pid, uid: user.uid, name: user.name || 'Profile'})
+        riotcontrol.on('nav', function(uid, pid) {
+            self.update({uid: uid, pid: pid})
         })
     </script>
 </app-nav>

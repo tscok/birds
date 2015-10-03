@@ -30,7 +30,7 @@ module.exports = function() {
         self.trigger('memberlist_data', type, memberlist[type]);
     }
 
-    function onRoute(route, id, action) {
+    /*function onRoute(route, id, action) {
         if (route != 'project' || !id || !!action) {
             // Not project overview.
             return;
@@ -47,5 +47,5 @@ module.exports = function() {
         init(id);
     }
 
-    self.on('route', onRoute);
+    self.on('route', onRoute);*/
 };

@@ -7,6 +7,7 @@ module.exports = function() {
 
     var validRoute = {
         'login':    {uidReq: false},
+        'logout':   {uidReq: false},
         'profile':  {uidReq: true},
         'search':   {uidReq: true},
         'create':   {uidReq: true},
@@ -29,21 +30,27 @@ module.exports = function() {
     function validateRoute(route, id, action) {
         var uid = fbRef.getAuth() ? fbRef.getAuth().uid : null;
 
+        // Invalid route.
+        if (route && !validRoute[route]) {
+            riotcontrol.trigger('alert', '404 - Route "' + route + '" not found.', 'warning');
+            return;
+        }
+
+        // Update navigation.
+        riotcontrol.trigger('nav', uid, id);
+
         // Show login.
         if (route == 'login') {
+            console.log('trigger route, login (shows login)');
             riotcontrol.trigger('route', 'login');
             return;
         }
 
         // unAuth and trigger login.
         if (route == 'logout' || !route || !uid) {
-            riotcontrol.trigger('logout');
-            return;
-        }
-
-        // Route is undefined.
-        if (!validRoute[route]) {
-            riotcontrol.trigger('alert', '404 - Route "' + route + '" not found.', 'warning');
+            fbRef.unauth();
+            riot.route('login');
+            console.log('unauth, route to login');
             return;
         }
         

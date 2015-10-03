@@ -64,6 +64,7 @@
         }
 
         riotcontrol.on('memberrole_hide', function() {
+            console.log('hide memmber role form');
             self.update({showForm: false})
         })
     </script>

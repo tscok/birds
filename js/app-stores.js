@@ -6,7 +6,6 @@ module.exports = function() {
 
     // General
     var main = require('./stores/main');
-    var nav = require('./stores/nav');
 
     // Profile
     var profile = require('./stores/profile/profile');
@@ -39,7 +38,6 @@ module.exports = function() {
     riotcontrol.addStore(new login());
 
     riotcontrol.addStore(new main());
-    riotcontrol.addStore(new nav());
 
     riotcontrol.addStore(new profile());
     riotcontrol.addStore(new projects());
