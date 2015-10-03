@@ -40,5 +40,5 @@ module.exports = function() {
     var minmax = require('./tags/project/ring/minmax.tag');
 
     // Mount only root elements.
-    riot.mount('app-main, app-nav');
+    riot.mount('main, nav');
 };

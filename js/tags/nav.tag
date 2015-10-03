@@ -1,4 +1,4 @@
-<app-nav>
+<nav>
     <div class="site-header" if={ uid }>
         <nav if={ uid && !pid } class="site-header__nav site-header__nav--left">
             <a href="#create">Create Project</a>
@@ -23,4 +23,4 @@
             self.update({uid: uid, pid: pid})
         })
     </script>
-</app-nav>
+</nav>

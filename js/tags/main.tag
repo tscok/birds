@@ -1,4 +1,4 @@
-<app-main>
+<main>
     <section riot-tag="alert"></section>
     <section riot-tag="login" if={ route == 'login' }></section>
     <section riot-tag="search" if={ route == 'search' }></section>
@@ -16,4 +16,4 @@
             self.update({route: route, id: id, action: action})
         })
     </script>
-</app-main>
+</main>
