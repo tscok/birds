@@ -10,7 +10,7 @@
             <a href="#project/{ pid }/control">Control</a>
         </nav>
         <nav if={ uid } class="site-header__nav site-header__nav--right">
-            <a href="#profile">{ name }</a>
+            <a href="#profile">Profile</a>
             <a href="#logout">Log out</a>
         </nav>
     </div>

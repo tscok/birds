@@ -41,16 +41,14 @@ module.exports = function() {
 
         // Show login.
         if (route == 'login') {
-            console.log('trigger route, login (shows login)');
             riotcontrol.trigger('route', 'login');
             return;
         }
 
-        // unAuth and trigger login.
+        // unAuth and route to login.
         if (route == 'logout' || !route || !uid) {
             fbRef.unauth();
             riot.route('login');
-            console.log('unauth, route to login');
             return;
         }
         
@@ -69,7 +67,7 @@ module.exports = function() {
                 return;
             }
 
-            // Project route and ID is defined.
+            // Project route with ID. Check user access.
             authProjectAccess(uid, id).then(function(status) {
                 var msg = 'Access denied. Membership required.';
                 

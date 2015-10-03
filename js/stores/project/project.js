@@ -15,7 +15,6 @@ module.exports = function() {
         self.trigger('project_clear');
 
         fbRef.child('project/' + pid).on('value', projectHandle);
-        fbRef.child('membership/' + pid + '/member/' + uid).on('value', memberHandle);
     }
 
     function projectHandle(snap) {
@@ -39,45 +38,20 @@ module.exports = function() {
         self.trigger('project_data', projectData);
     }
 
-    function memberHandle(snap) {
-        memberData = snap.val();
-        self.trigger('membership_data', memberData);
-    }
-
     function onRoute(route, id, action) {
+        // Ignore if not project or action is defined.
         if (route != 'project' || !id || action) {
             return;
         }
 
-        if (pid && pid == id) {
-            // Pre-loading existing data
+        // Load existing data.
+        if (pid && pid == id && projectData) {
             self.trigger('project_data', projectData);
-            self.trigger('membership_data', memberData);
             return;
         }
 
+        // Initialize project data.
         init(id);
-
-        
-
-        // console.log(route, id, action);
-        // if (route != 'project' || !id || !!action) {
-        //     // Not project overview.
-        //     console.log('not project');
-        //     return;
-        // }
-        // console.log(pid, id, pid == id);
-        // if (pid == id) {
-        //     // Project did not change.
-        //     console.log('project, no change');
-        //     self.trigger('project_data', projectData);
-        //     return;
-        // }
-
-        // console.log('project, change');
-
-        // // Initialize project data.
-        // init(id);
     }
 
     self.on('route', onRoute);

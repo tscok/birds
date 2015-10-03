@@ -7,7 +7,7 @@ module.exports = function() {
     riot.observable(this);
 
     var self = this, pid;
-    var memberlist = {pending: [], member: []};
+    var list = {pending: [], member: []};
 
     function init(id) {
         pid = id;
@@ -20,24 +20,24 @@ module.exports = function() {
 
     function handle(snap) {
         var type = snap.key();
-        memberlist[type].length = 0;
+        list[type].length = 0;
         snap.forEach(function(user) {
             var data = user.val();
             data.uid = user.key();
-            memberlist[type].push(data);
+            list[type].push(data);
         });
 
-        self.trigger('memberlist_data', type, memberlist[type]);
+        self.trigger('memberlist_data', type, list[type]);
     }
 
-    /*function onRoute(route, id, action) {
-        if (route != 'project' || !id || !!action) {
-            // Not project overview.
+    function onRoute(route, id, action) {
+        // Ignore if not project or action is defined.
+        if (route != 'project' || !id || action) {
             return;
         }
 
-        if (pid == id && (memberlist.pending.length || memberlist.member.length)) {
-            // Project did not change.
+        // Load existing data.
+        if (pid && pid == id && (list.pending.length || list.member.length)) {
             self.trigger('memberlist_data', 'pending', memberlist.pending);
             self.trigger('memberlist_data', 'member', memberlist.member);
             return;
@@ -47,5 +47,5 @@ module.exports = function() {
         init(id);
     }
 
-    self.on('route', onRoute);*/
+    self.on('route', onRoute);
 };

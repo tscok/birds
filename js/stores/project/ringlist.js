@@ -14,7 +14,7 @@ module.exports = function() {
 
     function init(id) {
         pid = id;
-console.log('init ringlist');
+
         ringlistRef = fbRef.child('ringlist/' + pid);
         ringlistRef.orderByChild('size').on('value', handle);
     }
@@ -39,24 +39,24 @@ console.log('init ringlist');
         ringlistRef.child(item.rsid).remove(onComplete);
     }
 
-    /*function onRoute(route, id, action) {
-        if (route != 'project' || !id) {
-            // Not a project.
+    function onRoute(route, id, action) {
+        // Ignore if not project or action is defined.
+        if (route != 'project' || !id || action) {
             return;
         }
 
-        if (pid == id && ringlist.length) {
-            // Project did not change.
+        // Load existing data.
+        if (pid && pid == id && ringlist.length) {
             self.trigger('ringlist_hide');
             self.trigger('ringlist_data', ringlist);
             return;
         }
 
-        // Initialize ringlist.
+        // Initialize ringlist data.
         init(id);
     }
     
-    self.on('route', onRoute);*/
+    self.on('route', onRoute);
     self.on('ringlist_add', add);
     self.on('ringlist_remove', remove);
 };
