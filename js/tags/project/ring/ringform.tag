@@ -20,13 +20,9 @@
             <input type="text" name="net">
         </div>
 
-        <div riot-tag="dropdown" label="age">
-            <option each={ val in parent.age } value={ val }>{ val }</option>
-        </div>
+        <div riot-tag="button-input" label="Age" options={ age }></div>
 
-        <div riot-tag="dropdown" label="sex">
-            <option each={ val in parent.sex } value={ val }>{ val }</option>
-        </div>
+        <div riot-tag="button-input" label="Sex" options={ sex }></div>
 
         <div>
             <label>PJM</label><br>
@@ -76,8 +72,18 @@
         var serialize = require('form-serialize')
         var self = this
 
-        self.sex = ['F','M']
-        self.age = ['1.0','2.0','2+','3+']
+        // self.sex = ['F','M']
+        self.sex = [
+            {label:'F', value:'F'},
+            {label:'M', value:'M'}
+        ]
+        // self.age = ['1.0','2.0','2+','3+']
+        self.age = [
+            {label:'1.0', value:'1'},
+            {label:'2.0', value:'2'},
+            {label:'2+', value:'3'},
+            {label:'3+', value:'4'}
+        ]
 
         setRingformData(data) {
             self.update({data: data})

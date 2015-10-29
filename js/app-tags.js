@@ -8,7 +8,8 @@ module.exports = function() {
     // General
     var list = require('./tags/list.tag');
     var alert = require('./tags/alert.tag');
-    var dropdown = require('./tags/dropdown.tag')
+    var dropdown = require('./tags/dropdown.tag');
+    var dropdown = require('./tags/button-input.tag');
 
     // Auth
     var login = require('./tags/login.tag')
@@ -40,5 +41,5 @@ module.exports = function() {
     var minmax = require('./tags/project/ring/minmax.tag');
 
     // Mount only root elements.
-    riot.mount('main, nav');
+    riot.mount('app-main, app-nav');
 };

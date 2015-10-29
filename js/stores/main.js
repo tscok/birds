@@ -6,11 +6,16 @@ module.exports = function() {
 	var self = this;
 
 	self.on('route', function(route, id, action) {
+        // Affects main.tag
 		self.trigger('main', route, id, action);
+        // Affects login.tag
         self.trigger('main_' + route, id, action);
 
-        if (route == 'project') {
-            self.trigger('membership_check', id);
-        }
+
+        // -- This is now done in app-router.js --
+        // 
+        // if (route == 'project') {
+        //     self.trigger('membership_check', id);
+        // }
 	});
 };
