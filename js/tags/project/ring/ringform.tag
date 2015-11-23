@@ -79,10 +79,10 @@
         ]
         // self.age = ['1.0','2.0','2+','3+']
         self.age = [
-            {label:'1.0', value:'1'},
-            {label:'2.0', value:'2'},
-            {label:'2+', value:'3'},
-            {label:'3+', value:'4'}
+            {label:'1.0', value:'1.0'},
+            {label:'2.0', value:'2.0'},
+            {label:'2+', value:'2+'},
+            {label:'3+', value:'3+'}
         ]
 
         setRingformData(data) {

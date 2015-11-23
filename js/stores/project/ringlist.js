@@ -4,7 +4,7 @@ var fbRef = require('../../firebase');
 module.exports = function() {
     riot.observable(this);
 
-    var self = this, pid, ringlistRef, ringlist = [];
+    var self = this, ringlistRef, ringlist = [];
 
     var onComplete = function(err) {
         if (err) {
@@ -12,9 +12,8 @@ module.exports = function() {
         }
     }
 
-    function init(id) {
-        pid = id;
-
+    function init(pid) {
+        console.log('ringlist init');
         ringlistRef = fbRef.child('ringlist/' + pid);
         ringlistRef.orderByChild('size').on('value', handle);
     }
@@ -40,14 +39,18 @@ module.exports = function() {
     }
 
     function onRoute(route, id, action) {
-        // Ignore if not project or action is defined.
-        if (route != 'project' || !id || action) {
+        if (route != 'project' || !id) {
+            console.log('not a project or ID missing');
             return;
         }
 
-        // Load existing data.
-        if (pid && pid == id && ringlist.length) {
+        if (!action) {
+            console.log('no action given');
             self.trigger('ringlist_hide');
+        }
+
+        if (ringlist.length) {
+            console.log('ringlist has data');
             self.trigger('ringlist_data', ringlist);
             return;
         }

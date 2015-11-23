@@ -28,6 +28,7 @@
         }
 
         riotcontrol.on('ringlist_data', function(data) {
+            console.log('got ringlist data', data);
             self.update({ringsize: data})
         })
     </script>

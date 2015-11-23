@@ -1,7 +1,7 @@
 <button-input>
     <label>{ label }</label><br>
     <button type="button" each={ buttons } onclick={ parent.select } value="{ value }" class={selected: selected }>{ label }</button>
-    <input type="hidden" name="{ label }" value="hepp">
+    <input type="hidden" name="{ label }">
 
     <style>
         .selected {
@@ -10,20 +10,27 @@
     </style>
 
     <script>
-        this.buttons = this.opts.options
-        this.label = opts.label
+        var riotcontrol = require('riotcontrol')
+        var self = this
+
+        self.buttons = opts.options
+        self.label = opts.label.toLowerCase()
+
+        deselectAll() {
+            self.buttons.forEach(function(btn){
+                if (btn.selected) btn.selected = false
+            })
+        }
 
         select(e) {
             // get button state
             var isSelected = e.item.selected
             // reset button states
-            this.buttons.forEach(function(btn){
-                if (btn.selected) btn.selected = false
-            })
+            self.deselectAll()
             // set button state
             e.item.selected = isSelected ? false : true
             // get input element
-            var input = this[this.label]
+            var input = self[self.label]
             // get input element value
             var oldVal = input.value
             // get button value
@@ -31,5 +38,12 @@
             // set input element value
             input.value = oldVal != newVal ? newVal : ''
         }
+
+        riotcontrol.on('route', function(route) {
+            if (route == 'project' && self[self.label].value) {
+                self[self.label].value = null
+                self.deselectAll()
+            }
+        })
     </script>
 </button-input>

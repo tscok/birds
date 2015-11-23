@@ -13,13 +13,20 @@
         checkValue(e) {
             var elm = e.target.name
             var val = e.target.value
-            if (!opts.min || !opts.max || !val) {
-                self.showHint = false
-            } else if (val < opts.min || val > opts.max) {
+
+            self.showHint = false
+
+            if (val < opts.min || val > opts.max) {
                 self.showHint = true
-            } else {
-                self.showHint = false
             }
+
+            // if (!opts.min || !opts.max || !val) {
+            //     self.showHint = false
+            // } else if (val < opts.min || val > opts.max) {
+            //     self.showHint = true
+            // } else {
+            //     self.showHint = false
+            // }
         }
     </script>
 </minmax>
